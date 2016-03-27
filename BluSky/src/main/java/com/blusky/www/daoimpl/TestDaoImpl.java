@@ -5,11 +5,13 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+
+
 import com.blusky.www.Idao.TestDaoI;
 import com.blusky.www.bean.TestBean;
 
 @Repository("testDao")
-public class TestDaoImpl implements TestDaoI{
+public class TestDaoImpl extends BaseDaoImpl<TestBean> implements TestDaoI{
 
 	
 	@Inject

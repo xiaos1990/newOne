@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.blusky.www.Iservice.ITestSerivce;
+import com.blusky.www.Iservice.TestSerivceI;
 
 public class TestClass {
 
@@ -23,7 +23,7 @@ public class TestClass {
 	@Test
 	public void testSpring(){
 		  //从Spring的IOC容器中获取bean对象
-		  ITestSerivce testService = (ITestSerivce) ac.getBean("testService");
+		  TestSerivceI testService = (TestSerivceI) ac.getBean("testService");
 	         //执行测试方法
 		  testService.testMethod();
 	}
