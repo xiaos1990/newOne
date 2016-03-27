@@ -1,5 +1,6 @@
 package com.blusky.www.daoimpl;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,13 +9,21 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 
+
 import com.blusky.www.Idao.BaseDaoI;
 
 
-public class BaseDaoImpl<T> implements BaseDaoI<T> {
+public class BaseDaoImpl<T> implements BaseDaoI<T>{
 	
 	@Inject
 	SessionFactory sFactory;
+	
+	private Class<T> clazz ;
+	@SuppressWarnings("unchecked")
+	public BaseDaoImpl() {
+		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
+		clazz = (Class<T>) type.getActualTypeArguments()[0];
+	}
 
 	public void saveEntity(T t) {
 		// TODO Auto-generated method stub

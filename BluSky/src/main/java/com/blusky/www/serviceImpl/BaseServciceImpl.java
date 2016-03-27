@@ -1,15 +1,18 @@
 package com.blusky.www.serviceImpl;
 
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import com.blusky.www.Idao.BaseDaoI;
 import com.blusky.www.Iservice.BaseServiceI;
 
 @Service("baseService")
-public class BaseServciceImpl<T> implements BaseServiceI<T>{
+public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 
 	BaseDaoI<T> dao;
 	
@@ -19,12 +22,12 @@ public class BaseServciceImpl<T> implements BaseServiceI<T>{
 	}
 
 	
-	/*private Class<T> clazz ;
+	private Class<T> clazz ;
 	@SuppressWarnings("unchecked")
 	public BaseServciceImpl() {
 		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
 		clazz = (Class<T>) type.getActualTypeArguments()[0];
-	}*/
+	}
 	
 
 	public void saveEntity(T t) {

@@ -5,16 +5,12 @@
 <html>
 <head>
 <title>Head</title>
-<script src="../js/jquery-1.12.2.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="../css/bootstrap.min.css">
-
 <style>
 .logo {
 	background-size: cover;
 	overflow: hidden;
 	width: 10%;
-	margin-left: 25%;
+	margin-left: 10%;
 	float: left;
 }
 
@@ -76,6 +72,8 @@
 								<input type="text" class="form-control" placeholder="input address or zipcode">
 							</div>
 							<button type="submit" class="btn btn-default">Submit</button>
+							<button type="button" class="btn btn-default" id="signinId">Sign In</button>
+							<button type="button" class="btn btn-default" id="singupId">Sign Up</button>
 						</form>
 					</div>
 					<!-- /.navbar-collapse -->
