@@ -29,7 +29,7 @@
 
 	<div>
 		<div class="logo">
-			<a href="/BluSky/page/homepage.jsp"><img src="../image/page.jpg"
+			<a href="/BluSky/home/page"><img src="../image/page.jpg"
 				style="width: 50px; height: 50px" /></a>
 		</div>
 		<div class="content">
@@ -39,7 +39,7 @@
 					<div class="collapse navbar-collapse"
 						id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="/BluSky/page/homepage.jsp">Home<span
+							<li class="active"><a href="/BluSky/home/page">Home<span
 									class="sr-only"></span></a></li>					
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -73,7 +73,7 @@
 							</div>
 							<button type="submit" class="btn btn-default">Submit</button>
 							<button type="button" class="btn btn-default" id="signinId">Sign In</button>
-							<button type="button" class="btn btn-default" id="singupId">Sign Up</button>
+							<button type="button" class="btn btn-default" id="signupId">Sign Up</button>
 						</form>
 					</div>
 					<!-- /.navbar-collapse -->

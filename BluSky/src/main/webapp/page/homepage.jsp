@@ -10,18 +10,18 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="../css/bootstrap.min.css">
-
+<link rel="stylesheet" href="../css/jquery-ui.min.css">
 <title>home</title>
 <style type="text/css">
 body {
-	/* position: absolute; */
-	/* top: 0;
-	left: 0; */
+/* 	 position: absolute; 
+	 top: 0;
+	left: 0;  */
 	/* height: 100%;
 	width: 100%;  */
-	/* overflow-y:auto;
-	overflow-x:auto;  */
-	/* padding:20px; */
+	overflow-y:auto;
+	overflow-x:auto;  
+	 padding:20px; 
 	
 }
 
@@ -81,6 +81,7 @@ body {
 	margin: auto;
 	z-index: 1000;
 	border: 1px solid black;
+	 display:none; 
 }
 </style>
 </head>
@@ -93,46 +94,49 @@ body {
 			<jsp:include page="body.jsp" />
 			<div id="dialog-form" title="Create new user">
 				<form:form action="/BluSky/user/signup" method="post"
-					commandName="UserBean">
+					commandName="UserBean" cssId="signUpForm">
 					<fieldset>
 						<legend>Sign Up Form</legend>
+						<div id="errors"></div>
 						<table style="margin: auto">
 							<tr>
 								<td><label for="email">email:</label></td>
 								<td><form:input  path="email" id="email"
 										class="text ui-widget-content ui-corner-all" /></td>
-								<td><form:errors path="email" cssClass="error" /></td>
+								<%-- <td><form:errors path="email" cssClass="error" /></td> --%>
+								<td><div style="display:none" name="email"></div></td>
 							</tr>
 							<tr>
 								<td><label for="name">name:</label></td>
-								<td><form:input  path="name" id="name"
-										
+								<td><form:input  path="name" id="name"									
 										class="text ui-widget-content ui-corner-all" /></td>
-										<td><form:errors path="name" cssClass="error" /></td>
+										<%-- <td><form:errors path="name" cssClass="error" /></td> --%>
+											<td><div name="name"></div></td>
 							</tr>
 							<tr>
 								<td><label for="password">password:</label></td>
-								<td><form:input  path="password" id="password"
-										
+								<td><form:input  path="password" id="password"									
 										class="text ui-widget-content ui-corner-all" /></td>
-										<td><form:errors path="password" cssClass="error" /></td>
+										<%-- <td><form:errors path="password" cssClass="error" /></td> --%>
+											<td><div  name="password"></div></td>
 							</tr>
 							<tr>
 								<td><label for="birthday">birthday:</label></td>
-								<td><form:input  path="birthday" id="birthday"
-										
+								<td><form:input  path="birthday" id="birthday"										
 										class="text ui-widget-content ui-corner-all" /></td>
-										<td><form:errors path="birthday" cssClass="error" /></td>
+										<%-- <td><form:errors path="birthday" cssClass="error" /></td> --%>
+											<td><div  name="birthday"></div></td>
 							</tr>
 							<tr>
 								<td><label for="phone">phone:</label></td>
 								<td><form:input  path="phone" id="phone"
 										class="text ui-widget-content ui-corner-all" /></td>
-										<td><form:errors path="phone" cssClass="error" /></td>
+									<%-- 	<td><form:errors path="phone" cssClass="error" /></td> --%>
+									<td><div name="phone"></div></td>
 							</tr>
 							<tr>
 								<!-- Allow form submission with keyboard without duplicating the dialog button -->
-								<td colspan="2"><input type="submit"></td>
+								<td colspan="2"><input type="button"class="btn" value="submit"><input type="button" value="close" class="btn"></td>
 							</tr>
 						</table>
 					</fieldset>
@@ -149,11 +153,52 @@ body {
 </body>
 <script>
 	$("#signinId").on("click", function() {
-		window.location.href = "/BluSky/page/homepage.jsp";
+		window.location.href = "/BluSky/home/page";
 	});
-	$("#signupId").on("click", function() {
-		window.location.href = "/BluSky/page/homepage.jsp";
+	
+	$("#signupId").on("click", function() {	
+			$("#dialog-form").show();
 	});
+	
+	
+	$("input:button[value='submit']").on("click", function() {
+		$.ajax({
+                cache: true,
+                type: "POST",
+                url:itle="/BluSky/user/signup",
+                data:$('#signUpForm').serializeArray(),
+                async: false,
+                error: function(request) {
+                    alert("Connection error");
+                },
+                success: function(data) {
+                    if(data.success) {
+                    console.log("success");
+                }
+                else {   
+                 console.log("fail");               
+                   	setData(data);
+                    $("#errors").text(data.saveFail);
+                }
+            },
+            });
+
+	});
+	
+	
+	
+	$("input:button[value='close']").on("click", function() {
+		$("#dialog-form").hide();
+	});
+	
+	 function setData(data) {
+
+        $.each(data,function(key, val) {
+        console.log(data);
+        console.log(key+":"+val);
+           $("div[name='"+key+"']").text(val);
+        });
+    }
 </script>
 
 </html>
