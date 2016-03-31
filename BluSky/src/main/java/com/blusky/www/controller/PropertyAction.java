@@ -45,7 +45,8 @@ public class PropertyAction {
 		InputStream is = null;
 		OutputStream os = null;
 		String fileName;
-		String folderRoot = request.getContextPath() + "/files";
+		String folderRoot = this.getClass().getResource("").toString();
+		folderRoot=(folderRoot.split("target")[0]+ "files").substring(6);
 		for (int i = 0; i < btnFile.length; i++) {
 			if(btnFile[i].getSize()>0){
 			fileName = btnFile[i].getOriginalFilename();
@@ -88,8 +89,7 @@ public class PropertyAction {
 						os.write(buffer);
 					}
 					UploadFiles files = new UploadFiles();
-					files.setAddress(filePath + File.separator + subFileName
-							+ "_" + i + ext);
+					files.setAddress(realFile.getPath());
 					files.setPropery(propertyBean);
 					files.setSize(btnFile[i].getSize());
 					set.add(files);

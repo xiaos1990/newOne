@@ -1,6 +1,7 @@
 package com.blusky.www.bean;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class UploadFiles {
 	private long file_id;
 	
 	private String address;
+	@Column(name="file_size")
 	private long size;
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="property_id")
