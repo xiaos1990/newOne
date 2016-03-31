@@ -45,8 +45,8 @@
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">Property<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="#">InProgress</a></li>
-									<li><a href="#">Pending</a></li>
+									<li><a href="/BluSky/property/newOne">Post Property</a></li>
+									<li><a href="#">Display Property</a></li>
 									<li><a href="#">Something else here</a></li>
 									<li role="separator" class="divider"></li>
 								<!-- 	<li><a href="#">Separated link</a></li>

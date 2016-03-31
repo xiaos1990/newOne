@@ -13,7 +13,7 @@
 </head>
 <body>
 okay! you are here!
-<form:form action="/BluSky/test/forward" method="post" commandName="testBean">
+<form:form action="/BluSky/property/upload" method="post" commandName="testBean">
 	<form:input path="request"/> 
 	<form:input path="response"/> 
 	<input type="submit" value="submit" />
