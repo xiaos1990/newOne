@@ -2,6 +2,7 @@ package com.blusky.www.bean;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.JoinFetch;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -41,12 +43,15 @@ public class PropertyBean {
 	
 	private String type;
 	
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-	private Set<UploadFiles> files;
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="propery")
+	@JoinFetch
+	private List<UploadFiles> files;
 
 	private Date createdDate;
 	
 	private Date ModifiedDate;
+	
+	private String description;
 	
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
@@ -118,11 +123,11 @@ public class PropertyBean {
 
 
 
-	public Set<UploadFiles> getFiles() {
+	public List<UploadFiles> getFiles() {
 		return files;
 	}
 
-	public void setFiles(Set<UploadFiles> files) {
+	public void setFiles(List<UploadFiles> files) {
 		this.files = files;
 	}
 
@@ -148,6 +153,14 @@ public class PropertyBean {
 
 	public void setUser(UserBean user) {
 		this.user = user;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
