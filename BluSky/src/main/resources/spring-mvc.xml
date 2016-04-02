@@ -47,12 +47,12 @@
 		<property name="basename" value="messages"></property>
 	</bean>
 
-	<bean
+	<!-- <bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/pages/" />
 		<property name="suffix" value=".jsp" />
 
-	</bean>
+	</bean> -->
 
 	<!-- 支持上传文件 -->
 	<bean id="multipartResolver"

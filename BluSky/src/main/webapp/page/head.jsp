@@ -5,6 +5,11 @@
 <html>
 <head>
 <title>Head</title>
+<script src="../js/jquery-1.12.2.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<!-- <script src="../js/jquery-ui.min.js"></script> -->
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<!--  <link rel="stylesheet" href="../css/jquery-ui.min.css"> -->
 <style>
 .logo {
 	background-size: cover;
@@ -19,6 +24,7 @@
 	width: 65%;
 	margin-right: 0;
 }
+
 </style>
 
 
@@ -26,10 +32,9 @@
 
 <body>
 
-
 	<div>
 		<div class="logo">
-			<a href="/BluSky/home/page"><img src="../image/page.jpg"
+			<a href="/BluSky/page/home.jsp" target="top"><img src="../image/page.jpg"
 				style="width: 50px; height: 50px" /></a>
 		</div>
 		<div class="content">
@@ -39,14 +44,14 @@
 					<div class="collapse navbar-collapse"
 						id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="/BluSky/home/page">Home<span
+							<li><a href="/BluSky/page/home.jsp" target="top">Home<span
 									class="sr-only"></span></a></li>					
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">Property<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="/BluSky/property/newOne">Post Property</a></li>
-									<li><a href="/BluSky/property/display">Display Property</a></li>
+									<li><a href="/BluSky/property/newOne" target="body">Post Property</a></li>
+									<li><a href="/BluSky/property/display" target="body">Display Property</a></li>
 									<li><a href="#">Something else here</a></li>
 									<li role="separator" class="divider"></li>
 								<!-- 	<li><a href="#">Separated link</a></li>
@@ -86,19 +91,16 @@
 
 </body>
 <script>
-	$(document).ready(function() {
+ $("#signupId").on("click",function(){
 
-		$("#Property").on("mouseover", function() {
-			$(this).children("ul").css("display", "block");
 
-		});
+window.parent.frames["body"].location.href="/BluSky/user/register"; 
+/*  var frame =  window.parent.frames["body"];
+ frame.src='/BluSky/user/register'; */
+/*parent.location.reload; */
 
-		$("#Property").on("mouseout", function() {
-			$(this).children("ul").css("display", "none");
-
-		});
-
-	});
+ 
+	
+}); 
 </script>
-
 </html>

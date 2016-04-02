@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.python.modules.newmodule;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -55,8 +55,8 @@ public class PropertyAction {
 			if (btnFile[i].getSize() > 0) {
 				fileName = btnFile[i].getOriginalFilename();
 				String ext = fileName.substring(fileName.lastIndexOf("."));
-				if (!(ext.equals(".mp4") || ext.equals(".jpg") || ext
-						.equals(".png"))) {
+				if (!(ext.equalsIgnoreCase(".mp4") || ext.equalsIgnoreCase(".jpg") || ext
+						.equalsIgnoreCase(".png"))) {
 					result.reject("FileName" + i,
 							"File type should be in the list");
 				}

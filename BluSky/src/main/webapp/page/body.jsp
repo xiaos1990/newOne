@@ -6,7 +6,7 @@
 <title>BODY</title>
 
 </head>
-<body >
-	<h1>Welcome to the HomePage!</h1>
+<body>
+	<%@page include="/BluSky/property/display" %>
 </body>
 </html>

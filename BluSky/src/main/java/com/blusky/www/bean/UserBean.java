@@ -29,23 +29,25 @@ public class UserBean {
 	@GenericGenerator(name = "paymentableGenerator", strategy = "increment")
 	@Column(name="user_id")
 	private int id;
-
+	
+	@NotEmpty(message="email is required!")
 	@Email(message="email is not valid!")
 	private String email;
 	
 	@Column(name="user_name")
-	@NotEmpty
+	@NotEmpty(message="name is required!")
 	private String name;
 	
 	@DateTimeFormat(pattern="MM/dd/yyyy")
-	@NotNull
+	@NotNull(message="birthday is required!")
 	@Past(message="birthday is not valid!")
 	private Date birthday;
 	
+	@NotNull(message="phone is required!")
 	@Pattern(regexp="^\\d{3}-\\d{3}-\\d{4}$",message="phone is not valid!")
 	private String phone;
 	
-	@NotNull(message="password is required!")
+	@NotEmpty(message="password is required!")
 	private String password;
 
 	

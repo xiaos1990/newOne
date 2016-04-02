@@ -12,11 +12,5 @@ import com.blusky.www.bean.UserBean;
 @RequestMapping("/home")
 public class HomeAction {
 
-	@RequestMapping("/page")
-	public String testAction(ModelMap map){
-		map.addAttribute("UserBean", new UserBean());
-		System.out.println("123");
-		return "homepage";	
-	}
 	
 }

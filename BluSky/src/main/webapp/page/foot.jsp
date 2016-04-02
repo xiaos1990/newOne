@@ -7,6 +7,6 @@
     <title>Foot</title>
   </head>
   <body>
-	<div>Copyright 2016 XIAO</div>
+	<div style="text-align:center;color:red">Copyright 2016 XIAO</div>
   </body>
 </html>
