@@ -57,7 +57,7 @@ public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 
 	public T getEntity(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getEntity(id);
 	}
 
 	public T loadEntity(Integer id) {

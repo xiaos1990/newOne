@@ -7,20 +7,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +28,7 @@ import com.blusky.www.Iservice.PropertySerivceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
 import com.blusky.www.formbean.PropertyForm;
+import com.blusky.www.utils.RefTableUtils;
 
 @Controller
 @RequestMapping("/property")
@@ -49,14 +48,16 @@ public class PropertyAction {
 		OutputStream os = null;
 		String fileName;
 		String folderRoot = this.getClass().getResource("").toString();
-		//C:\Users\User\git\newOne\BluSky\src\main\webapp\files
-		folderRoot = (folderRoot.split("target")[0] + "src/main/webapp/files").substring(6);
+		// C:\Users\User\git\newOne\BluSky\src\main\webapp\files
+		folderRoot = (folderRoot.split("target")[0] + "src/main/webapp/files")
+				.substring(6);
 		for (int i = 0; i < btnFile.length; i++) {
 			if (btnFile[i].getSize() > 0) {
 				fileName = btnFile[i].getOriginalFilename();
 				String ext = fileName.substring(fileName.lastIndexOf("."));
-				if (!(ext.equalsIgnoreCase(".mp4") || ext.equalsIgnoreCase(".jpg") || ext
-						.equalsIgnoreCase(".png"))) {
+				if (!(ext.equalsIgnoreCase(".mp4")
+						|| ext.equalsIgnoreCase(".jpg") || ext
+							.equalsIgnoreCase(".png"))) {
 					result.reject("FileName" + i,
 							"File type should be in the list");
 				}
@@ -97,11 +98,12 @@ public class PropertyAction {
 							os.write(buffer);
 						}
 						UploadFiles files = new UploadFiles();
-						files.setAddress("/BluSky/files/"+subFolder+"/"+subFileName + "_" + i + ext);
+						files.setAddress("/BluSky/files/" + subFolder + "/"
+								+ subFileName + "_" + i + ext);
 						files.setPropery(propertyBean);
 						files.setSize(btnFile[i].getSize());
 						set.add(files);
-						
+
 					}
 				}
 				propertyBean.setFiles(set);
@@ -130,42 +132,58 @@ public class PropertyAction {
 			return "uploadProperty";
 		}
 	}
-	@RequestMapping(value="/display")
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/display")
 	public String dipslayProperty(ModelMap map) {
 		PropertyForm pForm = new PropertyForm();
 		pForm.setPropertyList(getPropertyList(null));
-		map.addAttribute("propertyForm",pForm);
+		pForm.setTypeList(RefTableUtils.getListBySql("PROPERTY_TYPE_BUYER"));
+		pForm.setPropertyTypeList(RefTableUtils.getListBySql("PROPERTY"));
+		System.out.println(pForm.getPropertyTypeList().get(0).get("REF_VALUE"));
+		map.addAttribute("propertyForm", pForm);
 		return "displayProperty";
 
 	}
-	
-	@RequestMapping(value="/filter")
-	public String filterProperty(@ModelAttribute(value = "propertyForm") PropertyBean pForm) {
-		
-		//getPropertyList(pForm));
+
+	@RequestMapping(value = "/filter")
+	public String filterProperty(
+			@ModelAttribute(value = "propertyForm") PropertyBean pForm) {
+
+		// getPropertyList(pForm));
 		return "display";
 
 	}
-	public List getPropertyList(PropertyForm pForm) {
-		try{
-		if(pForm==null){
-			String hql="from PropertyBean pb where pb.id >3 order by pb.createdDate desc";
-			return propertyService.findEntityByHQL(hql,null);
-		}else{
-			return null;
-		}
-		}catch(Exception e){
+
+	public List<PropertyBean> getPropertyList(PropertyForm pForm) {
+		try {
+			if (pForm == null) {
+				String hql = "from PropertyBean pb where rownum<21 order by pb.createdDate desc";
+				List<PropertyBean> list = propertyService.findEntityByHQL(hql,null);
+				return list;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/newOne", method = RequestMethod.GET)
 	public String createNewProperty(ModelMap map) {
 		PropertyBean property = new PropertyBean();
 		map.addAttribute("propertyBean", property);
-		//HibernateUtils.getListBySql(sql, clazz, objects);
-		
+		// HibernateUtils.getListBySql(sql, clazz, objects);
+
 		return "uploadProperty";
-}
+	}
+	
+	@RequestMapping(value = "/displayDetails/{propertyId}", method = RequestMethod.GET)
+	public String createNewProperty(@PathVariable("propertyId") String id,HttpServletRequest request) {
+		PropertyBean property=propertyService.getEntity(Integer.parseInt(id));
+		request.setAttribute("propertyBean", property);
+		return "displayPropertyDetails";
+	}
+	
 }

@@ -53,8 +53,8 @@
 									<li><a href="/BluSky/property/newOne" target="body">Post Property</a></li>
 									<li><a href="/BluSky/property/display" target="body">Display Property</a></li>
 									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-								<!-- 	<li><a href="#">Separated link</a></li>
+									<!-- <li role="separator" class="divider"></li>
+									<li><a href="#">Separated link</a></li>
 									<li role="separator" class="divider"></li>
 									<li><a href="#">One more separated link</a></li> -->
 								</ul></li>
@@ -66,8 +66,8 @@
 									<li><a href="#">Find Rommate</a></li>
 									<li><a href="#">Find Agent</a></li>
 									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-								<!-- 	<li><a href="#">Separated link</a></li>
+									<!--<li role="separator" class="divider"></li>
+								 	<li><a href="#">Separated link</a></li>
 									<li role="separator" class="divider"></li>
 									<li><a href="#">One more separated link</a></li> -->
 								</ul></li>

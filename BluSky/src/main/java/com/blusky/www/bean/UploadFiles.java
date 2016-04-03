@@ -5,18 +5,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.SequenceGenerator;
 
 
 @Entity
 public class UploadFiles {
 	@Id
-	@GenericGenerator(name="incre" , strategy="increment")
-	@GeneratedValue(generator="incre")
+	@SequenceGenerator(name="gen",sequenceName="UPLOADFILES_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen")
 	private long file_id;
 	
 	private String address;

@@ -1,42 +1,27 @@
 package com.blusky.www.utils;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.transform.Transformers;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-@Component
 public class HibernateUtils {
 
-	@Inject
-	static SessionFactory sf;
-	
-	@Transactional
-	public static List getListBySql(String sql,Class clazz,Object[] objects){
-		Query query ;
-		try{
-			if(clazz!=null){
-			 query = sf.getCurrentSession().createSQLQuery(sql).addEntity(clazz);
-			}else{
-			 query = sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+	private static SessionFactory sf;
+
+	public static Session getSession() {
+		ApplicationContext ac = new ClassPathXmlApplicationContext(
+				"classpath:spring.xml");
+		sf = (SessionFactory) ac.getBean("sessionFactory");
+		try {
+			if (sf.getCurrentSession() != null) {
+				return sf.getCurrentSession();
+			} else {
+				return sf.openSession();
 			}
-			if(objects!=null && objects.length>0){
-				for(int i=0;i<objects.length;i++){
-					query.setParameter(i, objects[i]);
-				}
-			}
-			return query.list();
-		}catch(Exception e){
-			e.printStackTrace();
-			return null;
+		} catch (Exception e) {
+			return sf.openSession();
 		}
-		
-		
+
 	}
-	
 }

@@ -3,29 +3,26 @@ package com.blusky.www.bean;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.eclipse.persistence.annotations.JoinFetch;
-import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
 @Table(name = "Property_Bean")
 public class PropertyBean {
 	@Id
-	@GeneratedValue(generator = "paymentableGenerator")
-	@GenericGenerator(name = "paymentableGenerator", strategy = "increment")
+	@SequenceGenerator(name="gen",sequenceName="PROPERTY_BEAN_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen")
 	@Column(name="property_id")
 	private int id;
 
@@ -35,16 +32,17 @@ public class PropertyBean {
 	
 	private long zipCode;
 	
+	@Column(name="states")
 	private String state;
 	
 	private String Country;
 	
 	private String propertyType;
 	
-	private String type;
+	@Column(name="ptype")
+	String type;
 	
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="propery")
-	@JoinFetch
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="propery")
 	private List<UploadFiles> files;
 
 	private Date createdDate;
