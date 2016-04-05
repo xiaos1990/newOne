@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.blusky.www.Iservice.TestSerivceI;
+import com.blusky.www.Iservice.TestServiceI;
 import com.blusky.www.bean.TestBean;
 import com.blusky.www.bean.UserBean;
 
@@ -34,7 +34,7 @@ public class TestAction {
 	@Inject
 	MessageSource messageSource;
 	@Inject
-	TestSerivceI testService;
+	TestServiceI testService;
 	
 	@Inject
 	SessionFactory sf;

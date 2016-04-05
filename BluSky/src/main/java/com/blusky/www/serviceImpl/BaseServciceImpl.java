@@ -76,9 +76,9 @@ public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 		return null;
 	}
 
-	public List findListBySQL(String sql, Object classObject, Object... objects) {
+	public List findListBySQL(String sql, Class classObject, Object... objects) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.findListBySQL(sql, classObject, objects);
 	}
 
 }

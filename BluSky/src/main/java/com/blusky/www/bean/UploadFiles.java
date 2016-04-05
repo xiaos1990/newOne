@@ -15,8 +15,8 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class UploadFiles {
 	@Id
-	@SequenceGenerator(name="gen",sequenceName="UPLOADFILES_ID_SEQ")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen")
+	@SequenceGenerator(name="gen2",sequenceName="UPLOADFILES_ID_SEQ",allocationSize = 1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen2")
 	private long file_id;
 	
 	private String address;

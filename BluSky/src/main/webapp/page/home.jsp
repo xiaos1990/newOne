@@ -37,6 +37,7 @@
 	margin-right: 10%; */
 	border: none;
 	margin-top: 150px;
+	background-color:white;
 	/* overflow-y: hidden;
 	overflow-x: hidden; */
 /* 	background-color:rgb(41,36,33); 

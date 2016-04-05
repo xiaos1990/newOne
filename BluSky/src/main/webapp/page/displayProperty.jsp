@@ -12,10 +12,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
 <script src="../js/jquery-1.12.2.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js" async defer></script>
 <style>
-.main {	
-	float: left;
- 	border-bottom: dashed blue 0.5px;
+.main {
+	border-bottom: dashed blue 0.5px;
 	/*border-right: solid blue 0.1px; */
 }
 
@@ -30,82 +30,189 @@
 	border-top: double gray;
 	height: 2px;
 	width: 100%;
-	height: 2px;
 }
+
 .innerTextDiv {
-float: left; 
-/* margin-right:5%;  */
-color: black;
-}
-body{
-margin-left:10%;
-margin-right:10%;
-
-
+	float: left;
+	/* margin-right:5%;  */
+	color: black;
 }
 
+body {
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+#googleMap {
+	float: left;
+	/* left:52%;
+right:10%; */
+	width: 38%;
+	height: 800px;
+	border: solid;
+}
+
+#map {
+	width: 100%;
+	height: 100%;
+}
 </style>
 </head>
-<body>
-<div class="formDiv">
-	<form:form action="/BluSky/property/upload" method="post"
-		commandName="propertyForm">
-		
+<body onload="initialize();">
 
-			<label for="propertyType">Property Type:</label>
-			<form:select path="propertyType" cssId="propertyType">
-				<form:option value="" label="--Please Select--" />
-				<c:forEach var="opts" items="${propertyForm.propertyTypeList}">
-					<form:option value="${opts['REF_VALUE'] }">${opts['SHORT_DESCRIPTION'] }</form:option>
-				</c:forEach>
-			</form:select>
 
-			<label for="type">Type:</label>
-			<form:select path="type" cssId="type">
-				<form:option value="" label="--Please Select--" />
-				<c:forEach var="opts" items="${propertyForm.typeList}">
-					<form:option value="${opts['REF_VALUE'] }">${opts['SHORT_DESCRIPTION'] }</form:option>
-				</c:forEach>
-			</form:select>
-			<label for="price">Price:</label>
-			<form:input cssId="price" path="price" />
-			<label for="sortBy">Sort By:</label>
-			<form:select path="sortBy" cssId="sortBy">
-				<form:option value="price">price</form:option>
-				<form:option value="distance">distance</form:option>
-				<form:option value="postDate">post date</form:option>
-			</form:select>
-			<input type="submit" value="refresh" />
-		
-		</form:form>
-</div>
-		<div class="spacer"></div>
-		<c:forEach var="properties" items="${propertyForm.propertyList }"
-			varStatus="status">
-			<a href="/BluSky/property/displayDetails/${properties.id}" target="body">
-				<div class="main">
-					<img style="float:left;" src="${properties.files[0].address}" />
-					<div class="innerTextDiv" >
+	<div>
+
+		<div style="float: left; width: 50%; height:800px; overflow-y: scroll">
+			<div class="formDiv">
+
+				<label for="address">Address:</label> <input type="text"
+					name="address" id="address" placeholder="input an address"
+					onchange="codeAddress();" /> <label for="propertyType">Property
+					Type:</label> <select name="propertyType" id="propertyType">
+					<option value="" label="--Please Select--" />
+					<c:forEach var="opts" items="${propertyForm.propertyTypeList}">
+						<option value="${opts['REF_VALUE'] }">${opts['SHORT_DESCRIPTION'] }</option>
+					</c:forEach>
+				</select> <label for="type">Type:</label> <select name="type" id="type">
+					<option value="" label="--Please Select--" />
+					<c:forEach var="opts" items="${propertyForm.typeList}">
+						<option value="${opts['REF_VALUE'] }">${opts['SHORT_DESCRIPTION'] }</option>
+					</c:forEach>
+				</select> <label for="price">Price:</label> <input id="price" name="price" />
+				<label for="sortBy">Sort By:</label> <select name="sortBy"
+					id="sortBy">
+					<option value="price">price</option>
+					<option value="distance">distance</option>
+					<option value="postDate">post date</option>
+				</select>
+				<button>filter</button>
+			</div>
+			<div class="spacer"></div>
+			<c:forEach var="properties" items="${list }" varStatus="status">
+				<a href="/BluSky/property/displayDetails/${properties.id}"
+					target="body"> <!-- <div class="main"> --> <img
+					src="${properties['address1']}" />
+					<div class="innerTextDiv">
 						<div style="float: left, text-align:left">
-							<b>Address</b><br/>${properties.address}</div>
+							<b>Address</b><br />${properties['address']}</div>
 						<div style="float: left, text-align:left">
-							<b>city</b><br/>${properties.city}</div>
+							<b>city</b><br />${properties['city']}</div>
 						<div style="float: left, text-align:left">
-							<b>state</b><br/>${properties.state}</div>
+							<b>state</b><br />${properties['state']}</div>
 						<div style="float: left, text-align:left">
-							<b>zipCode</b><br/>${properties.zipCode}</div>
+							<b>zipCode</b><br />${properties['zipCode']}</div>
 						<div
 							style="float: left, text-align:left; word-break: break-all; word-wrap: break-word;">
-							<b>features</b><br/>${properties.description}</div>
-					</div>
-				</div>
-			</a>
-		</c:forEach>
-	
+							<b>features</b><br />${properties['description']}</div>
+					</div> <!-- </div> -->
+				</a>
+			</c:forEach>
+
+		</div>
+		<div id="googleMap">
+			<div id="map"></div>
+		</div>
+
+	</div>
 
 </body>
 <script>
-	function initsize(){
+	var geocoder;
+	var map;
+	function initialize() {
+		geocoder = new google.maps.Geocoder();
+		var latlng = new google.maps.LatLng(-34.397, 150.644);
+		var mapOptions = {
+			zoom : 10,
+			center : latlng
+		}
+		map = new google.maps.Map(document.getElementById("map"), mapOptions);
+	}
+
+	function codeAddress() {
+		var address = document.getElementById("address").value;
+		geocoder.geocode({
+			'address' : address
+		}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map : map,
+					position : results[0].geometry.location
+				});
+				return results[0].address_components[6].long_name;
+			} else {
+				alert("Geocode was not successful for the following reason: "
+						+ status);
+			}
+		});
+	};
+
+ 	$(function() {
+ 	
+	 	var jsonObject = "${jsonObject}";
+		console.log(jsonObject);
+		fillAddress(jsonObject);
+ 
+	});
+
+	function fillAddress(jsonAddress) {
+		/*   var jsonAddress ={
+		"address":[{"location":"lansing"},
+		{"location":"michigan state university"}
+		]
+		}; */
+		var address;
+		for (var i = 0; i < jsonAddress.PropertyBean.length; i++) {
+			address = jsonAddress.PropertyBean[i].address;
+			geocoder
+					.geocode(
+							{
+								'address' : address
+							},
+							function(results, status) {
+								if (status == google.maps.GeocoderStatus.OK) {
+									map.setCenter(results[0].geometry.location);
+									var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+									var marker = new google.maps.Marker(
+											{
+												map : map,
+												position : results[0].geometry.location,
+												icon : iconBase
+														+ 'schools_maps.png'
+											});
+								} else {
+									alert("Geocode was not successful for the following reason: "
+											+ status);
+								}
+							});
+		}
+		;
+	};
+
+	function ajaxCall() {
+		var zipCode = codeAddress();
+		alert(1);
+		$.ajax({
+			url : 'http://localhost:7001/BluSky/property/display1',
+			type : 'POST',
+			data : 'zipCode=' + zipCode,
+			cache : false,
+			success : function(data) {
+				console.log(123);
+
+				fillAddress(data);
+				$("#body").reload();
+			},
+			error : function() {
+				alert(arguments[1]);
+			},
+		});
+
+	}
+
+	/* function initsize(){
 		
 
 		
@@ -140,7 +247,7 @@ margin-right:10%;
 
 	 window.onresize = function() {
 		initsize();
-	}; 
+	};  */
 
 	/* 	$(".main").on("mouseenter mouseleave",function(event){
 	 console.log(123);

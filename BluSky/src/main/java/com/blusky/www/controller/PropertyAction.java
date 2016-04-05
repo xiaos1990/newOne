@@ -1,5 +1,6 @@
 package com.blusky.www.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,34 +9,47 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.blusky.www.Iservice.PropertySerivceI;
+import com.bea.common.security.xacml.context.Request;
+import com.blusky.www.Iservice.PropertyServceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
 import com.blusky.www.formbean.PropertyForm;
+import com.blusky.www.utils.AddressUtils;
 import com.blusky.www.utils.RefTableUtils;
+import com.rsa.cryptoj.c.ja;
 
 @Controller
 @RequestMapping("/property")
 public class PropertyAction {
 
 	@Inject
-	PropertySerivceI propertyService;
+	PropertyServceI propertyService;
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String uploadProperty(
@@ -43,6 +57,8 @@ public class PropertyAction {
 			BindingResult result, @RequestParam MultipartFile[] btnFile,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		request.getSession(true).setAttribute("amenities", request.getParameterValues("amenities"));
+		request.getSession(true).setAttribute("leaseDetails", request.getParameterValues("leaseDetails"));
 		List<UploadFiles> set = new ArrayList<UploadFiles>();
 		InputStream is = null;
 		OutputStream os = null;
@@ -107,6 +123,26 @@ public class PropertyAction {
 					}
 				}
 				propertyBean.setFiles(set);
+				StringBuffer leaseDetails = new StringBuffer();
+				StringBuffer amenities = new StringBuffer();
+				String[] strings = request.getParameterValues("leaseDetails");
+					for(int i=0;i<strings.length;i++){
+						if(i==0){
+							leaseDetails.append(strings[i]);
+						}else{
+							leaseDetails.append(","+strings[i]);
+						}
+					}
+					String[] strings1 = request.getParameterValues("amenities");
+					for(int i=0;i<strings1.length;i++){
+						if(i==0){
+							amenities.append(strings1[i]);
+						}else{
+							amenities.append(","+strings1[i]);
+						}
+					}
+				propertyBean.setLeaseDetails(leaseDetails.toString());
+				propertyBean.setAmenities(amenities.toString());
 				propertyService.save(propertyBean);
 
 			} catch (Exception e) {
@@ -129,7 +165,7 @@ public class PropertyAction {
 				}
 
 			}
-			return "uploadProperty";
+			return "redirect:/property/displayDetails/"+propertyBean.getId();
 		}
 	}
 
@@ -170,11 +206,18 @@ public class PropertyAction {
 		return null;
 	}
 
-	@RequestMapping(value = "/newOne", method = RequestMethod.GET)
-	public String createNewProperty(ModelMap map) {
+	@RequestMapping(value = "/newOne.do", method = RequestMethod.GET)
+	public String createNewProperty(ModelMap map,HttpServletRequest request) {
 		PropertyBean property = new PropertyBean();
 		map.addAttribute("propertyBean", property);
-		// HibernateUtils.getListBySql(sql, clazz, objects);
+		List list=RefTableUtils.getListBySql("AMENITIES");
+		List leaseList = RefTableUtils.getListBySql("LEASE_DETAILS");
+		request.getSession(true).setAttribute("propertyTypes",RefTableUtils.getListBySql("PROPERTY_TYPE_OWNER"));
+		request.getSession(true).setAttribute("types",RefTableUtils.getListBySql("PROPERTY"));
+		request.getSession(true).setAttribute("amenityList", list);
+		request.getSession(true).setAttribute("leaseList", leaseList);
+		List<Map<String, String>> results = AddressUtils.getUSStates();
+		request.getSession(true).setAttribute("USstates", results);
 
 		return "uploadProperty";
 	}
@@ -186,4 +229,67 @@ public class PropertyAction {
 		return "displayPropertyDetails";
 	}
 	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping(value = "/display1")
+	public List<PropertyBean> dipslayProperty1(HttpServletRequest request) {
+		String zipcode =request.getParameter("zipcode");
+		List<PropertyBean> list = new ArrayList<PropertyBean>();
+		if(StringUtils.isNotEmpty(zipcode)){
+		Object[] paremeters={zipcode};
+		
+		list=propertyService.findEntityByHQL("from PropertyBean pb where pb.zipCode=? and rownum<11  ", paremeters);
+		}else{
+			list=propertyService.findEntityByHQL("from PropertyBean pb where rownum<3", null);	
+			
+		}
+		request.getSession(true).setAttribute("list", list);
+		return list;
+
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/display2")
+	public String dipslayProperty2(HttpServletRequest request) {
+		String zipcode =request.getParameter("zipcode");
+		List<Map> list = new ArrayList<Map>();
+		if(StringUtils.isNotEmpty(zipcode)){
+		Object[] paremeters={zipcode};
+		
+		list=propertyService.findListBySQL("SELECT PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1  from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where pb.zipCode=? and rownum<11  ",null, paremeters);
+		}else{
+			list=propertyService.findListBySQL("SELECT PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1 from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where rownum<3  ", null,null);	
+			
+		}
+		request.getSession(true).setAttribute("list", list);
+		final OutputStream out = new ByteArrayOutputStream();
+	    final ObjectMapper mapper = new ObjectMapper();
+
+		try {
+
+		    mapper.writeValue(out, list);
+		    JSONObject json = new JSONObject();
+		    JSONArray jArray = new JSONArray();
+		    jArray=JSONArray.fromObject(out);
+		    json.put("jsonObject", jArray);
+		    /* final byte[] data = ((ByteArrayOutputStream) out).toByteArray();*/
+		    System.out.println(json.toString());
+			request.setAttribute("jsonObject", json.toString());
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "displayProperty";
+
+	}
 }

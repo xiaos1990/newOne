@@ -50,7 +50,7 @@
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">Property<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="/BluSky/property/newOne" target="body">Post Property</a></li>
+									<li><a href="/BluSky/property/newOne.do" target="body">Post Property</a></li>
 									<li><a href="/BluSky/property/display" target="body">Display Property</a></li>
 									<li><a href="#">Something else here</a></li>
 									<!-- <li role="separator" class="divider"></li>
@@ -95,6 +95,18 @@
 
 
 window.parent.frames["body"].location.href="/BluSky/user/register"; 
+/*  var frame =  window.parent.frames["body"];
+ frame.src='/BluSky/user/register'; */
+/*parent.location.reload; */
+
+ 
+	
+}); 
+
+$("#signinId").on("click",function(){
+
+
+window.parent.frames["body"].location.href="/BluSky/page/signin.jsp"; 
 /*  var frame =  window.parent.frames["body"];
  frame.src='/BluSky/user/register'; */
 /*parent.location.reload; */

@@ -15,13 +15,35 @@
   <taglib>
   <taglib-uri>/spring-form.tld</taglib-uri>
   <taglib-location>/WEB-INF/spring-form.tld</taglib-location>
+  </taglib> 
+    <taglib>
+  <taglib-uri>/fmt.tld</taglib-uri>
+  <taglib-location>/WEB-INF/fmt.tld</taglib-location>
   </taglib>
-  
     <taglib>
   <taglib-uri>/c.tld</taglib-uri>
   <taglib-location>/WEB-INF/c.tld</taglib-location>
   </taglib>
+   <taglib>
+   <taglib-uri>/fn.tld</taglib-uri>
+  <taglib-location>/WEB-INF/fn.tld</taglib-location>
+  </taglib>
+   <taglib>
+   <taglib-uri>/spring.tld</taglib-uri>
+  <taglib-location>/WEB-INF/spring.tld</taglib-location>
+  </taglib>
  </jsp-config>
+ 
+  <filter>
+    <filter-name>CheckUserStatusFilter</filter-name>
+    <filter-class>com.blusky.www.filter.CheckUserStatusFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CheckUserStatusFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+
+  
   <!-- 配置Spring监听 -->  
   <listener>  
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  

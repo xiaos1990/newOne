@@ -6,11 +6,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 
 
 
 
+
+import org.hibernate.transform.Transformers;
 
 import com.blusky.www.Idao.BaseDaoI;
 
@@ -20,7 +23,6 @@ public class BaseDaoImpl<T> implements BaseDaoI<T>{
 	@Inject
 	SessionFactory sFactory;
 	
-	@SuppressWarnings("unused")
 	private Class<T> clazz ;
 
 	public BaseDaoImpl() {
@@ -86,9 +88,27 @@ public class BaseDaoImpl<T> implements BaseDaoI<T>{
 		return null;
 	}
 
-	public List<?> findListBySQL(String sql, Object classObject, Object... objects) {
+	public List findListBySQL(String sql, Class classObject, Object... objects) {
 		// TODO Auto-generated method stub
-		return null;
+		List list;
+		try{
+		SQLQuery query=sFactory.getCurrentSession().createSQLQuery(sql);
+		if(classObject==null)
+			query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		else {
+			query.addEntity(classObject);
+		}
+		if(objects!=null&&objects.length>0){
+			for(int i=0;i<objects.length;i++){
+				query.setParameter(i, objects[i]);
+			}			
+		}
+		list=query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			list=null;
+		}
+		return list;
 	}
 
 }

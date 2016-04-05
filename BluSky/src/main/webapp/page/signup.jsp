@@ -61,28 +61,28 @@
 
 					</tr>
 					<tr>
-						<td><label for="phone">address:</label></td>
+						<td><label for="address">address:</label></td>
 						<td><form:input path="address" id="address"
 								class="text ui-widget-content ui-corner-all" /></td>
 						<td><form:errors path="address" cssClass="error" /></td>
 
 					</tr>
 					<tr>
-						<td><label for="phone">city:</label></td>
+						<td><label for="city">city:</label></td>
 						<td><form:input path="city" id="city"
 								class="text ui-widget-content ui-corner-all" /></td>
 						<td><form:errors path="city" cssClass="error" /></td>
 
 					</tr>
 					<tr>
-						<td><label for="phone">zipCode</label></td>
+						<td><label for="zipCode">zipCode</label></td>
 						<td><form:input path="zipCode" id="zipCode"
 								class="text ui-widget-content ui-corner-all" /></td>
 						<td><form:errors path="zipCode" cssClass="error" /></td>
 
 					</tr>
 					<tr>
-						<td><label for="phone">state:</label></td>
+						<td><label for=state>state:</label></td>
 						<td><form:select path="state" id="state"
 								class="text ui-widget-content ui-corner-all">
 								<form:option value="">--please select--</form:option>
@@ -94,7 +94,7 @@
 
 					</tr>
 					<tr>
-						<td><label for="phone">country:</label></td>
+						<td><label for="country">country:</label></td>
 						<td><form:input path="country" id="country"
 								class="text ui-widget-content ui-corner-all" /></td>
 						<td><form:errors path="country" cssClass="error" /></td>

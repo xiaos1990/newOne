@@ -25,8 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "USER_BEAN")
 public class UserBean {
 	@Id
-	@SequenceGenerator(name="gen",sequenceName="USER_BEAN_ID_SEQ")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen")
+	@SequenceGenerator(name="gen1",sequenceName="USER_BEAN_ID_SEQ",allocationSize = 1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen1")
 	@Column(name="user_id")
 	private int id;
 	

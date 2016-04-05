@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.blusky.www.Idao.BaseDaoI;
 import com.blusky.www.Idao.TestDaoI;
 import com.blusky.www.Idao.UserDaoI;
-import com.blusky.www.Iservice.TestSerivceI;
-import com.blusky.www.Iservice.UserSerivceI;
+import com.blusky.www.Iservice.TestServiceI;
+import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.UserBean;
 
 @Service("userService")
-public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserSerivceI {
+public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserServiceI {
 	
 	@Resource
 	UserDaoI userDao;

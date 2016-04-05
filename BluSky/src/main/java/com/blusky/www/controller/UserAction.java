@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.persistence.criteria.From;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -13,7 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.blusky.www.Iservice.UserSerivceI;
+
+import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.UserBean;
 import com.blusky.www.utils.AddressUtils;
 
@@ -22,7 +24,7 @@ import com.blusky.www.utils.AddressUtils;
 public class UserAction {
 
 	@Inject
-	UserSerivceI userService;
+	UserServiceI userService;
 
 
 /*	@RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -76,11 +78,32 @@ public class UserAction {
 	}
 	
 	@RequestMapping(value="/register" , method = RequestMethod.GET)
-	public String testAction(ModelMap map,HttpServletRequest request){
+	public String registerAction(ModelMap map,HttpServletRequest request){
 		map.addAttribute("UserBean", new UserBean());
 		List<Map<String, String>> results = AddressUtils.getUSStates();
 		request.getSession(true).setAttribute("USstates", results);
 		return "signup";	
+	}
+	
+	@RequestMapping(value="/signin" , method = RequestMethod.POST)
+	public String signinAction(ModelMap map,HttpServletRequest request){
+		//simple validate frist!!!!
+		List<UserBean> list=validateUser(request.getParameter("email"),request.getParameter("password"));
+		if(list!=null && list.size()>1)
+			request.getSession(true).setAttribute("user", list.get(0));
+		else{
+			return "signin";
+		}
+		String forwardPage=request.getSession().getAttribute("forwardPage").toString();
+		//System.out.println(forwardPage);
+		return ("redirect:"+forwardPage.split("BluSky")[1]);	
+	}
+
+	private List<UserBean> validateUser(String parameter, String parameter2) {
+		// TODO Auto-generated method stub
+		Object[] parameters ={parameter,parameter2};
+		List<UserBean> list =userService.findEntityByHQL("from UserBean ub where ub.email=? and ub.password=?",parameters);
+		return list;
 	}
 
 }

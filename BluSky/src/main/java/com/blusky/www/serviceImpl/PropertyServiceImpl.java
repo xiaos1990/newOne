@@ -1,16 +1,19 @@
 package com.blusky.www.serviceImpl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.blusky.www.Idao.BaseDaoI;
 import com.blusky.www.Idao.PropertyDaoI;
-import com.blusky.www.Iservice.PropertySerivceI;
+import com.blusky.www.Iservice.PropertyServceI;
 import com.blusky.www.bean.PropertyBean;
 
 @Service("propertyService")
-public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implements PropertySerivceI {
+public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implements PropertyServceI {
 	
 	@Resource
 	PropertyDaoI propertyDao;
