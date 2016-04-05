@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 @Entity
 public class UploadFiles {
@@ -24,6 +26,7 @@ public class UploadFiles {
 	private long size;
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="property_id")
+	@JsonIgnore
 	private PropertyBean propery;
 
 	

@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,6 +42,7 @@ public class UserBean {
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	@NotNull(message="birthday is required!")
 	@Past(message="birthday is not valid!")
+	@JsonIgnore
 	private Date birthday;
 	
 	@NotNull(message="phone is required!")
@@ -66,6 +68,7 @@ public class UserBean {
 	
 	private String Country="US";
 	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JsonIgnore
 	private Set<PropertyBean> properties;
 	
 	

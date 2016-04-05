@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -63,9 +64,9 @@ public class PropertyBean {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="propery")
 	private List<UploadFiles> files;
 	
-
+	@JsonIgnore
 	private Date createdDate;
-	
+	@JsonIgnore
 	private Date ModifiedDate;
 	
 	private String description;

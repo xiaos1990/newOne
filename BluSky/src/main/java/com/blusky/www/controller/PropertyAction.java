@@ -18,31 +18,35 @@ import javax.validation.Valid;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.util.CycleDetectionStrategy;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.python.modules.newmodule;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bea.common.security.xacml.context.Request;
 import com.blusky.www.Iservice.PropertyServceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
 import com.blusky.www.formbean.PropertyForm;
 import com.blusky.www.utils.AddressUtils;
 import com.blusky.www.utils.RefTableUtils;
-import com.rsa.cryptoj.c.ja;
+import com.rsa.cryptoj.c.aJ.l;
 
 @Controller
 @RequestMapping("/property")
@@ -232,60 +236,84 @@ public class PropertyAction {
 	
 	
 	
-	@SuppressWarnings("unchecked")
-	@ResponseBody
+
 	@RequestMapping(value = "/display1")
-	public List<PropertyBean> dipslayProperty1(HttpServletRequest request) {
+	public  @ResponseBody List<PropertyBean> dipslayProperty1(HttpServletRequest request) {
+		 JSONArray jArray = new JSONArray();
 		String zipcode =request.getParameter("zipcode");
+		System.out.println(zipcode);
 		List<PropertyBean> list = new ArrayList<PropertyBean>();
-		if(StringUtils.isNotEmpty(zipcode)){
+		if(StringUtils.isNotEmpty(zipcode)&&zipcode.matches("^\\d{5}$")){
 		Object[] paremeters={zipcode};
 		
-		list=propertyService.findEntityByHQL("from PropertyBean pb where pb.zipCode=? and rownum<11  ", paremeters);
+		/*list=propertyService.findListBySQL("SELECT pb.property_id,PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1  from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where pb.zipCode=? and rownum<11  ",null, paremeters);
 		}else{
-			list=propertyService.findEntityByHQL("from PropertyBean pb where rownum<3", null);	
+			list=propertyService.findListBySQL("SELECT pb.property_id,PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1 from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where rownum<3  ", null,null);	
+			
+		}*/
+		list=propertyService.findEntityByHQL("SELECT distinct pb from PropertyBean pb  inner JOIN fetch pb.files FILES inner join fetch pb.user u  where pb.zipCode=? and rownum<50  ", paremeters);
+		}else{
+		list=propertyService.findEntityByHQL("SELECT distinct pb from PropertyBean pb inner JOIN fetch pb.files FILES inner join fetch pb.user u  where  rownum<30", null);
 			
 		}
-		request.getSession(true).setAttribute("list", list);
-		return list;
+		  /* JsonConfig jc = new JsonConfig();
+		    jc.setExcludes(new String[]{"property","properties","createdDate","modifiedDate","birthday"});
+		    jc.setIgnoreDefaultExcludes(false);
+		    jc.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 
+			try {
+	
+			    mapper.writeValue(out, list);
+			    JSONObject json = new JSONObject();
+			   
+			    jArray=JSONArray.fromObject(list,jc);
+			    json.put("jsonObject", jArray);
+			    System.out.println(json.toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+			return list;
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+
 	@RequestMapping(value = "/display2")
 	public String dipslayProperty2(HttpServletRequest request) {
 		String zipcode =request.getParameter("zipcode");
-		List<Map> list = new ArrayList<Map>();
-		if(StringUtils.isNotEmpty(zipcode)){
+		List<PropertyBean> list = new ArrayList<PropertyBean>();
+		if(StringUtils.isNotEmpty(zipcode)&&zipcode.matches("^\\d{5}$")){
 		Object[] paremeters={zipcode};
 		
-		list=propertyService.findListBySQL("SELECT PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1  from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where pb.zipCode=? and rownum<11  ",null, paremeters);
+		/*list=propertyService.findListBySQL("SELECT pb.property_id,PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1  from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where pb.zipCode=? and rownum<11  ",null, paremeters);
 		}else{
-			list=propertyService.findListBySQL("SELECT PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1 from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where rownum<3  ", null,null);	
+			list=propertyService.findListBySQL("SELECT pb.property_id,PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1 from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where rownum<3  ", null,null);	
+			
+		}*/
+		list=propertyService.findEntityByHQL("SELECT distinct pb from PropertyBean pb  inner JOIN fetch pb.files FILES inner join fetch pb.user u  where pb.zipCode=? and rownum<50  ", paremeters);
+		}else{
+			list=propertyService.findEntityByHQL("SELECT distinct pb from PropertyBean pb inner JOIN fetch pb.files FILES inner join fetch pb.user u  where  rownum<30  ", null);
 			
 		}
-		request.getSession(true).setAttribute("list", list);
+		System.out.println(list.toString());
+		request.setAttribute("list123", list);
 		final OutputStream out = new ByteArrayOutputStream();
 	    final ObjectMapper mapper = new ObjectMapper();
+	    JsonConfig jc = new JsonConfig();
+	    jc.setExcludes(new String[]{"property","properties","createdDate","modifiedDate","birthday"});
+	/*    jc.setIgnoreDefaultExcludes(false);*/
+	    jc.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 
 		try {
-
-		    mapper.writeValue(out, list);
+/*
+		    mapper.writeValue(out, list);*/
 		    JSONObject json = new JSONObject();
 		    JSONArray jArray = new JSONArray();
-		    jArray=JSONArray.fromObject(out);
-		    json.put("jsonObject", jArray);
-		    /* final byte[] data = ((ByteArrayOutputStream) out).toByteArray();*/
-		    System.out.println(json.toString());
-			request.setAttribute("jsonObject", json.toString());
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		    jArray=JSONArray.fromObject(list,jc);
+		    /*json.put("jsonObject", jArray);
+		    System.out.println(json.toString());*/
+			request.setAttribute("jsonObject", jArray);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -18,6 +18,9 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.blusky.www.Idao.BaseDaoI;
+import com.blusky.www.daoimpl.BaseDaoImpl;
+import com.blusky.www.serviceImpl.BaseServciceImpl;
 import com.blusky.www.serviceImpl.PropertyServiceImpl;
 
 public class TestClass {
@@ -35,14 +38,13 @@ public class TestClass {
 	@Test
 	public void testSpring() {
 		// 从Spring的IOC容器中获取bean对象
-		PropertyServiceImpl propertyService = (PropertyServiceImpl) ac
-				.getBean("propertyService");
+		BaseDaoI<TestClass> bs = new BaseDaoImpl<TestClass>();
 		// 执行测试方法
 		/* testService.testMethod(); */
 
 		List<Map> list = new ArrayList<Map>();
 
-		list = propertyService
+		list = bs
 				.findListBySQL(
 						"SELECT PB.ADDRESS,PB.CITY,PB.STATES,PB.ZIPCODE,FILES.ADDRESS AS ADDRESS1 from Property_Bean pb INNER JOIN UPLOADFILES FILES ON FILES.PROPERTY_ID=PB.PROPERTY_ID where rownum<3  ",
 						null, null);

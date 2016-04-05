@@ -58,7 +58,7 @@ right:10%; */
 }
 </style>
 </head>
-<body onload="initialize();">
+<body onload="initialize();loadJson();">
 
 
 	<div>
@@ -68,7 +68,7 @@ right:10%; */
 
 				<label for="address">Address:</label> <input type="text"
 					name="address" id="address" placeholder="input an address"
-					onchange="codeAddress();" /> <label for="propertyType">Property
+					onchange="codeAddress();ajaxCall();" /> <label for="propertyType">Property
 					Type:</label> <select name="propertyType" id="propertyType">
 					<option value="" label="--Please Select--" />
 					<c:forEach var="opts" items="${propertyForm.propertyTypeList}">
@@ -89,22 +89,22 @@ right:10%; */
 				<button>filter</button>
 			</div>
 			<div class="spacer"></div>
-			<c:forEach var="properties" items="${list }" varStatus="status">
+			<c:forEach var="properties" items="${list123}" varStatus="status">
 				<a href="/BluSky/property/displayDetails/${properties.id}"
 					target="body"> <!-- <div class="main"> --> <img
-					src="${properties['address1']}" />
+					src="${properties.files[0].address}" />
 					<div class="innerTextDiv">
 						<div style="float: left, text-align:left">
-							<b>Address</b><br />${properties['address']}</div>
+							<b>Address</b><br />${properties.address}</div>
 						<div style="float: left, text-align:left">
-							<b>city</b><br />${properties['city']}</div>
+							<b>city</b><br />${properties.city}</div>
 						<div style="float: left, text-align:left">
-							<b>state</b><br />${properties['state']}</div>
+							<b>state</b><br />${properties.state}</div>
 						<div style="float: left, text-align:left">
-							<b>zipCode</b><br />${properties['zipCode']}</div>
+							<b>zipCode</b><br />${properties.zipCode}</div>
 						<div
 							style="float: left, text-align:left; word-break: break-all; word-wrap: break-word;">
-							<b>features</b><br />${properties['description']}</div>
+							<b>features</b><br />${properties.description}</div>
 					</div> <!-- </div> -->
 				</a>
 			</c:forEach>
@@ -118,8 +118,10 @@ right:10%; */
 
 </body>
 <script>
+ 	var zipcode123;
 	var geocoder;
 	var map;
+	var markers = [];
 	function initialize() {
 		geocoder = new google.maps.Geocoder();
 		var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -128,20 +130,23 @@ right:10%; */
 			center : latlng
 		}
 		map = new google.maps.Map(document.getElementById("map"), mapOptions);
-	}
+	};
 
 	function codeAddress() {
 		var address = document.getElementById("address").value;
-		geocoder.geocode({
-			'address' : address
-		}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
+		console.log(address);
+		 geocoder.geocode( { 'address': address}, function(results, status) {
+				console.log(results);
+				var index1;
+				if (status == google.maps.GeocoderStatus.OK) {
 				map.setCenter(results[0].geometry.location);
 				var marker = new google.maps.Marker({
 					map : map,
 					position : results[0].geometry.location
 				});
-				return results[0].address_components[6].long_name;
+				markers.push(marker);
+				index1=parseFloat(results[0].address_components.length)-1;
+				zipcode123= results[0].address_components[index1].long_name;
 			} else {
 				alert("Geocode was not successful for the following reason: "
 						+ status);
@@ -149,13 +154,13 @@ right:10%; */
 		});
 	};
 
- 	$(function() {
+/*  	$(function() {
  	
-	 	var jsonObject = "${jsonObject}";
-		console.log(jsonObject);
+	 	var jsonObject = ${jsonObject};
+		console.log(jsonObject); 
 		fillAddress(jsonObject);
  
-	});
+	}); */
 
 	function fillAddress(jsonAddress) {
 		/*   var jsonAddress ={
@@ -164,14 +169,10 @@ right:10%; */
 		]
 		}; */
 		var address;
-		for (var i = 0; i < jsonAddress.PropertyBean.length; i++) {
-			address = jsonAddress.PropertyBean[i].address;
-			geocoder
-					.geocode(
-							{
-								'address' : address
-							},
-							function(results, status) {
+		for (var i = 0; i < jsonAddress.length; i++) {
+			address = jsonAddress[i].address+","+jsonAddress[i].zipCode;
+			console.log(address);
+		 geocoder.geocode( { 'address': address}, function(results, status) {
 								if (status == google.maps.GeocoderStatus.OK) {
 									map.setCenter(results[0].geometry.location);
 									var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
@@ -182,6 +183,7 @@ right:10%; */
 												icon : iconBase
 														+ 'schools_maps.png'
 											});
+												markers.push(marker);
 								} else {
 									alert("Geocode was not successful for the following reason: "
 											+ status);
@@ -192,18 +194,14 @@ right:10%; */
 	};
 
 	function ajaxCall() {
-		var zipCode = codeAddress();
-		alert(1);
-		$.ajax({
+		deleteMarkers();
+		$.ajax({	
 			url : 'http://localhost:7001/BluSky/property/display1',
 			type : 'POST',
-			data : 'zipCode=' + zipCode,
+			data : 'zipcode='+zipcode123,
 			cache : false,
 			success : function(data) {
-				console.log(123);
-
-				fillAddress(data);
-				$("#body").reload();
+				fillAddress(data);	
 			},
 			error : function() {
 				alert(arguments[1]);
@@ -211,6 +209,35 @@ right:10%; */
 		});
 
 	}
+	
+	function loadJson(){
+	var jsonObject1 = ${jsonObject};
+		//console.log(jsonObject); 
+		fillAddress(jsonObject1);
+	};
+
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  };
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+};
 
 	/* function initsize(){
 		
