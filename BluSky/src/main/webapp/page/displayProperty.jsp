@@ -89,6 +89,7 @@ right:10%; */
 				<button>filter</button>
 			</div>
 			<div class="spacer"></div>
+			<div id="content">
 			<c:forEach var="properties" items="${list123}" varStatus="status">
 				<a href="/BluSky/property/displayDetails/${properties.id}"
 					target="body"> <!-- <div class="main"> --> <img
@@ -108,7 +109,7 @@ right:10%; */
 					</div> <!-- </div> -->
 				</a>
 			</c:forEach>
-
+			</div>
 		</div>
 		<div id="googleMap">
 			<div id="map"></div>
@@ -162,7 +163,7 @@ var lng=${lng};
 					map : map,
 					position : latLng
 				});
-				markers.push(marker);	
+				//markers.push(marker);	
 /* 	 google.maps.event.addListener(map, 'center_changed', function() {
         
             var bounds = map.getBounds();
@@ -245,7 +246,7 @@ var lng=${lng};
 					map : map,
 					position : results[0].geometry.location
 				});
-				markers.push(marker);
+				//markers.push(marker);
 				index1=parseFloat(results[0].address_components.length)-1;
 				zipcode123= results[0].address_components[index1].long_name;
 			} else {
@@ -308,7 +309,8 @@ var lng=${lng};
 	
 	
 	function ajaxCall1() {
-		
+			deleteMarkers();
+			$("#content").html("");
             $.ajax({
                 url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",
                 success: function (json) {
@@ -318,17 +320,22 @@ var lng=${lng};
                     for (var i = 0; i < json.properties.length; i++) {
                         var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);
                        // bounds.extend(latLng);
-                        var marker = new google.maps.Marker({map : map,position: latLng});
+                       var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                        var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'});
                         //attachInfoWindows(marker, map, infowindow, json.properties[i].lat, json.properties[i].lng);
+                        markers.push(marker);
+                        var content = $("#content");
+                        content.append('<img id="'+i+'" src="'+json.properties[i].files[0].address+'" onmouseover="changeColor(this);"  onmouseout="changebackColor(this);"/>');
                     };
                      for (var j = 0; j < json.users.length; j++) {
                         var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);
-                      //  bounds.extend(latLng);
-                        var marker = new google.maps.Marker({map : map,position: latLng});
+                      // bounds.extend(latLng);                   
+                        var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
                         //attachInfoWindows(marker, map, infowindow, json.users[i].lat, json.users[i].lng);
+                        markers.push(marker);
                     };
                     // only fit the bounds when all the markers have been added.
-                  //  map.fitBounds(bounds);
+                  // map.fitBounds(bounds);
                 }
             });
 	
@@ -401,8 +408,15 @@ google.maps.event.addListener(map, 'idle', function(ev){
 });
 } */
 
+function changeColor(obj){
+//console.log(obj.id);
+markers[obj.id].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+};
+
+function changebackColor(obj){
+markers[obj.id].setIcon('https://maps.google.com/mapfiles/kml/shapes/schools_maps.png');
+};
 
 
- 
 </script>
 </html>
