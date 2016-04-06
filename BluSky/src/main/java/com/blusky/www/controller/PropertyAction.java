@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +43,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blusky.www.Iservice.PropertyServceI;
+import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
+import com.blusky.www.bean.UserBean;
 import com.blusky.www.formbean.PropertyForm;
 import com.blusky.www.utils.AddressUtils;
 import com.blusky.www.utils.RefTableUtils;
@@ -54,6 +58,8 @@ public class PropertyAction {
 
 	@Inject
 	PropertyServceI propertyService;
+	@Inject
+	UserServiceI userService;
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String uploadProperty(
@@ -122,6 +128,11 @@ public class PropertyAction {
 								+ subFileName + "_" + i + ext);
 						files.setPropery(propertyBean);
 						files.setSize(btnFile[i].getSize());
+						if(".mp4".equalsIgnoreCase(ext)){
+							files.setFileType("video");
+						}else{
+							files.setFileType("photo");
+						}
 						set.add(files);
 
 					}
@@ -147,6 +158,9 @@ public class PropertyAction {
 					}
 				propertyBean.setLeaseDetails(leaseDetails.toString());
 				propertyBean.setAmenities(amenities.toString());
+				propertyBean.setUser((UserBean)request.getSession().getAttribute("user"));
+				propertyBean.setModifiedDate(new Date());
+				propertyBean.setCreatedDate(new Date());
 				propertyService.save(propertyBean);
 
 			} catch (Exception e) {
@@ -320,4 +334,31 @@ public class PropertyAction {
 		return "displayProperty";
 
 	}
+	
+	
+	@RequestMapping(value = "/display3")
+	public String dipslayProperty3(HttpServletRequest request) {
+		String lat = request.getParameter("lat");
+		String lng = request.getParameter("lng");
+		request.setAttribute("lat",lat);
+		request.setAttribute("lng",lng);
+		return "displayProperty";	
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/display4/{lat1}/{lng1}/{lat2}/{lng2}/")
+	public @ResponseBody Map dipslayProperty4(@PathVariable String lat1,@PathVariable String lng1,@PathVariable String lat2,@PathVariable String lng2) {
+		Map map = new HashMap();
+		List<PropertyBean> list =new ArrayList<PropertyBean>();
+		System.out.println(lat1+","+lng1+","+lat2+","+lng2);
+		/*map.put("properties",propertyService.findEntityByHQL("select ub from PropertyBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? order by price", new Object[]{lat1,lng1,lat2,lng2}));
+		map.put("users",userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lng1,lat2,lng2}));	*/
+		//map.put("properties",propertyService.findEntityByHQL("select ub from PropertyBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? order by price", new Object[]{lat1,lat2,lng1,lng2}));
+		//map.put("users",userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lat2,lng1,lng2}));	
+		map.put("properties",propertyService.findEntityByHQL("SELECT distinct pb from PropertyBean pb inner JOIN fetch pb.files FILES inner join fetch pb.user u  where pb.lat <=? and pb.lat>=? and pb.lng>=? and pb.lng<=? order by pb.price", new Object[]{lat1,lat2,lng1,lng2}));
+		map.put("users",userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lat2,lng1,lng2}));
+		
+		return map;	
+	}
+	
 }

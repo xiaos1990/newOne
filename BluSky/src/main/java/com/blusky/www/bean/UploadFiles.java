@@ -28,8 +28,8 @@ public class UploadFiles {
 	@JoinColumn(name="property_id")
 	@JsonIgnore
 	private PropertyBean propery;
-
-	
+	@Column(name="file_type")
+	private String fileType;
 	public long getFile_id() {
 		return file_id;
 	}
@@ -54,4 +54,11 @@ public class UploadFiles {
 	public void setPropery(PropertyBean propery) {
 		this.propery = propery;
 	}
+	public String getFileType() {
+		return fileType;
+	}
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+	
 }

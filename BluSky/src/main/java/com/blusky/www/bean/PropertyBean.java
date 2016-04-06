@@ -76,14 +76,16 @@ public class PropertyBean {
 	
 	private String amenities;
 	
-
+	private String lat;
+	
+	private String lng;
 	
 	
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private UserBean user;
 
-	
+	@Column(name="find_roommate")
 	private String findRoommate;
 	
 	
@@ -247,6 +249,22 @@ public class PropertyBean {
 
 	public void setAmenities(String amenities) {
 		this.amenities = amenities;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
 	}
 	
 	

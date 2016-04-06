@@ -40,8 +40,8 @@ body {
 }
 
 .MainContainer {
-	position: absolute;
-	top: 6%;
+	position: fixed;
+	top: 40%;
 	left: 0;
 	right: 0;
 	/* height:90%;  */
@@ -66,86 +66,21 @@ body {
 	right: 0;
 }
 
-.error{
-	color:red;
-}
 
-#dialog-form {
-	align: center;
-	text-align: center;
-	position: fixed;
-	top: 20%;
-	left: 40%;
-	right: 40%;
-	bottom: 20%;
-	margin: auto;
-	z-index: 1000;
-	border: 1px solid black;
-	 display:none; 
-}
+
 </style>
 </head>
 <body>
 	<div class="page">
-		<div class="header">
+		<%-- <div class="header">
 			<jsp:include page="head.jsp" />
-		</div>
+		</div> --%>
 		<div class="MainContainer">
 			<jsp:include page="body.jsp" />
-			<div id="dialog-form" title="Create new user">
-				<form:form action="/BluSky/user/signup" method="post"
-					commandName="UserBean" cssId="signUpForm">
-					<fieldset>
-						<legend>Sign Up Form</legend>
-						<div id="errors"></div>
-						<table style="margin: auto">
-							<tr>
-								<td><label for="email">email:</label></td>
-								<td><form:input  path="email" id="email"
-										class="text ui-widget-content ui-corner-all" /></td>
-								<%-- <td><form:errors path="email" cssClass="error" /></td> --%>
-								<td><div style="display:none" name="email"></div></td>
-							</tr>
-							<tr>
-								<td><label for="name">name:</label></td>
-								<td><form:input  path="name" id="name"									
-										class="text ui-widget-content ui-corner-all" /></td>
-										<%-- <td><form:errors path="name" cssClass="error" /></td> --%>
-											<td><div name="name"></div></td>
-							</tr>
-							<tr>
-								<td><label for="password">password:</label></td>
-								<td><form:input  path="password" id="password"									
-										class="text ui-widget-content ui-corner-all" /></td>
-										<%-- <td><form:errors path="password" cssClass="error" /></td> --%>
-											<td><div  name="password"></div></td>
-							</tr>
-							<tr>
-								<td><label for="birthday">birthday:</label></td>
-								<td><form:input  path="birthday" id="birthday"										
-										class="text ui-widget-content ui-corner-all" /></td>
-										<%-- <td><form:errors path="birthday" cssClass="error" /></td> --%>
-											<td><div  name="birthday"></div></td>
-							</tr>
-							<tr>
-								<td><label for="phone">phone:</label></td>
-								<td><form:input  path="phone" id="phone"
-										class="text ui-widget-content ui-corner-all" /></td>
-									<%-- 	<td><form:errors path="phone" cssClass="error" /></td> --%>
-									<td><div name="phone"></div></td>
-							</tr>
-							<tr>
-								<!-- Allow form submission with keyboard without duplicating the dialog button -->
-								<td colspan="2"><input type="button"class="btn" value="submit"><input type="button" value="close" class="btn"></td>
-							</tr>
-						</table>
-					</fieldset>
-				</form:form>
-			</div>
 		</div>
-		<div class="footer">
+	<%-- 	<div class="footer">
 			<jsp:include page="foot.jsp" />
-		</div>
+		</div> --%>
 	</div>
 
 

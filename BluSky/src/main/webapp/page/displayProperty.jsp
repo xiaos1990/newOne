@@ -58,7 +58,7 @@ right:10%; */
 }
 </style>
 </head>
-<body onload="initialize();loadJson();">
+<body onload="initialize();">
 
 
 	<div>
@@ -118,11 +118,17 @@ right:10%; */
 
 </body>
 <script>
+var lat =${lat};
+var lng=${lng};
+ 	var bounds;
  	var zipcode123;
 	var geocoder;
 	var map;
 	var markers = [];
-	function initialize() {
+	
+		 var ne;
+          var sw ;
+/* 	function initialize() {
 		geocoder = new google.maps.Geocoder();
 		var latlng = new google.maps.LatLng(-34.397, 150.644);
 		var mapOptions = {
@@ -131,7 +137,102 @@ right:10%; */
 		}
 		map = new google.maps.Map(document.getElementById("map"), mapOptions);
 	};
+ */
+ 
+ function initialize() {
+         geocoder = new google.maps.Geocoder();
+        var latLng = new google.maps.LatLng(lat, lng);
+        var myMapOptions = {
+            sensor: true,
+            //mapTypeControl: true,
+            zoom: 10,
+            center: new google.maps.LatLng(25, -84),
+            rotateControlOptions: false,
+            panControl: false,
+            scrollwheel: false,
+           // mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        var infowindow = new google.maps.InfoWindow({
+            disableAutoPan : false,
+        });
+         map = new google.maps.Map(document.getElementById('map'), myMapOptions);
+			map.setCenter(new google.maps.LatLng(lat,lng));
+        var marker = new google.maps.Marker({
+					map : map,
+					position : latLng
+				});
+				markers.push(marker);	
+/* 	 google.maps.event.addListener(map, 'center_changed', function() {
+        
+            var bounds = map.getBounds();
+             ne = bounds.getNorthEast();
+             sw = bounds.getSouthWest();
+				ajaxCall1();
+				}); */
+				
+        //google.maps.event.addListener(map, 'bounds_changed', function() {
+        google.maps.event.addListener(map, 'idle', function() {
+        
+            var bounds = map.getBounds();
+             ne = bounds.getNorthEast();
+             sw = bounds.getSouthWest();
+			ajaxCall1();
+				
+           /*  $.ajax({
+                url: '/BluSky/property/display4/'+ne.lat()+','+ne.lng()+'/'+sw.lat()+','+sw.lng(),
+                success: function (json) {
+                    // now make an empty bounds to determine the new viewport
+                     bounds =  new google.maps.LatLngBounds();
+                    for (var i = 0; i < json.length; ++i) {
+                        var latLng = new google.maps.LatLng(json[i].latitude, json[i].longitude);
+                        bounds.extend(latLng);
+                        var marker = new google.maps.Marker({position: latLng});
+                        attachInfoWindows(marker, map, infowindow, json[i].latitude, json[i].longitude);
+                    };
+                    // only fit the bounds when all the markers have been added.
+                    //map.fitBounds(bounds);
+                }
+            }); */
+        });
+    };
+ 
+ $(function(){
 
+
+/* var bounds = map.getBounds();
+             ne = bounds.getNorthEast();
+             sw = bounds.getSouthWest();
+				ajaxCall1(); */
+
+      /*   map.setCenter(new google.maps.LatLng(lat,lng));
+        var marker = new google.maps.Marker({
+					map : map,
+					position : latLng
+				});
+				markers.push(marker); */
+ 
+ });
+ 
+  function attachInfoWindows(marker, map, infowindow, lat, lng) {
+            google.maps.event.addListener(marker, 'click', function() {
+                var lat1 = lat, lng2 = lng;
+                $.ajax({
+                    url: '/api/v3/building_permits/'+lat1+'/'+lng2,
+                    async: false,
+                    success: function (json) {
+                        infowindow.setContent(json);
+                        infowindow.open(marker.get('map'), marker); 
+                        //map.panTo(marker.getPosition());
+                    }
+                });
+            });
+        }
+       // google.maps.event.addDomListener(window, 'load', initialize);
+
+ 
+ 
+ 
 	function codeAddress() {
 		var address = document.getElementById("address").value;
 		console.log(address);
@@ -163,11 +264,6 @@ right:10%; */
 	}); */
 
 	function fillAddress(jsonAddress) {
-		/*   var jsonAddress ={
-		"address":[{"location":"lansing"},
-		{"location":"michigan state university"}
-		]
-		}; */
 		var address;
 		for (var i = 0; i < jsonAddress.length; i++) {
 			address = jsonAddress[i].address+","+jsonAddress[i].zipCode;
@@ -194,11 +290,10 @@ right:10%; */
 	};
 
 	function ajaxCall() {
-		deleteMarkers();
+		//deleteMarkers();
 		$.ajax({	
-			url : 'http://localhost:7001/BluSky/property/display1',
+			url : 'http://localhost:7001/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng(),
 			type : 'POST',
-			data : 'zipcode='+zipcode123,
 			cache : false,
 			success : function(data) {
 				fillAddress(data);	
@@ -208,13 +303,41 @@ right:10%; */
 			},
 		});
 
-	}
+	};
 	
-	function loadJson(){
+	
+	
+	function ajaxCall1() {
+		
+            $.ajax({
+                url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",
+                success: function (json) {
+                    // now make an empty bounds to determine the new viewport
+                    //bounds = map.getBounds();
+                    //var bounds = new google.maps.LatLngBounds();
+                    for (var i = 0; i < json.properties.length; i++) {
+                        var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);
+                       // bounds.extend(latLng);
+                        var marker = new google.maps.Marker({map : map,position: latLng});
+                        //attachInfoWindows(marker, map, infowindow, json.properties[i].lat, json.properties[i].lng);
+                    };
+                     for (var j = 0; j < json.users.length; j++) {
+                        var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);
+                      //  bounds.extend(latLng);
+                        var marker = new google.maps.Marker({map : map,position: latLng});
+                        //attachInfoWindows(marker, map, infowindow, json.users[i].lat, json.users[i].lng);
+                    };
+                    // only fit the bounds when all the markers have been added.
+                  //  map.fitBounds(bounds);
+                }
+            });
+	
+	};
+/* 	function loadJson(){
 	var jsonObject1 = ${jsonObject};
 		//console.log(jsonObject); 
 		fillAddress(jsonObject1);
-	};
+	}; */
 
 
 function setMapOnAll(map) {
@@ -239,52 +362,47 @@ function deleteMarkers() {
   markers = [];
 };
 
-	/* function initsize(){
-		
 
-		
-		if($(window).width()<500){
-		$("body").css("margin","0");
-			$(".main").width($(window).width());
-			$(".innerTextDiv").width($(".main").width());
-			$("img").height($(".main").width());
-			$("img").width($(".main").width());
-		}else{
-		$("body").css("margin-left",$(window).width() *0.1);
-		$("body").css("margin-right",$(window).width() *0.1);
-		var size = $(window).width() * 0.25;
-		var size1 = $(window).width() * 0.14;
-		$("img").height(size);
-		$("img").width(size);
-		$(".innerTextDiv").width(size1);
-		$(".main").width($(window).width()*0.395);
-		
-		}
-	
-		 if($(".main").height()>(size+5)){
-			$(".innerTextDiv").width($(".main").width()-5);
-			$("img").height($(".main").width()-5);
-			$("img").width($(".main").width()-5);
-		} 
-		
-	}
-	$(function() {
-		initsize();
-	});
 
-	 window.onresize = function() {
-		initsize();
-	};  */
+//google.maps.event.addListener(map,'center_changed',function() { checkBounds(); });
 
-	/* 	$(".main").on("mouseenter mouseleave",function(event){
-	 console.log(123);
-	 var self = $(this);
-	 if(event.type=='mouseenter'){
-	 self.css({"border": "dashed blue 0.5px"});
-	 }else{
-	 self.css('border','none');
-	 }
-	
-	 }); */
+/* function checkBounds() {    
+    if(! allowedBounds.contains(map.getCenter())) {
+      var C = map.getCenter();
+      var X = C.lng();
+      var Y = C.lat();
+
+      var AmaxX = allowedBounds.getNorthEast().lng();
+      var AmaxY = allowedBounds.getNorthEast().lat();
+      var AminX = allowedBounds.getSouthWest().lng();
+      var AminY = allowedBounds.getSouthWest().lat();
+
+      if (X < AminX) {X = AminX;}
+      if (X > AmaxX) {X = AmaxX;}
+      if (Y < AminY) {Y = AminY;}
+      if (Y > AmaxY) {Y = AmaxY;}
+
+      map.setCenter(new google.maps.LatLng(Y,X));
+    }
+} */
+
+/* function getBoundaries(){
+var bounds = map.getBounds();
+var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+console.log(bounds);
+
+var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+var se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+
+google.maps.event.addListener(map, 'idle', function(ev){
+    // update the coordinates here
+});
+} */
+
+
+
+ 
 </script>
 </html>

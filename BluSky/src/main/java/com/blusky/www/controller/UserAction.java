@@ -60,15 +60,15 @@ public class UserAction {
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String signupAction(
 			 @ModelAttribute("UserBean") @Valid UserBean user,
-			BindingResult bindingResult) throws Exception {
+			BindingResult bindingResult,HttpServletRequest request) throws Exception {
 		try{
 			
 		if (bindingResult.hasErrors()) {		
 			return "signup";
-		}else		
+		}else	{
 			userService.save(user);
 			return "forward:/property/display";
-		} catch (Exception ex) {
+		} }catch (Exception ex) {
 			 ex.printStackTrace();
 			 bindingResult.reject("hibernateError",ex.getMessage());
 			 return "signup";
@@ -90,7 +90,7 @@ public class UserAction {
 		//simple validate frist!!!!
 		List<UserBean> list=validateUser(request.getParameter("email"),request.getParameter("password"));
 		if(list!=null && list.size()>1)
-			request.getSession(true).setAttribute("user", list.get(0));
+			request.getSession(true).setAttribute("user", (UserBean)list.get(0));
 		else{
 			return "signin";
 		}
