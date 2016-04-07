@@ -242,6 +242,21 @@ public class PropertyAction {
 	
 	@RequestMapping(value = "/displayDetails/{propertyId}", method = RequestMethod.GET)
 	public String createNewProperty(@PathVariable("propertyId") String id,HttpServletRequest request) {
+		String lat = request.getParameter("lat");
+		String lng = request.getParameter("lng");
+		String lat1 = request.getParameter("lat1");
+		String lng1 = request.getParameter("lng1");
+		String lat2 = request.getParameter("lat2");
+		String lng2 = request.getParameter("lng2");
+		JsonConfig jc = new JsonConfig();
+	    jc.setExcludes(new String[]{"property","properties","createdDate","modifiedDate","birthday"});
+	    jc.setIgnoreDefaultExcludes(false);
+	    jc.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
+		request.setAttribute("lat",lat);
+		request.setAttribute("lng",lng);
+		List<UserBean> list =userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lat2,lng1,lng2});
+		JSONArray jArray=JSONArray.fromObject(list,jc);
+		request.setAttribute("users", jArray.toString());
 		PropertyBean property=propertyService.getEntity(Integer.parseInt(id));
 		request.setAttribute("propertyBean", property);
 		return "displayPropertyDetails";
@@ -255,7 +270,7 @@ public class PropertyAction {
 	public  @ResponseBody List<PropertyBean> dipslayProperty1(HttpServletRequest request) {
 		 JSONArray jArray = new JSONArray();
 		String zipcode =request.getParameter("zipcode");
-		System.out.println(zipcode);
+		//System.out.println(zipcode);
 		List<PropertyBean> list = new ArrayList<PropertyBean>();
 		if(StringUtils.isNotEmpty(zipcode)&&zipcode.matches("^\\d{5}$")){
 		Object[] paremeters={zipcode};

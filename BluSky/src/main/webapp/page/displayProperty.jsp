@@ -12,7 +12,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
 <script src="../js/jquery-1.12.2.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 <style>
 .main {
 	border-bottom: dashed blue 0.5px;
@@ -62,13 +62,16 @@ right:10%; */
 
 
 	<div>
-
 		<div style="float: left; width: 50%; height:800px; overflow-y: scroll">
 			<div class="formDiv">
 
-				<label for="address">Address:</label> <input type="text"
+				<!-- <label for="address">Address:</label> <input type="text"
 					name="address" id="address" placeholder="input an address"
-					onchange="codeAddress();ajaxCall();" /> <label for="propertyType">Property
+					onchange="codeAddress();ajaxCall();" /> -->
+					<label for="address">Address:</label> <input type="text"
+					name="address" id="address" placeholder="input an address"
+					 /> 
+					 <label for="propertyType">Property
 					Type:</label> <select name="propertyType" id="propertyType">
 					<option value="" label="--Please Select--" />
 					<c:forEach var="opts" items="${propertyForm.propertyTypeList}">
@@ -91,9 +94,8 @@ right:10%; */
 			<div class="spacer"></div>
 			<div id="content">
 			<c:forEach var="properties" items="${list123}" varStatus="status">
-				<a href="/BluSky/property/displayDetails/${properties.id}"
-					target="body"> <!-- <div class="main"> --> <img
-					src="${properties.files[0].address}" />
+				<a href="/BluSky/property/displayDetails/${properties.id}">
+				<img src="${properties.files[0].address}" />
 					<div class="innerTextDiv">
 						<div style="float: left, text-align:left">
 							<b>Address</b><br />${properties.address}</div>
@@ -126,7 +128,8 @@ var lng=${lng};
 	var geocoder;
 	var map;
 	var markers = [];
-	
+	var markersCenter = [];
+	var infowindow;
 		 var ne;
           var sw ;
 /* 	function initialize() {
@@ -154,7 +157,7 @@ var lng=${lng};
            // mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         
-        var infowindow = new google.maps.InfoWindow({
+            infowindow = new google.maps.InfoWindow({
             disableAutoPan : false,
         });
          map = new google.maps.Map(document.getElementById('map'), myMapOptions);
@@ -163,7 +166,71 @@ var lng=${lng};
 					map : map,
 					position : latLng
 				});
-				//markers.push(marker);	
+				
+			
+				
+				markersCenter.push(marker);	
+				
+				
+				
+	var input = document.getElementById('address');
+	  //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  var searchBox = new google.maps.places.SearchBox((input));
+
+
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  });
+  
+  
+   searchBox.addListener('places_changed', function() {
+  codeAddress();
+  ajaxCall1();
+  });
+ /* 
+  searchBox.addListener('places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  }); */
+
 /* 	 google.maps.event.addListener(map, 'center_changed', function() {
         
             var bounds = map.getBounds();
@@ -198,35 +265,19 @@ var lng=${lng};
         });
     };
  
- $(function(){
-
-
-/* var bounds = map.getBounds();
-             ne = bounds.getNorthEast();
-             sw = bounds.getSouthWest();
-				ajaxCall1(); */
-
-      /*   map.setCenter(new google.maps.LatLng(lat,lng));
-        var marker = new google.maps.Marker({
-					map : map,
-					position : latLng
-				});
-				markers.push(marker); */
  
- });
- 
-  function attachInfoWindows(marker, map, infowindow, lat, lng) {
+  function attachInfoWindows(marker, map, infowindow,jsonObj) {
             google.maps.event.addListener(marker, 'click', function() {
-                var lat1 = lat, lng2 = lng;
-                $.ajax({
-                    url: '/api/v3/building_permits/'+lat1+'/'+lng2,
-                    async: false,
-                    success: function (json) {
-                        infowindow.setContent(json);
-                        infowindow.open(marker.get('map'), marker); 
-                        //map.panTo(marker.getPosition());
-                    }
-                });
+                        
+                        infowindow.setContent(
+'<div><a href="/BluSky/property/displayDetails/'+jsonObj.id+'"> <img src="'+jsonObj.files[0].address+'" width=50px height=50px  /> </div></a>'+
+'<div>'+jsonObj.address+' </div>'+
+'<div>'+jsonObj.city+' </div>'+
+'<div>'+jsonObj.zipCode+' </div>'+
+'<div>'+jsonObj.state+' </div>'+
+'<div>'+jsonObj.country+' </div>'
+);
+                        infowindow.open(map, marker);               
             });
         }
        // google.maps.event.addDomListener(window, 'load', initialize);
@@ -242,10 +293,13 @@ var lng=${lng};
 				var index1;
 				if (status == google.maps.GeocoderStatus.OK) {
 				map.setCenter(results[0].geometry.location);
+			
 				var marker = new google.maps.Marker({
 					map : map,
 					position : results[0].geometry.location
 				});
+				deleteCenterMarkers();
+					markersCenter.push(marker);
 				//markers.push(marker);
 				index1=parseFloat(results[0].address_components.length)-1;
 				zipcode123= results[0].address_components[index1].long_name;
@@ -311,9 +365,12 @@ var lng=${lng};
 	function ajaxCall1() {
 			deleteMarkers();
 			$("#content").html("");
+			//lat=map.getCenter().lat();
+			//lng=map.getCenter().lng();
             $.ajax({
                 url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",
                 success: function (json) {
+               // window.history.pushState("", "search screen", "http://localhost:7001/BluSky/property/display3?lat="+lat+"&lng="+lng);
                     // now make an empty bounds to determine the new viewport
                     //bounds = map.getBounds();
                     //var bounds = new google.maps.LatLngBounds();
@@ -322,16 +379,16 @@ var lng=${lng};
                        // bounds.extend(latLng);
                        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
                         var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'});
-                        //attachInfoWindows(marker, map, infowindow, json.properties[i].lat, json.properties[i].lng);
+                        attachInfoWindows(marker, map, infowindow, json.properties[i]);
                         markers.push(marker);
                         var content = $("#content");
-                        content.append('<img id="'+i+'" src="'+json.properties[i].files[0].address+'" onmouseover="changeColor(this);"  onmouseout="changebackColor(this);"/>');
+                        content.append('<a href="/BluSky/property/displayDetails/'+json.properties[i].id+'?lat='+lat+'&lng='+lng+'" onclick="changeCenter('+json.properties[i].lat+","+json.properties[i].lng+',this);" ><img id="'+i+'" src="'+json.properties[i].files[0].address+'" width=400px height=400px onmouseover="changeColor(this);"  onmouseout="changebackColor(this);"/> </a>');
                     };
                      for (var j = 0; j < json.users.length; j++) {
                         var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);
                       // bounds.extend(latLng);                   
                         var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
-                        //attachInfoWindows(marker, map, infowindow, json.users[i].lat, json.users[i].lng);
+                        //attachInfoWindows(marker, map, infowindow, json.users[i]);
                         markers.push(marker);
                     };
                     // only fit the bounds when all the markers have been added.
@@ -367,6 +424,12 @@ function showMarkers() {
 function deleteMarkers() {
   clearMarkers();
   markers = [];
+};
+function deleteCenterMarkers() {
+  for (var i = 0; i < markersCenter.length; i++) {
+    markersCenter[i].setMap(null);
+  };
+  markersCenter = [];
 };
 
 
@@ -407,6 +470,16 @@ google.maps.event.addListener(map, 'idle', function(ev){
     // update the coordinates here
 });
 } */
+
+function changeCenter(val1,val2,obj){
+map.setCenter(new google.maps.LatLng(val1,val2));
+bounds=map.getBounds();
+  ne = bounds.getNorthEast();
+  sw = bounds.getSouthWest();
+  
+  obj.href=obj.href+'&lat1='+ne.lat()+'&lng1='+ne.lng()+'&lat2='+sw.lat()+'&lng2='+sw.lng();
+};
+
 
 function changeColor(obj){
 //console.log(obj.id);
