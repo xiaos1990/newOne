@@ -293,11 +293,13 @@ var lng=${lng};
 				var index1;
 				if (status == google.maps.GeocoderStatus.OK) {
 				map.setCenter(results[0].geometry.location);
-			
+				
 				var marker = new google.maps.Marker({
 					map : map,
 					position : results[0].geometry.location
 				});
+			lat=map.getCenter().lat();
+			lng=map.getCenter().lng();
 				deleteCenterMarkers();
 					markersCenter.push(marker);
 				//markers.push(marker);

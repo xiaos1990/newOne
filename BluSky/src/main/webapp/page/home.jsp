@@ -98,14 +98,7 @@
 <body id="bodyCSS">
 	<div class="page">
 
-		<iframe name="head" id="header" src="head.jsp" width="100%"
-			height="150px"></iframe>
-
-
-		<iframe name="body" id="body" src="/BluSky/property/display"
-			width="100%" height="1000px" ></iframe>
-
-		<iframe name="foot" id="foot" src="foot.jsp" width="100%" height="50px"></iframe>
+	
 
 	</div>
 
@@ -113,18 +106,7 @@
 
 </body>
 <script>
-/* 
-onchange="flipUrl(this);
-	function flipUrl(obj){
-	
-	
-	var state ={
-	title:"",
-	url:obj.src,
-	};
-	window.history.pushState(state,"",obj.src);
-	};
- */
+
 </script>
 
 </html>
