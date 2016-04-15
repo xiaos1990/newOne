@@ -10,11 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 @Entity
+@Table(name="upload_files")
 public class UploadFiles {
 	@Id
 	@SequenceGenerator(name="gen2",sequenceName="UPLOADFILES_ID_SEQ",allocationSize = 1)

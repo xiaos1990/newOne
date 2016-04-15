@@ -17,6 +17,7 @@ import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.UserBean;
 
 @Service("userService")
+@Transactional
 public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserServiceI {
 	
 	@Resource
@@ -25,13 +26,9 @@ public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserS
 	@Resource(name="userDao")
 	public void setDao(BaseDaoI<UserBean> dao) {
 		super.setDao(dao);		
-	};
-	@Transactional
-	public void save(UserBean ub) {
-		// TODO Auto-generated method stub
-		System.out.println("Hello World");
-		userDao.save(ub);
-		
 	}
+
+	
+	
 
 }

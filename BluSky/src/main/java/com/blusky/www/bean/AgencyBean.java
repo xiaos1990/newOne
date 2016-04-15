@@ -1,5 +1,6 @@
 package com.blusky.www.bean;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,55 +14,44 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "blue_user")
-public class UserBean{
+@Table(name = "agency")
+public class AgencyBean{
 	@Id
-	@SequenceGenerator(name="gen1",sequenceName="USER_BEAN_ID_SEQ",allocationSize = 1)
+	@SequenceGenerator(name="gen1",sequenceName="agency_id_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen1")
-	@Column(name="user_id")
+	@Column(name="agency_id")
 	private int id;
 	
 	@NotEmpty(message="email is required!")
 	@Email(message="email is not valid!")
 	private String email;
 	
-	@Column(name="first_name")
-	@NotEmpty(message="first name is required!")
-	private String firstName;
+	@Column(name="agency_name")
+	@NotEmpty(message="name is required!")
+	private String name;
 	
-	@Column(name="last_name")
-	@NotEmpty(message="last name is required!")
-	private String lastName;
-	
-	
-	@NotNull(message="phone is required!")
-	@Pattern(regexp="^\\d{10}$",message="phone is not valid!")
-	private String phone;
-	
-	@NotEmpty(message="password is required!")
-	@Pattern(regexp="^\\d{10,20}$",message="password is not valid!")
-	private String password;
-
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-	@JsonIgnore
-	private Set<PropertyBean> properties;
-	
-	
-/*	@DateTimeFormat(pattern="MM/dd/yyyy")
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	@NotNull(message="birthday is required!")
 	@Past(message="birthday is not valid!")
 	@JsonIgnore
 	private Date birthday;
-
 	
-	private String Country="US";
+	@NotNull(message="phone is required!")
+	@Pattern(regexp="^\\d{3}-\\d{3}-\\d{4}$",message="phone is not valid!")
+	private String phone;
+	
+	@NotEmpty(message="password is required!")
+	private String password;
+
 	
 	@NotEmpty(message="address is required!")
 	private String address;
@@ -76,10 +66,54 @@ public class UserBean{
 	@NotEmpty(message="state is required!")
 	private String state;
 	
+	private String Country="US";
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JsonIgnore
+	private Set<PropertyBean> properties;
+	
 	
 	private String lat;
-	private String lng;*/
+	private String lng;
+	
+	public String getAddress() {
+		return address;
+	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCountry() {
+		return Country;
+	}
+
+	public void setCountry(String country) {
+		Country = country;
+	}
 
 	public int getId() {
 		return id;
@@ -97,7 +131,21 @@ public class UserBean{
 		this.email = email;
 	}
 
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 
 	public String getPhone() {
 		return phone;
@@ -123,22 +171,21 @@ public class UserBean{
 		this.properties = properties;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getLat() {
+		return lat;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setLat(String lat) {
+		this.lat = lat;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getLng() {
+		return lng;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLng(String lng) {
+		this.lng = lng;
 	}
-
 
 
 	

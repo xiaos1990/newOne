@@ -1290,7 +1290,7 @@
 				y: chartY
 			});
 
-			// Normalize all angles to 0 - 2*PI (0 - 360¡ã)
+			// Normalize all angles to 0 - 2*PI (0 - 360ï¿½ï¿½)
 			var pointRelativeAngle = pointRelativePosition.angle % (Math.PI * 2),
 			    startAngle = (Math.PI * 2 + this.startAngle) % (Math.PI * 2),
 			    endAngle = (Math.PI * 2 + this.endAngle) % (Math.PI * 2) || 360;
@@ -3734,4 +3734,4 @@
 
 
 }).call(this);
-Status API Training Shop Blog About
+/*Status API Training Shop Blog About*/

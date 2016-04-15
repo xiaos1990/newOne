@@ -7,10 +7,12 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.blusky.www.Idao.BaseDaoI;
 import com.blusky.www.Iservice.BaseServiceI;
 
+@Transactional
 @Service("baseService")
 public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 
@@ -32,7 +34,7 @@ public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 
 	public void saveEntity(T t) {
 		// TODO Auto-generated method stub
-		
+		dao.saveEntity(t);
 	}
 
 	public void updateEntity(T t) {

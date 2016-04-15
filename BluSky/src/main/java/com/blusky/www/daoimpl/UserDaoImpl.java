@@ -16,9 +16,10 @@ public class UserDaoImpl extends BaseDaoImpl<UserBean> implements UserDaoI{
 	SessionFactory sf;
 	
 
-	public void save(UserBean userBean) {
+	public UserBean getUserByUserName(String userName) {
 		// TODO Auto-generated method stub
-		sf.getCurrentSession().save(userBean);
+		return (UserBean) sf.getCurrentSession().createQuery("from UserBean ub where ub.email=?").setParameter(0, userName).list().get(0);
+		
 	}
 
 }

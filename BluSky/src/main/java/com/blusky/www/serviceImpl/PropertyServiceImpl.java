@@ -11,6 +11,7 @@ import com.blusky.www.Iservice.PropertyServceI;
 import com.blusky.www.bean.PropertyBean;
 
 @Service("propertyService")
+@Transactional
 public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implements PropertyServceI {
 	
 	@Resource
@@ -20,7 +21,7 @@ public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implemen
 	public void setDao(BaseDaoI<PropertyBean> dao) {
 		super.setDao(dao);		
 	};
-	@Transactional
+	
 	public void save(PropertyBean pb) {
 		// TODO Auto-generated method stub
 		System.out.println("Hello World");

@@ -8,9 +8,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cat & Dog</title>
-<link rel="stylesheet" href="../css/bluesky.css" />
-<link rel="stylesheet" href="../css/homepage.css" />
-<link rel="stylesheet" href="../css/animate.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bluesky.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/homepage.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css" />
 </head>
 
 <body onload="initialize();">
@@ -33,8 +33,9 @@
 					<li><a href="#content2">content2</a></li>
 					<li><a href="#content3">content3</a></li>
 					<li><a href="#content4">foot</a></li>
-					<li><a href="#"  data-toggle="modal" data-target="#signIn">Sign In</a></li>
-					<li><a href="#"  data-toggle="modal" data-target="#signUp">Sign Up</a></li>
+					<li id="signInLi"><a href="#"  data-toggle="modal" data-target="#signIn">Sign In</a></li>
+					<li id="signUpLi"><a href="#"  data-toggle="modal" data-target="#signUp">Sign Up</a></li>
+					<li id="signOffLi" style="display:none"><a href="#">Sign Off</a></li>
 				</ul>
 			</div>
 		</div>
@@ -93,7 +94,7 @@
 			<div class="row wow fadeInUp" data-wow-duration="1s">
 				<div class="col-md-3"></div>
 				<div class="col-md-4">
-					<img class="img-responsive thumbnail" src="../image/1.jpg">
+					<img class="img-responsive thumbnail" src="${pageContext.request.contextPath}/image/1.jpg">
 				</div>
 				<div class="col-md-2">
 					<h3>Miami</h3>
@@ -113,16 +114,16 @@
 			
 			<div class="row wow bounceIn" data-wow-duration="1s" >
 				<div class="col-md-4">
-					<a href="#"> <img class="img-responsive img-circle" src="../image/2.jpg">
+					<a href="#"> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/2.jpg">
 					</a>
 				</div>
 				<div class="col-md-4">
 					<a> <img class="img-responsive img-circle"
-						src="../image/3.jpeg">
+						src="${pageContext.request.contextPath}/image/3.jpeg">
 					</a>
 				</div>
 				<div class="col-md-4">
-					<a> <img class="img-responsive img-circle" src="../image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
 					</a>
 				</div>
 			
@@ -135,12 +136,12 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="../image/2.jpg">
+					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/2.jpg">
 					</a>
 				</div>
 				<div class="col-md-2"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="../image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
 					</a>
 				</div>
 				<div class="col-md-2"></div>
@@ -148,7 +149,7 @@
 			<div class="row">
 				<div class="col-md-4"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="../image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
 					</a>
 				</div>
 
@@ -169,15 +170,15 @@
 					</ol>
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
-							<img src="../image/flip1.jpg" alt="MIAMI">
+							<img src="${pageContext.request.contextPath}/image/flip1.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 						<div class="item">
-							<img src="../image/flip2.jpg" alt="MIAMI">
+							<img src="${pageContext.request.contextPath}/image/flip2.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 						<div class="item">
-							<img src="../image/flip3.jpg" alt="MIAMI">
+							<img src="${pageContext.request.contextPath}/image/flip3.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 					</div>
@@ -220,12 +221,12 @@
       </div>
       <div class="modal-body">
 					<form action="" method="post">
-						<div class="form-group  has-feedback"">
-						<input	type="email" class="form-control" id="email" placeholder="Email">
+						<div class="form-group  has-feedback">
+						<input	type="email" class="form-control" id="email1" placeholder="Email">
 						 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
 						</div>
 						<div class="form-group  has-feedback">
-					<input type="password" class="form-control" id="password" placeholder="Password" >
+					<input type="password" class="form-control" id="password1" placeholder="Password" >
 					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>	
 						<div class="form-group pull-right">
@@ -251,32 +252,37 @@
         <h3 class="modal-title">Sign Up</h3>
       </div>
       <div class="modal-body">
-					<form action="" method="post">
+					<form action="" method="post" id="signupForm">
 						<div class="form-group  has-feedback">
-						<input	type="text" class="form-control" id="firstName" placeholder="First Name" required pattern="[A-Za-z]+" data-toggle="tooltip" data-placement="top" title="First Name is Required!">
+						<input	type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name"  required pattern="[A-Za-z]+" data-toggle="tooltip" data-placement="top" title="First Name is Required!">
+						<!-- <input	type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name" data-toggle="tooltip" data-placement="top" title="First Name is Required!"> -->
 						 <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
 						</div>
 						<div class="form-group  has-feedback">
-						<input	type="text" class="form-control" id="lastName" placeholder="Last Name" required pattern="[A-Za-z]+" data-toggle="tooltip" data-placement="top" title="Last Name is Required!">
+						<input	type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name" required pattern="[A-Za-z]+" data-toggle="tooltip" data-placement="top" title="Last Name is Required!">
+						<!-- <input	type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name" data-toggle="tooltip" data-placement="top" title="Last Name is Required!"> -->
 						 <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
 						</div>
 						
 						<div class="form-group  has-feedback">
-						<input	type="email" class="form-control" id="email" placeholder="Email" required data-toggle="tooltip" data-placement="top" title="Email is Required! Example:xxx@xxx.com">
+						<input	type="email" class="form-control" name="email" id="email" placeholder="Email" required data-toggle="tooltip" data-placement="top" title="Email is Required! Example:xxx@xxx.com">
+						<!-- <input	type="text" class="form-control" name="email" id="email" placeholder="Email"  data-toggle="tooltip" data-placement="top" title="Email is Required! Example:xxx@xxx.com"> -->
 						 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
 						</div>						
 						<div class="form-group  has-feedback">
-						<input type="password" class="form-control" id="password" placeholder="Password" required data-toggle="tooltip" data-placement="top" title="Password is Required!format:10-20 characters " pattern="\w{10,20}">
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password" required data-toggle="tooltip" data-placement="top" title="Password is Required!format:10-20 characters " pattern="\w{10,20}">
+						<!-- <input type="password" class="form-control" name="password" id="password" placeholder="Password"  data-toggle="tooltip" data-placement="top" title="Password is Required!format:10-20 characters"> -->
 						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>	
 						<div class="form-group  has-feedback">
-						<input	type="telephone" class="form-control" id="mobile" placeholder="Mobile" pattern="\d{10}" required data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers" pattern="\d{10}">
+						<input	type="text" class="form-control" name="phone" id="mobile" placeholder="Mobile" pattern="\d{10}" required data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers" pattern="\d{10}">
+					<!-- 	<input	type="text" class="form-control" name="phone" id="mobile" placeholder="Mobile" data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers"> -->
 						 <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
 						</div>
 						<div class="form-group pull-right">
 							<a href="#" >Forgot password?</a>
 						</div>		
-						<button type="submit" class="btn btn-primary">Sign Up</button>
+						<button type="button" id="signUpButton" class="btn btn-primary">Sign Up</button>
 					</form>
 				</div>
       <div class="modal-footer">
@@ -287,24 +293,110 @@
   </div>
 </div>
 
-	<script src="../js/jquery-1.12.2.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/jquery.singlePageNav.min.js"></script>
-	<script src="../js/wow.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-1.12.2.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.singlePageNav.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/wow.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 	<script>
-		$(function(){
-			$(".nav").singlePageNav({offset:60});
-  		    $('[data-toggle="tooltip"]').tooltip();
-  		    $(".navbar-collapse a").on("click",function(){
-  		    $('.collapse').collapse("hide");
-  		    });
-		});
 	
-	function initialize() {		
-	var input = document.getElementById('address');
-    new google.maps.places.SearchBox((input));
-   }
+		$.fn.serializeObject = function(){    
+   			var o = {};    
+  			var a = this.serializeArray();    
+   			$.each(a, function() {    
+       		if (o[this.name]) {    
+           if (!o[this.name].push) {    
+               o[this.name] = [o[this.name]];    
+           }    
+           o[this.name].push(this.value || '');    
+       		} else {    
+           o[this.name] = this.value || '';    
+       		}    
+  			 });    
+  			 return o;    
+};  
+	
+	
+		$(function() {
+			$(".nav").singlePageNav({
+				offset : 60
+			});
+			$('[data-toggle="tooltip"]').tooltip();
+			$(".navbar-collapse a").on("click", function() {
+				$('.collapse').collapse("hide");
+			});
+
+			$("#signUpButton").on("click", function() {
+				event.preventDefault();
+				
+				var formData = JSON.stringify($('#signupForm').serializeObject());
+			
+				$.ajax({
+					url : '/BluSky/user/signup',
+					type : 'POST',
+					contentType : 'application/json', 
+					data : formData,
+					cache : false,
+					dataType : 'json'				
+				}).done(function(data){		
+						$("#error").remove();
+						if(data.success == false){
+						$("#signupForm input").each(function(){
+							var name = $(this).prop("name");					
+						
+							if(typeof data[name] != 'undefined'){
+							$(this).closest('div').addClass("has-error");
+							$(this).closest('div').removeClass("has-success");
+							
+							}else{
+							$(this).closest('div').addClass("has-success");
+							$(this).closest('div').removeClass("has-error");
+								
+							}
+							});
+						};
+						 if(data.dumplicateEmail == true){
+							$("#email").closest('div').addClass("has-error");						
+							var span = $('<span />').attr("id","error").css("color","red").html(data.email);
+							span.appendTo($("#email").closest('div'));		
+						
+						};
+						if(data.success == true){
+							$("#signUp").modal('hide');
+							$("#signInLi,#signUpLi").css("display","none");
+							$("#signOffLi").css("display","block");
+						}
+						
+				})
+				.fail(function(){
+				console.log(arguments[1]);
+				});
+			});
+		});
+
+		$("#signOffLi a").on("click", function() {
+				event.preventDefault();										
+				$.ajax({
+					url : '/BluSky/user/signOff',
+					type : 'GET',
+					contentType : 'application/json', 
+					cache : false,
+					dataType : 'json'				
+				}).done(function(data){		
+					$("#signInLi,#signUpLi").css("display","block");
+					$("#signOffLi").css("display","none");									
+				})
+				.fail(function(){
+				console.log(arguments[1]);
+				});
+			});
+
+
+
+		function initialize() {
+			var input = document.getElementById('address');
+			new google.maps.places.SearchBox((input));
+		}
 		new WOW().init();
 	</script>
 </body>
