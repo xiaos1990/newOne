@@ -8,6 +8,8 @@ public class CommonConstant {
 	    public final static String BROWSER_COOKIE_AUTO_STATUS_NAME = "BluSkyUserLogIn"; 
 	    public final static String BROWSER_COOKIE_LOGIN_OUT_NAME = "BluSkyUserLogOut"; 	
 	    
+	    public final static String SESSION_AGENCY = "session_agency";
+	    
 	    public final static String DUMPLICATE_EMAIL = "This email is registered!"; 
 	    public final static String WRONG_USER_INFO = "Email or Password is wrong!"; 
 	    

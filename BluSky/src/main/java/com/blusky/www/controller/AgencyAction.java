@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,18 +20,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blusky.www.Iservice.UserServiceI;
+import com.blusky.www.Iservice.AgencyServiceI;
 import com.blusky.www.bean.UserBean;
 import com.blusky.www.constant.CommonConstant;
 
 @Controller
-@RequestMapping("/user")
-public class UserAction {
+@RequestMapping("/agency")
+public class AgencyAction {
 
 	@Inject
-	UserServiceI userService;
+	AgencyServiceI agencyService;
 
-
+	
+	@RequestMapping(value = "/create", method = RequestMethod.GET)	
+	public String createAgent(ModelMap map,HttpServletRequest request){
+		UserBean userBean = (UserBean) request.getSession(false).getAttribute(CommonConstant.SESSION_USER);
+		if(StringUtils.isBlank(userBean.getIsAgent()) || !userBean.getIsAgent().equals("1"))
+		map.put("userBean", userBean);	
+		else
+		return "homepage";
+		return "agentsignup";
+	}
+	
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)	
 	@ResponseBody
 	public  Map<String, Object> signupAction(
@@ -47,14 +59,14 @@ public class UserAction {
 			return mapErrors;
 		}
 		try {
-			List<UserBean> list=userService.findEntityByHQL("from UserBean ub where ub.email=?",user.getEmail());
+			List<UserBean> list=agencyService.findEntityByHQL("from UserBean ub where ub.email=?",user.getEmail());
 			if(list!=null && list.size()>0){
 				mapErrors.put("email", CommonConstant.DUMPLICATE_EMAIL);
 				mapErrors.put("dumplicateEmail", true);
 				return mapErrors;
 			}
-			
-			userService.saveEntity(user);
+	/*		
+			agencyService.saveEntity(user);*/
 			mapErrors.put("success", true);
 			request.getSession(false).setAttribute(CommonConstant.SESSION_USER, user);
 		} catch (Exception ex) {
@@ -98,7 +110,7 @@ public class UserAction {
 	private boolean validateUser(String parameter1, String parameter2,HttpServletRequest request) {
 
 		Object[] parameters ={parameter1};
-		List<UserBean> list =userService.findEntityByHQL("from UserBean ub where trim(ub.email)=?",parameters);
+		List<UserBean> list =agencyService.findEntityByHQL("from UserBean ub where trim(ub.email)=?",parameters);
 		if(list!=null&&list.size()>0){
 			if(list.get(0).getPassword().trim().equals(parameter2)){
 				request.getSession(false).setAttribute("user", list.get(0));
@@ -117,9 +129,6 @@ public class UserAction {
 		return "homepage";
 
 	}	
-	
-	
-	
 		   
 	    private void addCookieingUserToResponse(String email, String password, HttpServletRequest request, HttpServletResponse response){ 
 	  

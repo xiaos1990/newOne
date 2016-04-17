@@ -1,5 +1,6 @@
 package com.blusky.www.bean;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,11 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "blue_user")
@@ -54,14 +57,14 @@ public class UserBean{
 	private Set<PropertyBean> properties;
 	
 	
-/*	@DateTimeFormat(pattern="MM/dd/yyyy")
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	@NotNull(message="birthday is required!")
 	@Past(message="birthday is not valid!")
 	@JsonIgnore
 	private Date birthday;
 
-	
-	private String Country="US";
+	@Column(name="country")
+	private String country="US";
 	
 	@NotEmpty(message="address is required!")
 	private String address;
@@ -78,9 +81,23 @@ public class UserBean{
 	
 	
 	private String lat;
-	private String lng;*/
+	private String lng;
 
-
+	@Column(name="user_status")
+	private String userStatus;
+	@Column(name="account_status")
+	private String accountStatus;
+	@Column(name="is_agent")
+	private String isAgent;
+	@Column(name="email_code")
+	private String emailCode;
+	@Column(name="phone_code")
+	private String phoneCode;
+	@Column(name="is_email_activated")
+	private String isEmailActivated;
+	@Column(name="is_phone_activated")
+	private String isPhoneActivated;
+	
 	public int getId() {
 		return id;
 	}
@@ -137,6 +154,126 @@ public class UserBean{
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+
+	public String getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
+
+	public String getAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(String accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+
+	public String getIsAgent() {
+		return isAgent;
+	}
+
+	public void setIsAgent(String isAgent) {
+		this.isAgent = isAgent;
+	}
+
+	public String getEmailCode() {
+		return emailCode;
+	}
+
+	public void setEmailCode(String emailCode) {
+		this.emailCode = emailCode;
+	}
+
+	public String getPhoneCode() {
+		return phoneCode;
+	}
+
+	public void setPhoneCode(String phoneCode) {
+		this.phoneCode = phoneCode;
+	}
+
+	public String getIsEmailActivated() {
+		return isEmailActivated;
+	}
+
+	public void setIsEmailActivated(String isEmailActivated) {
+		this.isEmailActivated = isEmailActivated;
+	}
+
+	public String getIsPhoneActivated() {
+		return isPhoneActivated;
+	}
+
+	public void setIsPhoneActivated(String isPhoneActivated) {
+		this.isPhoneActivated = isPhoneActivated;
 	}
 
 

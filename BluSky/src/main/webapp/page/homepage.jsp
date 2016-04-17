@@ -25,7 +25,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a href="#" class="navbar-brand">Cat & Dog</a>
+				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span>&nbsp;Cat & Dog</a>
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
@@ -34,18 +34,15 @@
 				<!-- 	<li><a href="#content1">content1</a></li>
 					<li><a href="#content2">content2</a></li>
 					<li><a href="#content3">content3</a></li> -->
-					<li><a href="#content4">Footer</a></li>
+					<li><a href="#foot">Footer</a></li>
 					<li role="presentation" class="dropdown" id="dropDownAgent"><a
 						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">
 						Agent<span class="caret"></span>
 					</a>
-						<ul class="dropdown-menu dropdown-menu-left">
-							<li><a href="#">Become Agent</a></li>
-							<li><a href="#">Agent Log In</a></li>
-							<li><a href="#">Find Agent</a></li>							
-							<li role="separator" class="divider"></li>
-							<li id="agentlogOff"><a href="#">Agent Log Off</a></li>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a href="${path }/agency/create">Become Agent</a></li>
+							<li><a href="#">Find Agent</a></li>		
 						</ul>
 					</li>
 					<c:choose>
@@ -56,7 +53,7 @@
 								aria-haspopup="true" aria-expanded="false"> 
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left">
+								<ul class="dropdown-menu dropdown-menu-left aList">
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
@@ -76,7 +73,7 @@
 								aria-haspopup="true" aria-expanded="false"> 
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left">
+								<ul class="dropdown-menu dropdown-menu-left aList">
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
@@ -251,7 +248,7 @@
 		</div>
 	</section>
 
-	<section id="content4">
+	<section id="foot">
 		<div class="container-fluid">
 			<div class="row">
 				<h1>TO BE CONTINUE!</h1>
@@ -355,148 +352,9 @@
 	<script src="${path}/js/jquery.singlePageNav.min.js"></script>
 	<script src="${path}/js/wow.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
+	<script src="${path}/js/blusky.js"></script>
 	<script>
 	
-		$.fn.serializeObject = function(){    
-   			var o = {};    
-  			var a = this.serializeArray();    
-   			$.each(a, function() {    
-       		if (o[this.name]) {    
-           if (!o[this.name].push) {    
-               o[this.name] = [o[this.name]];    
-           }    
-           o[this.name].push(this.value || '');    
-       		} else {    
-           o[this.name] = this.value || '';    
-       		}    
-  			 });    
-  			 return o;    
-		};  
-	
-	
-		$(function() {
-			$(".nav").singlePageNav({
-				offset : 60
-			});
-			$('[data-toggle="tooltip"]').tooltip();
-			$(".navbar-collapse a:not(.skipThis)").on("click", function() {
-				$('.collapse').collapse("hide");
-			});
-
-			$("#signUpButton").on("click", function() {
-				event.preventDefault();
-				
-				var formData = JSON.stringify($('#signupForm').serializeObject());
-			
-				$.ajax({
-					url : '/BluSky/user/signup',
-					type : 'POST',
-					contentType : 'application/json', 
-					data : formData,
-					cache : false,
-					dataType : 'json'				
-				}).done(function(data){		
-						$("#errorMessage").remove();
-						if(data.success == false){
-						$("#signupForm input").each(function(){
-							var name = $(this).prop("name");					
-						
-							if(typeof data[name] != 'undefined'){
-							$(this).closest('div').addClass("has-error");
-							$(this).closest('div').removeClass("has-success");
-							
-							}else{
-							$(this).closest('div').addClass("has-success");
-							$(this).closest('div').removeClass("has-error");
-								
-							}
-							});
-						};
-						 if(data.dumplicateEmail == true){
-							$("#email").closest('div').addClass("has-error");						
-							var div='<div class="alert alert-danger" id="errorMessage" role="alert">'+data.email+'</div>';
-							$('#signUpModal').append(div);
-						
-						};
-						if(data.success == true){
-							$("#signUp").modal('hide');
-							$("#signInLi,#signUpLi").css("display","none");
-							$("#dropDownLog").addClass("show");
-							$("#dropDownLog").removeClass("hide");
-						}
-						
-				})
-				.fail(function(){
-				console.log(arguments[1]);
-				});
-			});
-			 
-			
-			$("#signInButton").on("click", function() {
-				event.preventDefault();
-				var forward = window.location.pathname;
-				var formData = JSON.stringify($('#signInForm').serializeObject());
-			
-				$.ajax({
-					url : '/BluSky/user/signin',
-					type : 'POST',
-					contentType : 'application/json', 
-					data : formData,
-					cache : false,
-					dataType : 'json'				
-				}).done(function(data){		
-					$("#message").remove();					
-						 if(data.success == false){
-							$("#email").closest('div').addClass("has-error");												
-							var div='<div class="alert alert-danger" id="message" role="alert">'+data.message+'</div>';
-							$('#signInModal').append(div);						
-						}else{
-						if($("#rememberMe").is(":checked")){
-							$("input[name='pathName']").val(forward);
-							$('#signInForm').prop("action","/BluSky/user/signinSave");
-							$('#signInForm').submit();
-						}
-							$("#signIn").modal('hide');
-							$("#signInLi,#signUpLi").css("display","none");
-							$("#dropDownLog").addClass("show");
-							$("#dropDownLog").removeClass("hide");
-						}												
-				})
-				.fail(function(){
-				console.log(arguments[1]);
-				});
-			}); 
-		});
-		
-		
-		
- 
-		$("#logOff a").on("click", function() {
-				window.location.href=$(this).prop("href");								
-				/*
-				 $.ajax({
-					url : '/BluSky/user/signOff',
-					type : 'GET',
-					contentType : 'application/json', 
-					cache : false,
-					dataType : 'json'				
-				}).done(function(data){		
-					$("#signInLi,#signUpLi").css("display","block");
-						$("#dropDownLog").addClass("hide");
-						$("#dropDownLog").removeClass("show");								
-				})
-				.fail(function(){
-				console.log(arguments[1]);
-				}); */
-			}); 
-
-
-
-		function initialize() {
-			var input = document.getElementById('address');
-			new google.maps.places.SearchBox((input));
-		}
-		new WOW().init();
 	</script>
 </body>
 
