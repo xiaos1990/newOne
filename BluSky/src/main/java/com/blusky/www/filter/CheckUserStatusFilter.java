@@ -11,6 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.blusky.www.constant.CommonConstant;
+
 
 public class CheckUserStatusFilter implements Filter {
 
@@ -23,10 +25,10 @@ public class CheckUserStatusFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
-		req.getSession().setAttribute("forwardPage", uri);
+		req.getSession().setAttribute(CommonConstant.FORWARD_PAGE, uri);
 		System.out.println(uri);
 	
-			Object user = req.getSession().getAttribute("user");
+			Object user = req.getSession().getAttribute(CommonConstant.SESSION_USER);
 			if(user==null){
 				resp.sendRedirect(req.getContextPath()+"/page/signin.jsp"); 
 				return;

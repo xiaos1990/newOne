@@ -45,6 +45,15 @@
   
  
   <filter>
+    <filter-name>CheckCookieFilter</filter-name>
+    <filter-class>com.blusky.www.filter.CheckCookieFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CheckCookieFilter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+ <filter>
     <filter-name>CheckUserStatusFilter</filter-name>
     <filter-class>com.blusky.www.filter.CheckUserStatusFilter</filter-class>
   </filter>
@@ -52,7 +61,6 @@
     <filter-name>CheckUserStatusFilter</filter-name>
     <url-pattern>*.do</url-pattern>
   </filter-mapping>
-
   
   <!-- 配置Spring监听 -->  
   <listener>  

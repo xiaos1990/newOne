@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@taglib uri="/spring-form.tld" prefix="form"%>
+<%@taglib uri="/c.tld" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cat & Dog</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bluesky.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/homepage.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css" />
+<c:set var="path" value="${pageContext.request.contextPath }"/>
+<link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
+<link rel="stylesheet" href="${path}/css/homepage.css" />
+<link rel="stylesheet" href="${path}/css/animate.css" />
 </head>
 
 <body onload="initialize();">
@@ -27,15 +29,67 @@
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#home">Home</a></li>
-					<li><a href="#content">content</a></li>
-					<li><a href="#content1">content1</a></li>
+					<li><a href="#home">Header</a></li>
+					<li><a href="#content">Content</a></li>
+				<!-- 	<li><a href="#content1">content1</a></li>
 					<li><a href="#content2">content2</a></li>
-					<li><a href="#content3">content3</a></li>
-					<li><a href="#content4">foot</a></li>
-					<li id="signInLi"><a href="#"  data-toggle="modal" data-target="#signIn">Sign In</a></li>
-					<li id="signUpLi"><a href="#"  data-toggle="modal" data-target="#signUp">Sign Up</a></li>
-					<li id="signOffLi" style="display:none"><a href="#">Sign Off</a></li>
+					<li><a href="#content3">content3</a></li> -->
+					<li><a href="#content4">Footer</a></li>
+					<li role="presentation" class="dropdown" id="dropDownAgent"><a
+						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						Agent<span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-left">
+							<li><a href="#">Become Agent</a></li>
+							<li><a href="#">Agent Log In</a></li>
+							<li><a href="#">Find Agent</a></li>							
+							<li role="separator" class="divider"></li>
+							<li id="agentlogOff"><a href="#">Agent Log Off</a></li>
+						</ul>
+					</li>
+					<c:choose>
+						<c:when test="${not empty session_user}">
+							<li role="presentation" class="dropdown" id="dropDownLog">
+								<a class="dropdown-toggle btn-lg skipThis"
+								data-toggle="dropdown" href="#" role="button"
+								aria-haspopup="true" aria-expanded="false"> 
+								<span class="glyphicon glyphicon-user"></span>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-left">
+									<li><a href="#">Wish List</a></li>
+									<li><a href="#">Another action</a></li>
+									<li><a href="#">Something else here</a></li>
+									<li role="separator" class="divider"></li>
+									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+								</ul>
+							</li>
+							<li id="signInLi" class="hide"><a href="#" data-toggle="modal"
+								data-target="#signIn">Sign In</a></li>
+							<li id="signUpLi" class="hide"><a href="#" data-toggle="modal"
+								data-target="#signUp">Sign Up</a></li>
+						</c:when>
+						<c:otherwise>
+							<li role="presentation" class="dropdown hide" id="dropDownLog">
+								<a class="dropdown-toggle btn-lg skipThis"
+								data-toggle="dropdown" href="#" role="button"
+								aria-haspopup="true" aria-expanded="false"> 
+								<span class="glyphicon glyphicon-user"></span>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-left">
+									<li><a href="#">Wish List</a></li>
+									<li><a href="#">Another action</a></li>
+									<li><a href="#">Something else here</a></li>
+									<li role="separator" class="divider"></li>
+									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+								</ul>
+							</li>
+							<li id="signInLi" ><a href="#" data-toggle="modal"
+								data-target="#signIn">Sign In</a></li>
+							<li id="signUpLi" ><a href="#" data-toggle="modal"
+								data-target="#signUp">Sign Up</a></li>
+						</c:otherwise>
+					</c:choose>					
 				</ul>
 			</div>
 		</div>
@@ -94,7 +148,7 @@
 			<div class="row wow fadeInUp" data-wow-duration="1s">
 				<div class="col-md-3"></div>
 				<div class="col-md-4">
-					<img class="img-responsive thumbnail" src="${pageContext.request.contextPath}/image/1.jpg">
+					<img class="img-responsive thumbnail" src="${path}/image/1.jpg">
 				</div>
 				<div class="col-md-2">
 					<h3>Miami</h3>
@@ -114,16 +168,16 @@
 			
 			<div class="row wow bounceIn" data-wow-duration="1s" >
 				<div class="col-md-4">
-					<a href="#"> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/2.jpg">
+					<a href="#"> <img class="img-responsive img-circle" src="${path}/image/2.jpg">
 					</a>
 				</div>
 				<div class="col-md-4">
 					<a> <img class="img-responsive img-circle"
-						src="${pageContext.request.contextPath}/image/3.jpeg">
+						src="${path}/image/3.jpeg">
 					</a>
 				</div>
 				<div class="col-md-4">
-					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${path}/image/4.jpg">
 					</a>
 				</div>
 			
@@ -136,12 +190,12 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/2.jpg">
+					<a> <img class="img-responsive img-circle" src="${path}/image/2.jpg">
 					</a>
 				</div>
 				<div class="col-md-2"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${path}/image/4.jpg">
 					</a>
 				</div>
 				<div class="col-md-2"></div>
@@ -149,7 +203,7 @@
 			<div class="row">
 				<div class="col-md-4"></div>
 				<div class="col-md-2">
-					<a> <img class="img-responsive img-circle" src="${pageContext.request.contextPath}/image/4.jpg">
+					<a> <img class="img-responsive img-circle" src="${path}/image/4.jpg">
 					</a>
 				</div>
 
@@ -170,15 +224,15 @@
 					</ol>
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
-							<img src="${pageContext.request.contextPath}/image/flip1.jpg" alt="MIAMI">
+							<img src="${path}/image/flip1.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 						<div class="item">
-							<img src="${pageContext.request.contextPath}/image/flip2.jpg" alt="MIAMI">
+							<img src="${path}/image/flip2.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 						<div class="item">
-							<img src="${pageContext.request.contextPath}/image/flip3.jpg" alt="MIAMI">
+							<img src="${path}/image/flip3.jpg" alt="MIAMI">
 							<div class="carousel-caption">MIAMI</div>
 						</div>
 					</div>
@@ -206,38 +260,43 @@
 	</section>
 
 
-
-
-
-
-
 	<!-- sign in -->
 <div class="modal fade" id="signIn" tabindex="-1" >
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-header" id="signInModal">
+        <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="modal-title">Sign In</h3>
       </div>
       <div class="modal-body">
-					<form action="" method="post">
+					<form action="" method="post" id="signInForm">
 						<div class="form-group  has-feedback">
-						<input	type="email" class="form-control" id="email1" placeholder="Email">
+						<input	type="email" name="email" class="form-control" id="email1" placeholder="Email">
 						 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
 						</div>
 						<div class="form-group  has-feedback">
-					<input type="password" class="form-control" id="password1" placeholder="Password" >
+					<input type="password" name="password" class="form-control" id="password1" placeholder="Password" >
 					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>	
-						<div class="form-group pull-right">
-							<a href="#" >Forgot password?</a>
-						</div>		
-						<button type="submit" class="btn btn-primary">Sign In</button>
+						<div class="form-group row">
+							<div class="checkbox col-xs-6">
+   							 <label>
+      							<input type="checkbox" name="rememberMe" id="rememberMe" value="on"> Remember me?
+   							 </label>
+   							 </div>
+   							 <div class="col-xs-6">  							 
+							<a href="#" class="pull-right">Forgot password?</a>
+							</div>
+						</div>
+						<div class="form-group">
+						<input type="hidden" name="pathName" value="" />		
+						<button type="submit" id="signInButton" class="btn btn-primary btn-block">Sign In</button>
+						</div>
 					</form>
 				</div>
       <div class="modal-footer">
        <span class="pull-left">Don’t have an account?</span>
-        <button type="button" class="btn btn-primary btn-left" data-toggle="modal" data-dismiss="modal" data-target="#signUp">Sign Up</button>
+        <button type="button" class="btn btn-primary btn-right" data-toggle="modal" data-dismiss="modal" data-target="#signUp">Sign Up</button>
       </div>
     </div>
   </div>
@@ -247,7 +306,7 @@
 <div class="modal fade" id="signUp" tabindex="-1" >
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" id="signUpModal">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="modal-title">Sign Up</h3>
       </div>
@@ -278,25 +337,23 @@
 						<input	type="text" class="form-control" name="phone" id="mobile" placeholder="Mobile" pattern="\d{10}" required data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers" pattern="\d{10}">
 					<!-- 	<input	type="text" class="form-control" name="phone" id="mobile" placeholder="Mobile" data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers"> -->
 						 <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
-						</div>
-						<div class="form-group pull-right">
-							<a href="#" >Forgot password?</a>
-						</div>		
-						<button type="button" id="signUpButton" class="btn btn-primary">Sign Up</button>
+						</div>	
+
+						<button type="button" id="signUpButton" class="btn btn-primary btn-block">Sign Up</button>
 					</form>
 				</div>
       <div class="modal-footer">
        <span class="pull-left">Already a member?</span>
-        <button type="button" class="btn btn-primary btn-left" data-toggle="modal" data-dismiss="modal" data-target="#signIn">Sign In</button>
+        <button type="button" class="btn btn-primary btn-right" data-toggle="modal" data-dismiss="modal" data-target="#signIn">Sign In</button>
       </div>
     </div>
   </div>
 </div>
 
-	<script src="${pageContext.request.contextPath}/js/jquery-1.12.2.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/jquery.singlePageNav.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/wow.min.js"></script>
+	<script src="${path}/js/jquery-1.12.2.js"></script>
+	<script src="${path}/js/bootstrap.min.js"></script>
+	<script src="${path}/js/jquery.singlePageNav.min.js"></script>
+	<script src="${path}/js/wow.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 	<script>
 	
@@ -314,7 +371,7 @@
        		}    
   			 });    
   			 return o;    
-};  
+		};  
 	
 	
 		$(function() {
@@ -322,7 +379,7 @@
 				offset : 60
 			});
 			$('[data-toggle="tooltip"]').tooltip();
-			$(".navbar-collapse a").on("click", function() {
+			$(".navbar-collapse a:not(.skipThis)").on("click", function() {
 				$('.collapse').collapse("hide");
 			});
 
@@ -339,7 +396,7 @@
 					cache : false,
 					dataType : 'json'				
 				}).done(function(data){		
-						$("#error").remove();
+						$("#errorMessage").remove();
 						if(data.success == false){
 						$("#signupForm input").each(function(){
 							var name = $(this).prop("name");					
@@ -357,14 +414,15 @@
 						};
 						 if(data.dumplicateEmail == true){
 							$("#email").closest('div').addClass("has-error");						
-							var span = $('<span />').attr("id","error").css("color","red").html(data.email);
-							span.appendTo($("#email").closest('div'));		
+							var div='<div class="alert alert-danger" id="errorMessage" role="alert">'+data.email+'</div>';
+							$('#signUpModal').append(div);
 						
 						};
 						if(data.success == true){
 							$("#signUp").modal('hide');
 							$("#signInLi,#signUpLi").css("display","none");
-							$("#signOffLi").css("display","block");
+							$("#dropDownLog").addClass("show");
+							$("#dropDownLog").removeClass("hide");
 						}
 						
 				})
@@ -372,11 +430,51 @@
 				console.log(arguments[1]);
 				});
 			});
-		});
-
-		$("#signOffLi a").on("click", function() {
-				event.preventDefault();										
+			 
+			
+			$("#signInButton").on("click", function() {
+				event.preventDefault();
+				var forward = window.location.pathname;
+				var formData = JSON.stringify($('#signInForm').serializeObject());
+			
 				$.ajax({
+					url : '/BluSky/user/signin',
+					type : 'POST',
+					contentType : 'application/json', 
+					data : formData,
+					cache : false,
+					dataType : 'json'				
+				}).done(function(data){		
+					$("#message").remove();					
+						 if(data.success == false){
+							$("#email").closest('div').addClass("has-error");												
+							var div='<div class="alert alert-danger" id="message" role="alert">'+data.message+'</div>';
+							$('#signInModal').append(div);						
+						}else{
+						if($("#rememberMe").is(":checked")){
+							$("input[name='pathName']").val(forward);
+							$('#signInForm').prop("action","/BluSky/user/signinSave");
+							$('#signInForm').submit();
+						}
+							$("#signIn").modal('hide');
+							$("#signInLi,#signUpLi").css("display","none");
+							$("#dropDownLog").addClass("show");
+							$("#dropDownLog").removeClass("hide");
+						}												
+				})
+				.fail(function(){
+				console.log(arguments[1]);
+				});
+			}); 
+		});
+		
+		
+		
+ 
+		$("#logOff a").on("click", function() {
+				window.location.href=$(this).prop("href");								
+				/*
+				 $.ajax({
 					url : '/BluSky/user/signOff',
 					type : 'GET',
 					contentType : 'application/json', 
@@ -384,12 +482,13 @@
 					dataType : 'json'				
 				}).done(function(data){		
 					$("#signInLi,#signUpLi").css("display","block");
-					$("#signOffLi").css("display","none");									
+						$("#dropDownLog").addClass("hide");
+						$("#dropDownLog").removeClass("show");								
 				})
 				.fail(function(){
 				console.log(arguments[1]);
-				});
-			});
+				}); */
+			}); 
 
 
 

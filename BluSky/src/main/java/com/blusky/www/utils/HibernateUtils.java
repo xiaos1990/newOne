@@ -10,8 +10,7 @@ public class HibernateUtils {
 	private static SessionFactory sf;
 
 	public static Session getSession() {
-		ApplicationContext ac = new ClassPathXmlApplicationContext(
-				"classpath:spring.xml");
+		ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:spring.xml");
 		sf = (SessionFactory) ac.getBean("sessionFactory");
 		try {
 			if (sf.getCurrentSession() != null) {
