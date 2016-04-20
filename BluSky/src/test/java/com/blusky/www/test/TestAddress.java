@@ -3,12 +3,16 @@ package com.blusky.www.test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -41,6 +45,34 @@ public class TestAddress {
 			}
 		} catch (Exception e) {
 			return;
+		}
+	
+	
+	
+	ObjectMapper mapper = new ObjectMapper();
+	Map<String, String> map = null;
+
+	
+		String filePath = AddressUtils.class.getResource("/US_STATES.json")
+				.getPath();
+		File file = new File(filePath);
+		try {
+			map = mapper.readValue(file, Map.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(map.size());
+		for (Entry<String, String> entry : map.entrySet()) {
+			Object key = entry.getKey();
+			System.out.print(key + ":");
+			System.out.println(entry.getValue().toString());
 		}
 	}
 }

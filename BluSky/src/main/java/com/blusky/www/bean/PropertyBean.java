@@ -35,9 +35,9 @@ public class PropertyBean {
 	@NotEmpty(message="price is required!")
 	private String price;
 	@Min(message="beds is required!", value = 0)
-	private int beds;
+	private String beds;
 	@Min(message="baths is required!", value = 0)
-	private int baths;
+	private String baths;
 	
 	@Column(name="property_size")
 	@NotEmpty(message="size is required!")
@@ -80,6 +80,7 @@ public class PropertyBean {
 	
 	private String lng;
 	
+	private String quality;
 	
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
@@ -219,19 +220,19 @@ public class PropertyBean {
 		this.price = price;
 	}
 
-	public int getBeds() {
+	public String getBeds() {
 		return beds;
 	}
 
-	public void setBeds(int beds) {
+	public void setBeds(String beds) {
 		this.beds = beds;
 	}
 
-	public int getBaths() {
+	public String getBaths() {
 		return baths;
 	}
 
-	public void setBaths(int baths) {
+	public void setBaths(String baths) {
 		this.baths = baths;
 	}
 
@@ -265,6 +266,14 @@ public class PropertyBean {
 
 	public void setLng(String lng) {
 		this.lng = lng;
+	}
+
+	public String getQuality() {
+		return quality;
+	}
+
+	public void setQuality(String quality) {
+		this.quality = quality;
 	}
 	
 	

@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cat & Dog</title>
+<title>Agent Sign Up</title>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
 <link rel="stylesheet" href="${path}/css/agent.css" />
@@ -28,17 +28,29 @@
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#home">Header</a></li>
+					<!-- <li><a href="#home">Header</a></li>
 					<li><a href="#content">Content</a></li>	
-					<li><a href="#foot">Footer</a></li>
+					<li><a href="#foot">Footer</a></li> -->
+					<li role="presentation" class="dropdown" id="dropDownProperty"><a
+						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						Property<span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a  href="${path }/property/create">Sell</a></li>
+							<li><a  href="${path }/property/create">Lease</a></li>	
+							<li><a href="#">Buy</a></li>	
+							<li><a href="#">Rent</a></li>		
+						</ul>
+					</li>
 					<li role="presentation" class="dropdown" id="dropDownAgent"><a
 						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">
 						Agent<span class="caret"></span>
 					</a>
-						<ul class="dropdown-menu dropdown-menu-left">
-							<li><a href="${path }/agency/create">Become Agent</a></li>
-							<li><a href="#">Find Agent</a></li>							
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a href="${path }/agencycreate">Become Agent</a></li>
+							<li><a href="#">Find Agent</a></li>		
 						</ul>
 					</li>
 					<c:choose>
@@ -49,7 +61,7 @@
 								aria-haspopup="true" aria-expanded="false"> 
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left">
+								<ul class="dropdown-menu dropdown-menu-left aList">
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
@@ -69,7 +81,7 @@
 								aria-haspopup="true" aria-expanded="false"> 
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left">
+								<ul class="dropdown-menu dropdown-menu-left aList">
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
@@ -217,7 +229,7 @@
 							<div class="form-group  has-feedback">
 							 <label class="col-sm-3 control-label" for="email">Email</label>
 							 <div class="col-sm-9">
-							<form:input	type="email" path="email" class="form-control"  id="email" placeholder="Email" required data-toggle="tooltip" data-placement="top" title="Email is Required! Example:xxx@xxx.com" />
+							<form:input	type="email" path="email" class="form-control"  id="email" placeholder="Email"  />
 							 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
 							</div>	
 							</div>
@@ -225,7 +237,7 @@
 							<div class="form-group  has-feedback">
 							 <label class="col-sm-3 control-label" for="mobile">Phone</label>
 							 <div class="col-sm-9">
-							<form:input	type="text" path="phone" class="form-control"  id="mobile" placeholder="Mobile"  required data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers" />
+							<form:input	type="text" path="phone" class="form-control"  id="mobile" placeholder="Mobile" />
 							 <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
 							</div>	
 							</div>
@@ -255,6 +267,9 @@
 							 <label class="col-sm-3 control-label" for="state">State</label>
 							 <div class="col-sm-9">
 							<form:select type="text" id="state" path="state" class="form-control">
+								<c:forEach var="state" items="${states }">
+													<form:option value="${state.key }">${state.value }</form:option>
+								</c:forEach>
 							 </form:select>							 
 							</div>
 							</div>
@@ -297,7 +312,7 @@
 	
 	<script src="${path}/js/jquery-1.12.2.js"></script>
 	<script src="${path}/js/bootstrap.min.js"></script>
-	<script src="${path}/js/jquery.singlePageNav.min.js"></script>
+<%-- 	<script src="${path}/js/jquery.singlePageNav.min.js"></script> --%>
 <%-- 	<script src="${path}/js/wow.min.js"></script> --%>
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 	<script src="${path}/js/agent.js"></script>

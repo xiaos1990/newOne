@@ -25,23 +25,32 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span>&nbsp;Cat & Dog</a>
+				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span>&nbsp;Cat & Dog & Victor</a>
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#home">Header</a></li>
 					<li><a href="#content">Content</a></li>
-				<!-- 	<li><a href="#content1">content1</a></li>
-					<li><a href="#content2">content2</a></li>
-					<li><a href="#content3">content3</a></li> -->
 					<li><a href="#foot">Footer</a></li>
+					<li role="presentation" class="dropdown" id="dropDownProperty"><a
+						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						Property<span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a  href="${path }/property/create">Sell</a></li>
+							<li><a  href="${path }/property/create">Lease</a></li>	
+							<li><a href="#">Buy</a></li>	
+							<li><a href="#">Rent</a></li>		
+						</ul>
+					</li>
 					<li role="presentation" class="dropdown" id="dropDownAgent"><a
 						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">
 						Agent<span class="caret"></span>
 					</a>
 						<ul class="dropdown-menu dropdown-menu-left aList">
-							<li><a href="${path }/agency/create">Become Agent</a></li>
+							<li><a href="${path }/agencycreate">Become Agent</a></li>
 							<li><a href="#">Find Agent</a></li>		
 						</ul>
 					</li>
@@ -54,6 +63,7 @@
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-left aList">
+									<li><a href="#"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
@@ -354,7 +364,6 @@
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 	<script src="${path}/js/blusky.js"></script>
 	<script>
-	
 	</script>
 </body>
 

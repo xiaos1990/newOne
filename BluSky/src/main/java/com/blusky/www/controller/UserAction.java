@@ -56,7 +56,7 @@ public class UserAction {
 			
 			userService.saveEntity(user);
 			mapErrors.put("success", true);
-			request.getSession(false).setAttribute(CommonConstant.SESSION_USER, user);
+			request.getSession().setAttribute(CommonConstant.SESSION_USER, user);
 		} catch (Exception ex) {
 			 ex.printStackTrace();
 			mapErrors.put("saveFail", ex);
@@ -86,11 +86,11 @@ public class UserAction {
 	public  String signinSaveAction(HttpServletRequest request,HttpServletResponse response){
 		
 		String value = request.getParameter("pathName").replace("/BluSky", "");
-		Object forward=request.getSession(false).getAttribute(CommonConstant.FORWARD_PAGE);
+		//Object forward=request.getSession(false).getAttribute(CommonConstant.FORWARD_PAGE);
 		addCookieingUserToResponse(request.getParameter("email").trim(),request.getParameter("password").trim(),request,response);
-		if(forward!=null)
+	/*	if(forward!=null)
 			return "redirect:"+forward.toString();
-		else
+		else*/
 			return "redirect:"+value;
 	}
 
@@ -101,7 +101,8 @@ public class UserAction {
 		List<UserBean> list =userService.findEntityByHQL("from UserBean ub where trim(ub.email)=?",parameters);
 		if(list!=null&&list.size()>0){
 			if(list.get(0).getPassword().trim().equals(parameter2)){
-				request.getSession(false).setAttribute("user", list.get(0));
+				UserBean userBean = list.get(0);
+				request.getSession().setAttribute(CommonConstant.SESSION_USER, userBean);
 				return true;
 			}
 		}

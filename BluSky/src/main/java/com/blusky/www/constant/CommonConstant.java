@@ -1,5 +1,6 @@
 package com.blusky.www.constant;
 
+
 public class CommonConstant {		 	    
 	    public final static String SESSION_USER = "session_user"; 
 	    public final static String BROWSER_COOKIE_EMAIL = "BluSkyUserEmail"; 	     
@@ -15,4 +16,18 @@ public class CommonConstant {
 	    
 	    public final static String FORWARD_PAGE = "forward_page"; 
 	    
+	    //property	
+	    public final static String PROPERTY_TYPE_BUYER = "property_type_buyer"; 
+	    public final static String AMENITIES = "amenityList"; 
+	    public final static String LEASE_DETAILS = "leaseList"; 
+	    public final static String PROPERTY_TYPE_OWNER = "property_type_owner"; 
+	    public final static String PROPERTY = "propertyTypes"; 
+	    
+	    public final static String PROPERTYOTHER = "propertyOtherTypes"; 
+	    
+	    
+	    public final static String QUALITY="quality";
+	    
+	    //states
+	    public final static String STATES="states";
 }

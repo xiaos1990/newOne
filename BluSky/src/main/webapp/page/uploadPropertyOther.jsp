@@ -56,7 +56,8 @@
 							<li><a href="${path }/agencycreate">Become Agent</a></li>
 							<li><a href="#">Find Agent</a></li>		
 						</ul>
-					</li>				
+					</li>
+					
 							<li role="presentation" class="dropdown" id="dropDownLog">
 								<a class="dropdown-toggle btn-lg skipThis"
 								data-toggle="dropdown" href="#" role="button"
@@ -89,6 +90,52 @@
 					<div class="panel panel-default">
 						<div class="panel-heading"><h4>Property Information:</h4></div>
 						<div class="panel-body">
+							
+ <%-- AJAX VALIDATION OR BACKEND VALIDATION 
+ <div class="control-group ${requestScope['org.springframework.validation.BindingResult.user'].hasFieldErrors('firstName') ? 'error' : ''}"> --%>
+ 
+ 
+								<%-- <div class="form-group  has-feedback">
+
+									 <label class="col-sm-2 control-label" for="firstName">First Name</label>
+							
+							<div class="col-sm-10">	
+							<form:input	type="text" id="firstName" path="firstName" class="form-control"/>
+							 <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
+							 </div>
+							</div>
+							
+							<div class="form-group  has-feedback">
+							 <label class="col-sm-2 control-label" for="lastName">Last Name</label>
+							 <div class="col-sm-10">
+							<form:input	type="text" id="lastName" path="lastName" class="form-control"  />							
+							 <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
+							 </div>
+							 
+							</div>						
+							<div class="form-group  has-feedback">
+							 <label class="col-sm-2 control-label" for="email">Email</label>
+							 <div class="col-sm-10">
+							<form:input	type="email" path="email" class="form-control"  id="email" placeholder="Email" required data-toggle="tooltip" data-placement="top" title="Email is Required! Example:xxx@xxx.com" />
+							 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
+							</div>	
+							</div>
+																		
+							<div class="form-group  has-feedback">
+							 <label class="col-sm-2 control-label" for="mobile">Phone</label>
+							 <div class="col-sm-10">
+							<form:input	type="text" path="phone" class="form-control"  id="mobile" placeholder="Mobile"  required data-toggle="tooltip" data-placement="top" title="Mobile is Required! format:10 numbers" />
+							 <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
+							</div>	
+							</div>
+							<div class="form-group  has-feedback">
+							 <label class="col-sm-2 control-label" for="lastName">Birthday</label>
+							 <div class="col-sm-10">
+							<form:input	type="date" path="birthday" class="form-control"  id="birthday" placeholder="birthday"  required data-toggle="tooltip" data-placement="top" title="birthday is Required! format:mm/dd/yyyy" />
+							 <span class="glyphicon glyphicon-calendar form-control-feedback" aria-hidden="true"></span>
+							</div>	
+							</div> --%>
+
 									<div class="form-group  has-feedback">
 										<label class="col-sm-2 control-label" for="address">Address</label>
 										<div class="col-sm-10">
@@ -115,7 +162,7 @@
 										<div class="col-sm-10">
 											<form:select class="form-control" type="text" id="state"
 												path="state" >
-													<c:forEach var="state" items="${states }">
+												<c:forEach var="state" items="${states }">
 													<form:option value="${state.key }">${state.value }</form:option>
 												</c:forEach>
 											</form:select>
@@ -141,101 +188,30 @@
 											</form:select>
 										</div>
 									</div>
-
-									<div class="form-group">
-										<label class="col-sm-2 control-label" for="type">Type</label>
-										<div class="col-sm-10">
-											<form:select class="form-control" path="type" onchange="flipLeaseInfo(this)">
-												<c:forEach var="type" items="${property_type_owner }">
-													<form:option value="${type.REF_VALUE }">${type.SHORT_DESCRIPTION }</form:option>
-												</c:forEach>
-											</form:select>
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label class="col-sm-2 control-label" for="propertyType">Property Type</label>
-										<div class="col-sm-10">
-											<form:select class="form-control" path="propertyType">
-												<c:forEach var="ptype" items="${propertyTypes }">
-													<form:option value="${ptype['REF_VALUE'] }">${ptype['SHORT_DESCRIPTION'] }</form:option>
-												</c:forEach>
-											</form:select>
-										</div>
-									</div>
-									<div class="form-group  has-feedback">
-										<label class="col-sm-2 control-label" for="baths">baths</label>
-										<div class="col-sm-10">
-											<form:input type="text" path="baths" class="form-control"
-												id="zipCode" placeholder="bath" required
-												data-toggle="tooltip" data-placement="top"
-												title="baths is Required!" onchange="validateNumber(this)" />
-										</div>
-									</div>
-
-									<div class="form-group  has-feedback">
-										<label class="col-sm-2 control-label" for="beds">beds</label>
-										<div class="col-sm-10">
-											<form:input type="text" path="beds" class="form-control"
-												id="zipCode" placeholder="beds" required
-												data-toggle="tooltip" data-placement="top"
-												title="beds is Required!" onchange="validateNumber(this)" />
-											<span class="glyphicon glyphicon-bed form-control-feedback"
-												aria-hidden="true"></span>
-										</div>
-									</div>
-									<div class="form-group  has-feedback">
-										<label class="col-sm-2 control-label" for="size">size</label>
-										<div class="col-sm-10">
-											<form:input type="text" path="size" class="form-control"
-												id="zipCode" placeholder="size" required
-												data-toggle="tooltip" data-placement="top"
-												title="size is Required!" onchange="validateNumber(this)" />
-										</div>
-									</div>
 									<div class="form-group  has-feedback">
 										<label class="col-sm-2 control-label" for="price">price</label>
 										<div class="col-sm-10">
 											<form:input type="text" path="price" class="form-control"
 												id="zipCode" placeholder="price" required
 												data-toggle="tooltip" data-placement="top"
-												title="price is Required!" onchange="formatCurrency(this)"/>
+												title="zipCode is Required! format:5 numbers" onchange="formatCurrency(this)"/>
 											<span class="glyphicon glyphicon-usd form-control-feedback"
 												aria-hidden="true"></span>
 										</div>
 									</div>
-
-									<div class="form-group  has-feedback" id="leaseDetails">
-										<label class="col-sm-2 control-label" for="Lease Details">Lease Details:</label>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="country">Quality</label>
 										<div class="col-sm-10">
-											<!-- <div class="checkbox"> -->
-											<c:forEach var="detail" items="${leaseList }">
-												<label class="checkbox-inline">
-													 <input type="checkbox" name="leaseDetails"
-														value="${detail.SHORT_DESCRIPTION }"
-														<c:forEach var="lease" items="${leaseDetails }"><c:if test="${detail.SHORT_DESCRIPTION eq lease }">checked</c:if></c:forEach>>${detail.SHORT_DESCRIPTION }
-												</label>							 
-											</c:forEach>
-											<!-- </div> -->
+											<form:select class="form-control" id="quality"
+												path="quality" >
+												<c:forEach var="qitem" items="${quality }">
+													<form:option value="${qitem.REF_VALUE }">${qitem.SHORT_DESCRIPTION }</form:option>
+												</c:forEach>
+											</form:select>
 										</div>
 									</div>
-
-									<div class="form-group  has-feedback">
-										<label class="col-sm-2 control-label" for="Amenities">Amenities</label>
-										<div class="col-sm-10">
-										<!-- 		<div class="checkbox">  -->
-											<c:forEach var="amenity" items="${amenityList }">
-												<label class="checkbox-inline">
-														 <input type="checkbox" name="amenities"
-														value="${amenity.REF_VALUE }"
-														<c:forEach var="amenityResult" items="${amenities }"><c:if test="${amenity.REF_VALUE eq amenityResult }">checked</c:if>	</c:forEach>>${amenity.SHORT_DESCRIPTION }
-												</label>
-											</c:forEach>
-											<!-- </div> -->
-										</div>
-									</div>
-
-
+									
 									<div class="form-group" id="files">
 										<label class="col-sm-2 control-label" for="price">images/videos:</label>
 										<div class="col-sm-10">

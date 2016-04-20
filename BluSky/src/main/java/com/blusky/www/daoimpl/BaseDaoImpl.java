@@ -36,8 +36,7 @@ public class BaseDaoImpl<T> implements BaseDaoI<T>{
 	}
 
 	public void updateEntity(T t) {
-		// TODO Auto-generated method stub
-		
+		sFactory.getCurrentSession().update(t);
 	}
 
 	public void saveOrUpdateEntity(T t) {

@@ -1,5 +1,50 @@
 var geocoder;
 
+function addMore() {
+	var append = '<div class="files"><div class="col-sm-2"></div><div class="col-sm-10"><div class="input-group" id="files"><input type="file" name="btnFile" class="form-control" /><div class="input-group-btn"><button type="button" class="btn btn-default" onclick="deleteThis(this);"><span class="glyphicon glyphicon-trash"> </span>&nbsp;Delete</button></div></div></div></div>';		
+	$("#files").append(append);
+};
+function deleteThis(obj){
+	$(obj).closest("div .files").remove();
+}
+
+function validateNumber(obj){
+	if(isNaN(obj.value)){
+		$(obj).val(0);
+	}
+	
+}
+
+function flipLeaseInfo(obj){
+	if(obj.value == 'RENT'){
+		$("#leaseDetails").addClass("show");
+		$("#leaseDetails").removeClass("hide");
+	}else{
+		$("#leaseDetails").addClass("hide");
+		$("#leaseDetails").removeClass("show");
+	}
+	
+}
+
+function formatCurrency(obj){
+	var value=$(obj).val();
+	$(obj).val(formatMoney(value));
+}
+
+function formatMoney(number, places, symbol, thousand, decimal) {
+	number = number || 0;
+	number = parseFloat(number.replace(/[^0-9-.]/g, '')); 
+    places = !isNaN(places = Math.abs(places)) ? places : 2;
+    symbol = symbol !== undefined ? symbol : "$";
+    thousand = thousand || ",";
+    decimal = decimal || ".";
+    var negative = number < 0 ? "-" : "",
+        i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+}
+
+
 $.fn.serializeObject = function(){    
    			var o = {};    
   			var a = this.serializeArray();    
@@ -52,17 +97,17 @@ $.fn.serializeObject = function(){
 	
 				
 		$(function(){
+			$(".nav").singlePageNav({
+				offset : 60
+			});
 			$('[data-toggle="tooltip"]').tooltip();
 			$(".navbar-collapse a:not(.skipThis)").on("click", function() {
 				$('.collapse').collapse("hide");
 			});
 			
-			/*$("#agentsignupForm input[name$='Name']").prop("disabled","disabeld");
+			$("#agentsignupForm input[name$='Name']").prop("disabled","disabeld");
 			$("#agentsignupForm input[name='email']").prop("disabled","disabeld");
-			$("#agentsignupForm input[name='phone']").prop("disabled","disabeld");*/
-			$("#agentsignupForm input[name$='Name']").prop("readonly","readonly");
-			$("#agentsignupForm input[name='email']").prop("readonly","readonly");
-			$("#agentsignupForm input[name='phone']").prop("readonly","readonly");
+			$("#agentsignupForm input[name='phone']").prop("disabled","disabeld");
 			
 			$("#city").on("focus",function(){
 			
@@ -83,7 +128,7 @@ $.fn.serializeObject = function(){
 		
 			}); 
 			
-			$("#signUpButton").on("click", function(event) {
+			$("#propertyButton").on("click", function(event) {
 				var address = $("#address").val();
 				var city= $("#city").val();
 				var state= $("#state").val();
@@ -100,6 +145,7 @@ $.fn.serializeObject = function(){
 				fullAddress=fullAddress.toString()+zipcode+",";
 				if((country=$.trim(country))!='')
 				fullAddress=fullAddress.toString()+country;
+				console.log(fullAddress.toString());
 				 geocoder.geocode( { 'address': fullAddress}, function(results, status) {
 						var lat=results[0].geometry.location.lat();
 						var lng=results[0].geometry.location.lng();
@@ -113,34 +159,43 @@ $.fn.serializeObject = function(){
 						$("#lat").val(lat);
 						$("#lng").val(lng);
 						addressCheck();
+						if (status == google.maps.GeocoderStatus.OK) {			
+					
+						event.preventDefault();
 						
-						if (status == google.maps.GeocoderStatus.OK) {														
 						var formData = JSON.stringify($('#agentsignupForm').serializeObject());
 						$.ajax({
-							url : '/BluSky/agencysignup',
+							url : '/BluSky/agency/signup',
 							type : 'POST',
 							contentType : 'application/json', 
 							data : formData,
 							cache : false,
 							dataType : 'json'				
 						}).done(function(data){		
+								$("#errorMessage").remove();
 								if(data.success == false){
-								$("#agentsignupForm input").each(function(){
+								$("#signupForm input").each(function(){
 									var name = $(this).prop("name");					
 								
 									if(typeof data[name] != 'undefined'){
-									$(this).closest('div').parent('div').addClass("has-error");
-									$(this).closest('div').parent('div').removeClass("has-success");
+									$(this).closest('div').addClass("has-error");
+									$(this).closest('div').removeClass("has-success");
 									
 									}else{
-									$(this).closest('div').parent('div').addClass("has-success");
-									$(this).closest('div').parent('div').removeClass("has-error");
+									$(this).closest('div').addClass("has-success");
+									$(this).closest('div').removeClass("has-error");
 										
 									}
 									});
 								};
+								 if(data.dumplicateEmail == true){
+									$("#email").closest('div').addClass("has-error");						
+									var div='<div class="alert alert-danger" id="errorMessage" role="alert">'+data.email+'</div>';
+									$('#signUpModal').append(div);
+								
+								};
 								if(data.success == true){
-									window.location.href="/BluSky/";
+									document.forms[0].submit();
 								}
 								
 						})
@@ -149,7 +204,8 @@ $.fn.serializeObject = function(){
 						});
 						
 					} else {
-						alert("Geocode was not successful for the following reason: "+ status);
+						alert("Geocode was not successful for the following reason: "
+								+ status);
 					}
 				});
 			});

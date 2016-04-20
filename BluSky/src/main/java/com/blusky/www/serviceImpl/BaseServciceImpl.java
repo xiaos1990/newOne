@@ -38,8 +38,7 @@ public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 	}
 
 	public void updateEntity(T t) {
-		// TODO Auto-generated method stub
-		
+		dao.updateEntity(t);
 	}
 
 	public void saveOrUpdateEntity(T t) {

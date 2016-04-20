@@ -30,10 +30,11 @@ public class CheckCookieFilter implements Filter {
 	        HttpServletRequest request = (HttpServletRequest) req; 
 	        HttpServletResponse response = (HttpServletResponse) res; 
 	        String URI = request.getRequestURI();
+	        System.out.println(URI);
 	        if(URI.matches("^(/BluSky)((/image)|(/fonts)|(/files)|(/js)|(/css))/.*$")){
 	        	 chain.doFilter(request, response); 
 	        }else{
-	        Object object = request.getSession(true).getAttribute( 
+	        Object object = request.getSession().getAttribute( 
 	                CommonConstant.SESSION_USER); 
 	 
 	        UserBean cookieUser = null; 

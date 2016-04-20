@@ -34,7 +34,8 @@ public class AgencyServiceImpl extends BaseServciceImpl<UserBean> implements Age
 		List<UserBean> list =findEntityByHQL("from UserBean ub where trim(ub.email)=?",parameters);
 		if(list!=null&&list.size()>0){
 			if(list.get(0).getPassword().trim().equals(parameter2)){
-				request.getSession(false).setAttribute(CommonConstant.SESSION_USER, list.get(0));
+				UserBean userBean =list.get(0);
+				request.getSession().setAttribute(CommonConstant.SESSION_USER,userBean );
 				return true;
 			}
 		}

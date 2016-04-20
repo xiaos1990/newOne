@@ -7,19 +7,24 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class HibernateUtils {
 
-	private static SessionFactory sf;
-
+	private static SessionFactory sf=null;
+	private static Session session=null;
+	private static ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:spring.xml");
 	public static Session getSession() {
-		ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:spring.xml");
+		if(sf==null)
 		sf = (SessionFactory) ac.getBean("sessionFactory");
+	
 		try {
-			if (sf.getCurrentSession() != null) {
-				return sf.getCurrentSession();
+			session=sf.getCurrentSession();
+			if (session!= null) {
+				return session;
 			} else {
-				return sf.openSession();
+				session=sf.openSession();
+				return session;
 			}
 		} catch (Exception e) {
-			return sf.openSession();
+			session=sf.openSession();
+			return session;
 		}
 
 	}

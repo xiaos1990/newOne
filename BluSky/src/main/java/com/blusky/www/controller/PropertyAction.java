@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,13 +23,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.python.modules.newmodule;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -47,10 +40,9 @@ import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
 import com.blusky.www.bean.UserBean;
+import com.blusky.www.constant.CommonConstant;
 import com.blusky.www.formbean.PropertyForm;
-import com.blusky.www.utils.AddressUtils;
 import com.blusky.www.utils.RefTableUtils;
-import com.rsa.cryptoj.c.aJ.l;
 
 @Controller
 @RequestMapping("/property")
@@ -158,7 +150,7 @@ public class PropertyAction {
 					}
 				propertyBean.setLeaseDetails(leaseDetails.toString());
 				propertyBean.setAmenities(amenities.toString());
-				propertyBean.setUser((UserBean)request.getSession().getAttribute("user"));
+				propertyBean.setUser((UserBean)request.getSession().getAttribute(CommonConstant.SESSION_USER));
 				propertyBean.setModifiedDate(new Date());
 				propertyBean.setCreatedDate(new Date());
 				propertyService.save(propertyBean);
@@ -192,8 +184,8 @@ public class PropertyAction {
 	public String dipslayProperty(ModelMap map) {
 		PropertyForm pForm = new PropertyForm();
 		pForm.setPropertyList(getPropertyList(null));
-		pForm.setTypeList(RefTableUtils.getListBySql("PROPERTY_TYPE_BUYER"));
-		pForm.setPropertyTypeList(RefTableUtils.getListBySql("PROPERTY"));
+/*		pForm.setTypeList(RefTableUtils.getListBySql("PROPERTY_TYPE_BUYER"));
+		pForm.setPropertyTypeList(RefTableUtils.getListBySql("PROPERTY"));*/
 		System.out.println(pForm.getPropertyTypeList().get(0).get("REF_VALUE"));
 		map.addAttribute("propertyForm", pForm);
 		return "displayProperty";
@@ -224,20 +216,15 @@ public class PropertyAction {
 		return null;
 	}
 
-	@RequestMapping(value = "/newOne.do", method = RequestMethod.GET)
-	public String createNewProperty(ModelMap map,HttpServletRequest request) {
+	@RequestMapping(value = "/create/{propertyType}", method = RequestMethod.GET)
+	public String createNewProperty(@PathVariable String propertyType,ModelMap map,HttpServletRequest request) {
 		PropertyBean property = new PropertyBean();
 		map.addAttribute("propertyBean", property);
-		List list=RefTableUtils.getListBySql("AMENITIES");
-		List leaseList = RefTableUtils.getListBySql("LEASE_DETAILS");
-		request.getSession(true).setAttribute("propertyTypes",RefTableUtils.getListBySql("PROPERTY_TYPE_OWNER"));
-		request.getSession(true).setAttribute("types",RefTableUtils.getListBySql("PROPERTY"));
-		request.getSession(true).setAttribute("amenityList", list);
-		request.getSession(true).setAttribute("leaseList", leaseList);
-		List<Map<String, String>> results = AddressUtils.getUSStates();
-		request.getSession(true).setAttribute("USstates", results);
-
+		if("1".equals(propertyType))
 		return "uploadProperty";
+		else 
+		return "uploadPropertyOther";	
+		
 	}
 	
 	@RequestMapping(value = "/displayDetails/{propertyId}", method = RequestMethod.GET)
