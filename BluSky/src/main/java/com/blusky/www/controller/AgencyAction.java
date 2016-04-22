@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blusky.www.Iservice.AgencyServiceI;
-import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.UserBean;
 import com.blusky.www.constant.CommonConstant;
 
@@ -29,9 +28,7 @@ public class AgencyAction {
 
 	@Inject
 	AgencyServiceI agencyService;
-	@Inject
-	UserServiceI userService;
-	
+
 	@RequestMapping(value = "/agencycreate", method = RequestMethod.GET)	
 	public String createAgent(ModelMap map,HttpServletRequest request){
 		Object object = request.getSession().getAttribute(CommonConstant.SESSION_USER);
@@ -41,7 +38,7 @@ public class AgencyAction {
 		if(StringUtils.isBlank(userBean.getIsAgent()) || !userBean.getIsAgent().equals("1"))
 		map.put("userBean", userBean);	
 		else
-		return "homepage";
+		return "redirect:/user/dashboard";
 		return "agentsignup";
 		}
 		return "signin";
@@ -55,29 +52,18 @@ public class AgencyAction {
 			BindingResult bindingResult,HttpServletRequest request) throws Exception {
 		Map<String, Object> mapErrors = new HashMap<String, Object>();
 		mapErrors.put("success", false);
-		mapErrors.put("dumplicateEmail", false);
 		if (bindingResult.hasErrors()) {
 			List<FieldError> errs = bindingResult.getFieldErrors();
-
-			for (FieldError err : errs) {
-				mapErrors.put(err.getField(), err.getDefaultMessage());
-			}
-			return mapErrors;
-		}
-		try {
-			List<UserBean> list=userService.findEntityByHQL("from UserBean ub where ub.email=?",user.getEmail());
-			if(list!=null && list.size()>0){
-				mapErrors.put("email", CommonConstant.DUMPLICATE_EMAIL);
-				mapErrors.put("dumplicateEmail", true);
+			if (errs.size() == 1 && errs.get(0).getField().equals("password")) {
+				mapErrors.put("success", true);
+				user.setIsAgent("1");
+				agencyService.updateEntity(user);
 				return mapErrors;
+			} else {
+				for (FieldError err : errs) {
+					mapErrors.put(err.getField(), err.getDefaultMessage());
+				}
 			}
-			
-			userService.saveEntity(user);
-			mapErrors.put("success", true);
-			request.getSession().setAttribute(CommonConstant.SESSION_USER, user);
-		} catch (Exception ex) {
-			 ex.printStackTrace();
-			mapErrors.put("saveFail", ex);
 		}
 		return mapErrors;
 

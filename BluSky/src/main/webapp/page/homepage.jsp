@@ -25,7 +25,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span>&nbsp;Cat & Dog & Victor</a>
+				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span></a>
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
@@ -38,9 +38,12 @@
 						Property<span class="caret"></span>
 					</a>
 						<ul class="dropdown-menu dropdown-menu-left aList">
-							<li><a  href="${path }/property/create">Sell</a></li>
-							<li><a  href="${path }/property/create">Lease</a></li>	
-							<li><a href="#">Buy</a></li>	
+							<li><a  href="${path }/property/create/1">Sell/Rent House/Apartment</a></li>
+							<li><a  href="${path }/property/create/2">Sell Other</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Buy House/Apartment</a></li>
+							<li><a href="#">Buy Other</a></li>	
+							<li role="separator" class="divider"></li>
 							<li><a href="#">Rent</a></li>		
 						</ul>
 					</li>
@@ -62,7 +65,7 @@
 								aria-haspopup="true" aria-expanded="false"> 
 								<span class="glyphicon glyphicon-user"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left aList">
+								<ul class="dropdown-menu dropdown-menu-right aList">
 									<li><a href="#"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
 									<li><a href="#">Wish List</a></li>
 									<li><a href="#">Another action</a></li>
@@ -124,7 +127,7 @@
 								<div class="input-group">
 									<div class="input-group-addon">Address</div>
 									<input type="text" class="form-control" id="address"
-										placeholder="input location">
+										placeholder="address">
 								</div>
 								<div class="input-group">
 									<select class="form-control type" id="type">

@@ -24,13 +24,13 @@ public abstract class BaseServciceImpl<T> implements BaseServiceI<T>{
 	}
 
 	
-	private Class<T> clazz ;
+/*	private Class<T> clazz ;
 	@SuppressWarnings("unchecked")
 	public BaseServciceImpl() {
 		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
 		clazz = (Class<T>) type.getActualTypeArguments()[0];
 	}
-	
+	*/
 
 	public void saveEntity(T t) {
 		// TODO Auto-generated method stub

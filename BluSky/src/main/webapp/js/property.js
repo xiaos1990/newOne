@@ -165,7 +165,7 @@ $.fn.serializeObject = function(){
 						
 						var formData = JSON.stringify($('#agentsignupForm').serializeObject());
 						$.ajax({
-							url : '/BluSky/agency/signup',
+							url : '/BluSky/agencysignup',
 							type : 'POST',
 							contentType : 'application/json', 
 							data : formData,

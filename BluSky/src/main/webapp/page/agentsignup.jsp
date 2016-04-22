@@ -37,9 +37,12 @@
 						Property<span class="caret"></span>
 					</a>
 						<ul class="dropdown-menu dropdown-menu-left aList">
-							<li><a  href="${path }/property/create">Sell</a></li>
-							<li><a  href="${path }/property/create">Lease</a></li>	
-							<li><a href="#">Buy</a></li>	
+							<li><a  href="${path }/property/create/1">Sell/Rent House/Apartment</a></li>
+							<li><a  href="${path }/property/create/2">Sell Other</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Buy House/Apartment</a></li>
+							<li><a href="#">Buy Other</a></li>	
+							<li role="separator" class="divider"></li>
 							<li><a href="#">Rent</a></li>		
 						</ul>
 					</li>
