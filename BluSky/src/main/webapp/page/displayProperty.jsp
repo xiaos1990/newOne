@@ -121,8 +121,11 @@ right:10%; */
 
 </body>
 <script>
-var lat =${lat};
-var lng=${lng};
+/* var lat = ${lat};
+var lng = ${lng};  */
+
+var lat =25;
+var lng = -84;  
  	var bounds;
  	var zipcode123;
 	var geocoder;

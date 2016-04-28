@@ -55,3 +55,18 @@ body {
     padding-left: 7px;
 }
 
+#description{
+	width:100%;
+	
+}
+
+@media (min-width: 992px){
+#map {
+    height: 800px;
+}
+}
+@media (max-width: 991px){
+#map {
+    height: 400px;
+}
+}

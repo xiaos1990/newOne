@@ -42,6 +42,10 @@ public class PropertyBean {
 	@Column(name="property_size")
 	@NotEmpty(message="size is required!")
 	private String size;
+	
+	@Column()
+	@Pattern(regexp="^[12]$",message="unit is not valid!")
+	private String unit;
 	@NotEmpty(message="address is required!")
 	private String address;
 	@NotEmpty(message="city is required!")
@@ -82,13 +86,16 @@ public class PropertyBean {
 	
 	private String quality;
 	
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private UserBean user;
 
 	@Column(name="find_roommate")
 	private String findRoommate;
 	
+	@Column(name="commision_fee")
+	@Pattern(regexp="^\\d*%?$",message="wrong format!")
+	private String commisionFee;
 	
 	public String getFindRoommate() {
 		return findRoommate;
@@ -274,6 +281,22 @@ public class PropertyBean {
 
 	public void setQuality(String quality) {
 		this.quality = quality;
+	}
+
+	public String getCommisionFee() {
+		return commisionFee;
+	}
+
+	public void setCommisionFee(String commisionFee) {
+		this.commisionFee = commisionFee;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	

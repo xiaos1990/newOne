@@ -120,6 +120,28 @@ public class UserAction {
 	}	
 	
 	
+	//forward user requests
+	
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)	
+	public  String dashboardAction(HttpServletRequest request,HttpServletResponse response) throws Exception {	
+		return "dashboard";
+
+	}
+	@RequestMapping(value = "/favorite", method = RequestMethod.GET)	
+	public  String favoriteAction(HttpServletRequest request,HttpServletResponse response) throws Exception {	
+		return "favorite";
+
+	}
+	@RequestMapping(value = "/collection", method = RequestMethod.GET)	
+	public  String collectionAction(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		return "collection";
+
+	}
+	@RequestMapping(value = "/properties", method = RequestMethod.GET)	
+	public  String propertiesAction(HttpServletRequest request,HttpServletResponse response) throws Exception {	
+		return "properties";
+
+	}
 	
 		   
 	    private void addCookieingUserToResponse(String email, String password, HttpServletRequest request, HttpServletResponse response){ 

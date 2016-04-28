@@ -27,8 +27,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,7 +44,6 @@ import com.blusky.www.bean.UploadFiles;
 import com.blusky.www.bean.UserBean;
 import com.blusky.www.constant.CommonConstant;
 import com.blusky.www.formbean.PropertyForm;
-import com.blusky.www.utils.RefTableUtils;
 
 @Controller
 @RequestMapping("/property")
@@ -54,70 +55,67 @@ public class PropertyAction {
 	UserServiceI userService;
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String uploadProperty(
-			@ModelAttribute(value = "propertyBean") @Valid PropertyBean propertyBean,
-			BindingResult result, @RequestParam MultipartFile[] btnFile,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		request.getSession(true).setAttribute("amenities", request.getParameterValues("amenities"));
-		request.getSession(true).setAttribute("leaseDetails", request.getParameterValues("leaseDetails"));
+	@ResponseBody
+	public Map<String, Object> uploadProperty(@RequestBody @Valid PropertyBean propertyBean,BindingResult result, @RequestParam MultipartFile[] btnFile,HttpServletRequest request, HttpServletResponse response)throws Exception {
+		/*request.getSession().setAttribute("amenities", request.getParameterValues("amenities"));
+		request.getSession().setAttribute("leaseDetails", request.getParameterValues("leaseDetails"));*/
+		Map<String, Object> mapErrors = new HashMap<String, Object>();
+		mapErrors.put("success", false);
+	
+
 		List<UploadFiles> set = new ArrayList<UploadFiles>();
 		InputStream is = null;
 		OutputStream os = null;
+		String[] strings = request.getParameterValues("leaseDetails");
+		String[] strings1 = request.getParameterValues("amenities");
+		if(!"sell".equals(propertyBean.getType())&&(strings==null||strings.length==0)){
+			result.reject("leaseDetails", "Lease Details can not be empty!");
+		}
 		String fileName;
 		String folderRoot = this.getClass().getResource("").toString();
-		// C:\Users\User\git\newOne\BluSky\src\main\webapp\files
-		folderRoot = (folderRoot.split("target")[0] + "src/main/webapp/files")
-				.substring(6);
+		folderRoot = (folderRoot.split("target")[0] + "src/main/webapp/files").substring(6);
 		for (int i = 0; i < btnFile.length; i++) {
 			if (btnFile[i].getSize() > 0) {
 				fileName = btnFile[i].getOriginalFilename();
 				String ext = fileName.substring(fileName.lastIndexOf("."));
-				if (!(ext.equalsIgnoreCase(".mp4")
-						|| ext.equalsIgnoreCase(".jpg") || ext
-							.equalsIgnoreCase(".png"))) {
-					result.reject("FileName" + i,
-							"File type should be in the list");
+				if (!(ext.equalsIgnoreCase(".mp4")|| ext.equalsIgnoreCase(".jpg") || ext.equalsIgnoreCase(".png"))) {
+					result.reject("FileName" + i,"File type should be in the list");
+					break;
 				}
-
-				if ((long) btnFile[i].getSize() > 100 * 1024 * 1204) {
-					result.reject("File" + i, "File size should not over 100Mb");
-					continue;
+				if ((long) btnFile[i].getSize() > 10 * 1024 * 1204) {
+					result.reject("File" + i, "File size should not over 10Mb");
+					break;
 				}
 			}
 		}
 
-		if (result.hasErrors()) {
-			return "uploadProperty";
+		if (result.hasErrors()) {			
+				List<FieldError> errs = result.getFieldErrors();		
+					for (FieldError err : errs) {
+						mapErrors.put(err.getField(), err.getDefaultMessage());
+					}			
+			return mapErrors;
 		} else {
 			try {
 				for (int i = 0; i < btnFile.length; i++) {
 					if (btnFile[i].getSize() > 0) {
-						String subFolder = btnFile[i].hashCode() % 20 + "";
-						String filePath = folderRoot + File.separator
-								+ subFolder;
+						String subFolder = btnFile[i].hashCode() % 100 + "";
+						String filePath = folderRoot + File.separator+ subFolder;
 						File file = new File(filePath);
 						if (!(file.exists())) {
 							file.mkdirs();// 如果不存在该文件目录,则创建
 						}
 						is = btnFile[i].getInputStream();
 						String subFileName = new Date().getTime() + "";
-						String ext = btnFile[i].getOriginalFilename()
-								.substring(
-										btnFile[i].getOriginalFilename()
-												.lastIndexOf("."));
-						File realFile = new File(filePath + File.separator
-								+ subFileName + "_" + i + ext);
+						String ext = btnFile[i].getOriginalFilename().substring(btnFile[i].getOriginalFilename().lastIndexOf("."));
+						File realFile = new File(filePath + File.separator+ subFileName + "_" + i + ext);
 						os = new FileOutputStream(realFile);
-
 						byte[] buffer = new byte[1024 * 1024];
-
 						while (-1 != is.read(buffer, 0, buffer.length)) {
 							os.write(buffer);
 						}
 						UploadFiles files = new UploadFiles();
-						files.setAddress("/BluSky/files/" + subFolder + "/"
-								+ subFileName + "_" + i + ext);
+						files.setAddress("/BluSky/files/" + subFolder + "/"+ subFileName + "_" + i + ext);
 						files.setPropery(propertyBean);
 						files.setSize(btnFile[i].getSize());
 						if(".mp4".equalsIgnoreCase(ext)){
@@ -126,13 +124,12 @@ public class PropertyAction {
 							files.setFileType("photo");
 						}
 						set.add(files);
-
 					}
 				}
 				propertyBean.setFiles(set);
 				StringBuffer leaseDetails = new StringBuffer();
 				StringBuffer amenities = new StringBuffer();
-				String[] strings = request.getParameterValues("leaseDetails");
+			
 					for(int i=0;i<strings.length;i++){
 						if(i==0){
 							leaseDetails.append(strings[i]);
@@ -140,7 +137,7 @@ public class PropertyAction {
 							leaseDetails.append(","+strings[i]);
 						}
 					}
-					String[] strings1 = request.getParameterValues("amenities");
+				
 					for(int i=0;i<strings1.length;i++){
 						if(i==0){
 							amenities.append(strings1[i]);
@@ -150,32 +147,32 @@ public class PropertyAction {
 					}
 				propertyBean.setLeaseDetails(leaseDetails.toString());
 				propertyBean.setAmenities(amenities.toString());
+				UserBean userBean = new UserBean();
+				Thread.currentThread().setContextClassLoader(userBean.getClass().getClassLoader());
 				propertyBean.setUser((UserBean)request.getSession().getAttribute(CommonConstant.SESSION_USER));
 				propertyBean.setModifiedDate(new Date());
 				propertyBean.setCreatedDate(new Date());
 				propertyService.save(propertyBean);
+				mapErrors.put("success", true);
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				try {
 					if (os != null)
 						os.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				} catch (IOException e) {					
 					e.printStackTrace();
 				}
 				try {
 					if (is != null)
 						is.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
-			return "redirect:/property/displayDetails/"+propertyBean.getId();
+			return mapErrors;
 		}
 	}
 
@@ -255,7 +252,7 @@ public class PropertyAction {
 
 	@RequestMapping(value = "/display1")
 	public  @ResponseBody List<PropertyBean> dipslayProperty1(HttpServletRequest request) {
-		 JSONArray jArray = new JSONArray();
+		 new JSONArray();
 		String zipcode =request.getParameter("zipcode");
 		//System.out.println(zipcode);
 		List<PropertyBean> list = new ArrayList<PropertyBean>();
@@ -313,17 +310,15 @@ public class PropertyAction {
 		}
 		System.out.println(list.toString());
 		request.setAttribute("list123", list);
-		final OutputStream out = new ByteArrayOutputStream();
-	    final ObjectMapper mapper = new ObjectMapper();
+		new ByteArrayOutputStream();
+	    new ObjectMapper();
 	    JsonConfig jc = new JsonConfig();
 	    jc.setExcludes(new String[]{"property","properties","createdDate","modifiedDate","birthday"});
 	/*    jc.setIgnoreDefaultExcludes(false);*/
 	    jc.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 
 		try {
-/*
-		    mapper.writeValue(out, list);*/
-		    JSONObject json = new JSONObject();
+new JSONObject();
 		    JSONArray jArray = new JSONArray();
 		    jArray=JSONArray.fromObject(list,jc);
 		    /*json.put("jsonObject", jArray);
@@ -351,7 +346,7 @@ public class PropertyAction {
 	@RequestMapping(value = "/display4/{lat1}/{lng1}/{lat2}/{lng2}/")
 	public @ResponseBody Map dipslayProperty4(@PathVariable String lat1,@PathVariable String lng1,@PathVariable String lat2,@PathVariable String lng2) {
 		Map map = new HashMap();
-		List<PropertyBean> list =new ArrayList<PropertyBean>();
+
 		System.out.println(lat1+","+lng1+","+lat2+","+lng2);
 		/*map.put("properties",propertyService.findEntityByHQL("select ub from PropertyBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? order by price", new Object[]{lat1,lng1,lat2,lng2}));
 		map.put("users",userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lng1,lat2,lng2}));	*/

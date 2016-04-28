@@ -32,6 +32,7 @@ public class UploadFiles {
 	private PropertyBean propery;
 	@Column(name="file_type")
 	private String fileType;
+	
 	public long getFile_id() {
 		return file_id;
 	}

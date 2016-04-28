@@ -79,10 +79,10 @@
 	
 		
 <section id="form" >	
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-2"></div>
-				<div class="col-md-8">	
+			
+				<div class="col-md-6">	
 				<form:form action="${path }/property/upload" method="post"
 								id="propertyForm" commandName="propertyBean"
 								class="form-horizontal" enctype="multipart/form-data">	
@@ -184,14 +184,21 @@
 												aria-hidden="true"></span>
 										</div>
 									</div>
-									<div class="form-group  has-feedback">
-										<label class="col-sm-2 control-label" for="size">size</label>
-										<div class="col-sm-10">
+									<div class="form-group">
+										<label class="col-sm-2 col-xs-12 control-label" for="size">size</label>
+										<div class="col-sm-8 col-xs-9">
 											<form:input type="text" path="size" class="form-control"
 												id="zipCode" placeholder="size" required
 												data-toggle="tooltip" data-placement="top"
 												title="size is Required!" onchange="validateNumber(this)" />
 										</div>
+										<div class="col-sm-2 col-xs-3">
+												<select name="unit" class="form-control">
+												<option value="1">ft²</option>
+												<option value="2">m²</option>
+											</select>
+										</div>
+										
 									</div>
 									<div class="form-group  has-feedback">
 										<label class="col-sm-2 control-label" for="price">price</label>
@@ -235,6 +242,16 @@
 										</div>
 									</div>
 
+									
+										<div class="form-group ">
+										<label class="col-sm-2 control-label" for="description">Description</label>
+										<div class="col-sm-10">
+							
+											<form:textarea maxlength="5000" path="description" class="form-control"
+												id="description" placeholder="description(optional)" 	data-toggle="tooltip" data-placement="top"
+												title="Extra Information about your property!"  />											
+										</div>
+									</div>
 
 									<div class="form-group" id="files">
 										<label class="col-sm-2 control-label" for="price">images/videos:</label>
@@ -252,6 +269,17 @@
 									</div>
 									<!-- <input type="button" value="submit" onclick="codeAddress();" /> -->
 
+									<div class="form-group ">
+										<div class="panel panel-default">
+											<div class="panel-heading"><h5>Optional</h5></div>
+												<div class="panel-body">										
+													<label class="col-sm-2 control-label" for="commisionFee">Commision Fee</label>
+													<div class="col-sm-10">						
+														<form:input type="text"  path="commisionFee" class="form-control" id="commisionFee"  	data-toggle="tooltip" data-placement="top" title="Commision Fee is optional, our agents will help you to sell/lease your property based on your commision fee! If you don't need help, you can put 0 or 0%. If you do need help, please input a constant number or a percentage!"  placeholder="commision fee(optional)" />											
+													</div>
+												</div>
+										</div>
+									</div>
 
 									<input type="hidden" name="lat" id="lat" /> <input
 										type="hidden" name="lng" id="lng" />
@@ -262,6 +290,13 @@
 					</div>
 					</form:form>
 				</div>
+					<div class="col-md-6">
+						<div id="map">
+							
+						</div>
+					
+					</div>
+				
 			</div>
 		</div>
 </section>			
@@ -279,10 +314,14 @@
 	
 	<script src="${path}/js/jquery-1.12.2.js"></script>
 	<script src="${path}/js/bootstrap.min.js"></script>
-	<script src="${path}/js/jquery.singlePageNav.min.js"></script>
-<%-- 	<script src="${path}/js/wow.min.js"></script> --%>
 	<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
 	<script src="${path}/js/property.js"></script>
+	
+	<script>
+	
+</script>
+	
+	
 </body>
 
 </html>

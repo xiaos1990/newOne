@@ -25,7 +25,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span></a>
+				<a href="${path }/" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span><span class="hidden-sm hidden-xs homeLabel">&nbsp;cat&dog</span></a>
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
@@ -44,7 +44,11 @@
 							<li><a href="#">Buy House/Apartment</a></li>
 							<li><a href="#">Buy Other</a></li>	
 							<li role="separator" class="divider"></li>
-							<li><a href="#">Rent</a></li>		
+							<li><a href="#">Rent</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Share House/Apartment (Owner)</a></li>		
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Share House/Apartment (Finder)</a></li>			
 						</ul>
 					</li>
 					<li role="presentation" class="dropdown" id="dropDownAgent"><a
@@ -63,15 +67,15 @@
 								<a class="dropdown-toggle btn-lg skipThis"
 								data-toggle="dropdown" href="#" role="button"
 								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user"></span>
+								<span class="glyphicon glyphicon-user"><span class="homeLabel">${session_user.firstName }</span></span>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-right aList">
-									<li><a href="#"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
-									<li><a href="#">Wish List</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
+									<li><a href="${path }/user/dashboard"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
+									<li><a href="${path }/user/properties"><span class="glyphicon glyphicon-piggy-bank"></span>&nbsp;My Properties</a></li>
+									<li><a href="${path }/user/favorite"><span class="glyphicon glyphicon-heart"></span>&nbsp;My Favorite</a></li>																	
+									<li><a href="${path }/user/collection"><span class="glyphicon glyphicon-star"></span>&nbsp;My Collection</a></li>
 									<li role="separator" class="divider"></li>
-									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+									<li id="logOff"><a href="${path}/user/signOff"><span class="glyphicon glyphicon-user"></span>&nbsp;Log Off</a></li>
 								</ul>
 							</li>
 							<li id="signInLi" class="hide"><a href="#" data-toggle="modal"
@@ -84,7 +88,7 @@
 								<a class="dropdown-toggle btn-lg skipThis"
 								data-toggle="dropdown" href="#" role="button"
 								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user"></span>
+								<span class="glyphicon glyphicon-user">${session_user.firstName }</span>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-left aList">
 									<li><a href="#">Wish List</a></li>

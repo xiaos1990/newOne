@@ -47,9 +47,7 @@ public class AgencyAction {
 
 	@RequestMapping(value = "/agencysignup", method = RequestMethod.POST)	
 	@ResponseBody
-	public  Map<String, Object> signupAction(
-			@RequestBody @Valid UserBean user,
-			BindingResult bindingResult,HttpServletRequest request) throws Exception {
+	public  Map<String, Object> signupAction(@RequestBody @Valid UserBean user,BindingResult bindingResult,HttpServletRequest request) throws Exception {
 		Map<String, Object> mapErrors = new HashMap<String, Object>();
 		mapErrors.put("success", false);
 		if (bindingResult.hasErrors()) {

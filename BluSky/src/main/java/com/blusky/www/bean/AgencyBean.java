@@ -22,10 +22,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table(name = "agency")
+
 public class AgencyBean{
-	@Id
+	/*@Id
 	@SequenceGenerator(name="gen1",sequenceName="agency_id_seq",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen1")
 	@Column(name="agency_id")
@@ -187,6 +186,6 @@ public class AgencyBean{
 		this.lng = lng;
 	}
 
-
+*/
 	
 }
