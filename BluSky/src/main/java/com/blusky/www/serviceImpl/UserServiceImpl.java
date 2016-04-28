@@ -35,6 +35,7 @@ public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserS
 		if(list!=null&&list.size()>0){
 			if(list.get(0).getPassword().trim().equals(parameter2)){
 				UserBean userBean = list.get(0);
+				Thread.currentThread().setContextClassLoader(userBean.getClass().getClassLoader());
 				request.getSession().setAttribute(CommonConstant.SESSION_USER, userBean);
 				return true;
 			}

@@ -33,6 +33,7 @@ public class CheckCookieFilter implements Filter {
 	        System.out.println(URI);
 	        if(URI.matches("^(/BluSky)((/image)|(/fonts)|(/files)|(/js)|(/css))/.*$")){
 	        	 chain.doFilter(request, response); 
+	        	 return;
 	        }else{
 	        Object object = request.getSession().getAttribute( 
 	                CommonConstant.SESSION_USER); 
@@ -80,6 +81,7 @@ public class CheckCookieFilter implements Filter {
 	        }
 	        }
 	            chain.doFilter(request, response); 
+	            return;
 	                    
 	} 
 

@@ -30,6 +30,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <spring.security.version>3.2.8.RELEASE</spring.security.version> -->
 		<spring.version>4.2.4.RELEASE</spring.version>
+		<!-- <spring.version>3.1.2.RELEASE</spring.version> -->
 	</properties>
 
 	<dependencies>
@@ -211,7 +212,7 @@
 
 		<!-- jackson json -->
 
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
@@ -221,7 +222,7 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>

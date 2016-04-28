@@ -25,21 +25,22 @@ public class CheckUserStatusFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
+		if(uri.matches("^/BluSky/property/display4/.*$")){
+			chain.doFilter(req, resp);
+			return;
+			}
 		uri.replace("/BluSky", "");
 		req.setAttribute(CommonConstant.FORWARD_PAGE, uri);
 		System.out.println(uri);
 	
 			Object user = req.getSession().getAttribute(CommonConstant.SESSION_USER);
 			if(user==null){
-				req.getRequestDispatcher("/page/signin.jsp").forward(req, resp); 
+				req.getRequestDispatcher(req.getContextPath()+"/page/signin.jsp").forward(req, resp); 
 				return;
 			}else{
 				chain.doFilter(req, resp);
-			}
-		
-		chain.doFilter(req, resp);
-				
-
+				return;
+			}			
 }
 
 	public void init(FilterConfig filterConfig) throws ServletException {

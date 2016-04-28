@@ -11,12 +11,18 @@
     var sw ;
 	function initialize() {
         geocoder = new google.maps.Geocoder();
+        if($("#lat").val()){
+        	lat=$("#lat").val();
+        }
+        if($("#lng").val()){
+        	lng=$("#lng").val();
+        }
        	var latLng = new google.maps.LatLng(lat, lng);
        	var myMapOptions = {
            		sensor: true,
            		//mapTypeControl: true,
            		zoom: 10,
-           		center: new google.maps.LatLng(25, -84),
+           		center:latLng,
            		rotateControlOptions: false,
           		panControl: false,
            		scrollwheel: false,
@@ -61,7 +67,7 @@
         	};
  
  	function codeAddress() {
-		var fulladdress = document.getElementById("address").value;
+		var fulladdress = $("#address").val();
 		var address = $("#address").val().split(",");
 			if(typeof address[1] != 'undefied'  && address[1]!=""){
 				$("#city").val($.trim(address[1]));
@@ -105,7 +111,8 @@
 				    if(this.types[0]=="postal_code"){
 				    	$("#zipCode").val(this.short_name);
 				    }
-				});				
+				});	
+				$("#address").val(address[0]);
 				} else {
 				alert("Geocode was not successful for the following reason: "+ status);
 				}
@@ -117,15 +124,27 @@
 	
 	function ajaxCall() {
 			deleteMarkers();
+			//event.preventDefault();
             $.ajax({
-                url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",            
+                url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",     				           
             }).done(function(json){         
                    for (var i = 0; i < json.properties.length; i++) {
                         var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);                     
-                       /* var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/'; */
-                        var iconBase = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=7|FF0000|000000';
-                       /*  var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'}); */
-                        var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase});
+                        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/'; 
+                       // var iconBase = 'http://chart.apis.google.com/chart?chst=d_bubble_icon_text_big&chld=1232|FF0000|000000';
+                         //var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'}); 
+                        var marker = new MarkerWithLabel({
+                        	   position: latLng,
+                        	   draggable: false,
+                        	   raiseOnDrag: false,
+                        	   map: map,
+                        	   labelContent: "$425K",
+                        	   labelAnchor: new google.maps.Point(22, 0),
+                        	   labelClass: "labels", // the CSS class for the label
+                        	   icon: iconBase+'schools_maps.png'
+                        	 });
+                        
+                       //var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase});
                         attachInfoWindows(marker, map, infowindow, json.properties[i]);
                         markers.push(marker);
                         };
@@ -134,11 +153,11 @@
                         var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
                         //attachInfoWindows(marker, map, infowindow, json.users[i]);
                         markers.push(marker);
-                    };          
-            }).fail(function(){
-            	console.log(arguments[1]);
-            });
-	
+                    };         
+           		}).fail(function(xhr){
+           		console.log(arguments[1]);           	
+            	console.log(xhr.responseText);
+            });          	
 	}; 
 	
 
@@ -239,27 +258,36 @@ $.fn.serializeObject = function(){
 		
 				
 $(function(){
-	$(".nav").singlePageNav({
-		offset : 60
-	});
 	$('[data-toggle="tooltip"]').tooltip();
 	$(".navbar-collapse a:not(.skipThis)").on("click", function() {
 		$('.collapse').collapse("hide");
 	});
-	
-	$("#agentsignupForm input[name$='Name']").prop("disabled","disabeld");
-	$("#agentsignupForm input[name='email']").prop("disabled","disabeld");
-	$("#agentsignupForm input[name='phone']").prop("disabled","disabeld");
-	
 	$(".aList a").on("click", function() {
 		window.location.href=$(this).prop("href");								
 
 	}); 
-	
+	var obj = document.getElementById("type");
+	flipLeaseInfo(obj);
+
+	/*
 	$("#propertyButton").on("click", function(event) {		
 				event.preventDefault();				
 				var formData = JSON.stringify($('#propertyForm').serializeObject());
-				$.ajax({
+							
+				 $('#propertyForm').ajaxSubmit({
+			         type: 'post', // 提交方式 get/post
+			         url: '/BluSky/property/upload1', // 需要提交的 url
+			         data: formData,
+			         success: function(data) { // data 保存提交后返回的数据，一般为 json 数据
+			             // 此处可对 data 作相关处理
+			             alert('提交成功！');
+			         }		       
+			     });
+			     return false; // 阻止表单自动提交事件
+			 });
+*/
+				
+	/*			$.ajax({
 					url : '/BluSky/property/upload',
 					type : 'POST',
 					contentType : 'application/json', 
@@ -269,7 +297,7 @@ $(function(){
 				}).done(function(data){		
 						$("#errorMessage").remove();
 						if(data.success == false){
-						$("#signupForm input").each(function(){
+						$("#propertyForm input").each(function(){
 							var name = $(this).prop("name");					
 						
 							if(typeof data[name] != 'undefined'){
@@ -290,13 +318,13 @@ $(function(){
 						
 						};
 						if(data.success == true){
-							window.location.href="/BluSky/user/properties"
+							window.location.href="/BluSky/user/properties";
 						}
 						
 				})
 				.fail(function(){
 				console.log(arguments[1]);
 				});				
-		});
+		});*/
 	});
 

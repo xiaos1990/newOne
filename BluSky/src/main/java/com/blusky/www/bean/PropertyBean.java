@@ -19,8 +19,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -65,7 +66,7 @@ public class PropertyBean {
 	@NotEmpty(message="type is required!")
 	private String type;
 	
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="propery")
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="property")
 	private List<UploadFiles> files;
 	
 	@JsonIgnore
@@ -94,7 +95,6 @@ public class PropertyBean {
 	private String findRoommate;
 	
 	@Column(name="commision_fee")
-	@Pattern(regexp="^\\d*%?$",message="wrong format!")
 	private String commisionFee;
 	
 	public String getFindRoommate() {

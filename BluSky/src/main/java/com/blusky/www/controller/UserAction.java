@@ -91,7 +91,7 @@ public class UserAction {
 	/*	if(forward!=null)
 			return "redirect:"+forward.toString();
 		else*/
-			return "redirect:"+value;
+			return "forward:"+value;
 	}
 
 

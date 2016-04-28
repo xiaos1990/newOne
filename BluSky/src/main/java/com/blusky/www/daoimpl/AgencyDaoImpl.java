@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import com.blusky.www.Idao.AgencyDaoI;
-import com.blusky.www.bean.AgencyBean;
 import com.blusky.www.bean.UserBean;
 
 @Repository("agencyDao")

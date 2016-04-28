@@ -12,7 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+
+
 
 
 @Entity
@@ -26,10 +30,11 @@ public class UploadFiles {
 	private String address;
 	@Column(name="file_size")
 	private long size;
+	
+	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="property_id")
-	@JsonIgnore
-	private PropertyBean propery;
+	private PropertyBean property;
 	@Column(name="file_type")
 	private String fileType;
 	
@@ -51,11 +56,13 @@ public class UploadFiles {
 	public void setSize(long size) {
 		this.size = size;
 	}
-	public PropertyBean getPropery() {
-		return propery;
+	
+	
+	public PropertyBean getProperty() {
+		return property;
 	}
-	public void setPropery(PropertyBean propery) {
-		this.propery = propery;
+	public void setProperty(PropertyBean property) {
+		this.property = property;
 	}
 	public String getFileType() {
 		return fileType;
