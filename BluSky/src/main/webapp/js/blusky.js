@@ -102,6 +102,7 @@ $.fn.serializeObject = function(){
 							$("#signInLi,#signUpLi").css("display","none");
 							$("#dropDownLog").addClass("show");
 							$("#dropDownLog").removeClass("hide"); 
+							$("#userSpan").text(data.userName);
 						}												
 				})
 				.fail(function(){

@@ -53,16 +53,52 @@
  
  
   	function attachInfoWindows(marker, map, infowindow,jsonObj) {
-            google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(
-				'<div><a href="/BluSky/property/displayDetails/'+jsonObj.id+'"> <img src="'+jsonObj.files[0].address+'" width=50px height=50px  /> </div></a>'+
-				'<div>'+jsonObj.address+' </div>'+
-				'<div>'+jsonObj.city+' </div>'+
-				'<div>'+jsonObj.zipCode+' </div>'+
-				'<div>'+jsonObj.state+' </div>'+
-				'<div>'+jsonObj.country+' </div>'
-				);
-                infowindow.open(map, marker);               
+            google.maps.event.addListener(marker, 'mouseover', function() {
+            	
+            	var div='<div class="media">'+'<div class="media-left">'+		
+				  '<div id="flip" class="carousel slide" data-ride="carousel">'+
+			/*		'<ol class="carousel-indicators">';
+            	if(jsonObj.files.length>0){
+            		for(var i=0;i<jsonObj.files.length;i++){
+            			if(i==0){
+            			div=div+'<li data-target="#flip" data-slide-to="'+i+'" class="active"></li>';
+            			}else{
+            				div=div+'<li data-target="#flip" data-slide-to="'+i+'"></li>';	
+            			}
+					}	
+            	}
+            	div=div+'</ol>'+*/'<div class="carousel-inner" role="listbox">';
+            	if(jsonObj.files.length>0){
+            		for(var i=0;i<jsonObj.files.length;i++){
+            			if(i==0){
+            			div=div+'<div class="item active">'+
+						'<img src="'+jsonObj.files[i].address+'" class="img-info" >'+						
+						'</div>';
+            			}else{
+            				div=div+'<div class="item">'+
+    						'<img src="'+jsonObj.files[i].address+'" class="img-info" >'+   						
+    						'</div>';
+            			}
+					}	
+            	}
+            	div=div+'</div>'+
+				'<a class="left carousel-control" href="#flip" role="button" data-slide="prev">'+
+				'<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>'+
+					'<span class="sr-only">Previous</span>'+
+				'</a>'+ 
+				'<a class="right carousel-control" href="#flip" role="button" data-slide="next">'+
+				'<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>'+
+					'<span class="sr-only">Next</span>'+
+				'</a>'+
+			'</div>'+	  
+			  '</div>'+
+			  '<div class="media-body">'+
+			    '<h4 class="media-heading">Infomation:</h4>'+
+			    	jsonObj.address+','+jsonObj.city+','+jsonObj.state+','+jsonObj.zipCode+','+jsonObj.country+
+			  '</div>'+
+			  '</div>';           	
+			infowindow.setContent(div);						
+                infowindow.open(map, marker); 
             	});
         	};
  
@@ -131,29 +167,19 @@
                    for (var i = 0; i < json.properties.length; i++) {
                         var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);                     
                         var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/'; 
-                       // var iconBase = 'http://chart.apis.google.com/chart?chst=d_bubble_icon_text_big&chld=1232|FF0000|000000';
-                         //var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'}); 
                         var marker = new MarkerWithLabel({
                         	   position: latLng,
                         	   draggable: false,
                         	   raiseOnDrag: false,
                         	   map: map,
-                        	   labelContent: "$425K",
+                        	   labelContent:json.properties[i].price,
                         	   labelAnchor: new google.maps.Point(22, 0),
-                        	   labelClass: "labels", // the CSS class for the label
+                        	   labelClass: "labels",
                         	   icon: iconBase+'schools_maps.png'
                         	 });
-                        
-                       //var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase});
                         attachInfoWindows(marker, map, infowindow, json.properties[i]);
                         markers.push(marker);
-                        };
-                     for (var j = 0; j < json.users.length; j++) {
-                        var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);                  
-                        var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
-                        //attachInfoWindows(marker, map, infowindow, json.users[i]);
-                        markers.push(marker);
-                    };         
+                        };       
            		}).fail(function(xhr){
            		console.log(arguments[1]);           	
             	console.log(xhr.responseText);
@@ -268,7 +294,9 @@ $(function(){
 	}); 
 	var obj = document.getElementById("type");
 	flipLeaseInfo(obj);
-
+	
+	
+	$("#address").val($("#addressHidden").val());
 	/*
 	$("#propertyButton").on("click", function(event) {		
 				event.preventDefault();				

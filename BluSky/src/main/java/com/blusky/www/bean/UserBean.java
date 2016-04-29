@@ -1,7 +1,7 @@
 package com.blusky.www.bean;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,8 +17,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
-
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,7 +30,7 @@ public class UserBean{
 	@SequenceGenerator(name="gen1",sequenceName="USER_BEAN_ID_SEQ",allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="gen1")
 	@Column(name="user_id")
-	private int id;
+	private Long id;
 	
 	@NotEmpty(message="email is required!")
 	@Email(message="email is not valid!")
@@ -55,9 +53,9 @@ public class UserBean{
 	@Pattern(regexp="^\\d{10,20}$",message="password is not valid!")
 	private String password;
 
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="user")
 	@JsonIgnore
-	private Set<PropertyBean> properties;
+	private List<PropertyBean> properties;
 	
 	
 	@DateTimeFormat(pattern="MM/dd/yyyy")
@@ -101,11 +99,14 @@ public class UserBean{
 	@Column(name="is_phone_activated")
 	private String isPhoneActivated;
 	
-	public int getId() {
+	@Column(name="expecation_value")
+	private String expectationValue;
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -135,11 +136,11 @@ public class UserBean{
 		this.password = password;
 	}
 
-	public Set<PropertyBean> getProperties() {
+	public List<PropertyBean> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(Set<PropertyBean> properties) {
+	public void setProperties(List<PropertyBean> properties) {
 		this.properties = properties;
 	}
 
@@ -279,7 +280,15 @@ public class UserBean{
 		this.isPhoneActivated = isPhoneActivated;
 	}
 
+	public String getExpectationValue() {
+		return expectationValue;
+	}
 
+	public void setExpectationValue(String expectationValue) {
+		this.expectationValue = expectationValue;
+	}
+
+	
 
 	
 }

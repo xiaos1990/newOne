@@ -44,7 +44,7 @@ public class PropertyBean {
 	@NotEmpty(message="size is required!")
 	private String size;
 	
-	@Column()
+	@Column
 	@Pattern(regexp="^[12]$",message="unit is not valid!")
 	private String unit;
 	@NotEmpty(message="address is required!")

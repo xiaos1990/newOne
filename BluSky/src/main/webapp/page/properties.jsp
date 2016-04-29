@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@taglib uri="/spring-form.tld" prefix="form"%>
 <%@taglib uri="/c.tld" prefix="c" %>
+<%@taglib uri="/fn.tld" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +12,7 @@
 <title>Cat & Dog</title>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
-<link rel="stylesheet" href="${path}/css/dashboard.css" />
+<link rel="stylesheet" href="${path}/css/properties.css" />
 <link rel="stylesheet" href="${path}/css/animate.css" />
 </head>
 
@@ -25,7 +26,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span></a>
+				<a href="${path }/" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span><span class="hidden-sm hidden-xs homeLabel">&nbsp;cat&dog</span></a>
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<form class="navbar-form navbar-left" role="search">
@@ -38,7 +39,7 @@
 						</div>
 					</div>
 				</form>
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav navbar-right">					
 					<li role="presentation" class="dropdown" id="dropDownProperty"><a
 						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">
@@ -51,7 +52,11 @@
 							<li><a href="#">Buy House/Apartment</a></li>
 							<li><a href="#">Buy Other</a></li>	
 							<li role="separator" class="divider"></li>
-							<li><a href="#">Rent</a></li>		
+							<li><a href="#">Rent</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Share House/Apartment (Owner)</a></li>		
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Share House/Apartment (Finder)</a></li>			
 						</ul>
 					</li>
 					<li role="presentation" class="dropdown" id="dropDownAgent"><a
@@ -64,53 +69,29 @@
 							<li><a href="#">Find Agent</a></li>		
 						</ul>
 					</li>
-					<c:choose>
-						<c:when test="${not empty session_user}">
 							<li role="presentation" class="dropdown" id="dropDownLog">
 								<a class="dropdown-toggle btn-lg skipThis"
 								data-toggle="dropdown" href="#" role="button"
 								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user"></span>
+								<span class="glyphicon glyphicon-user"><span class="homeLabel">${session_user.firstName }</span></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left aList">
-									<li><a href="#"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
-									<li><a href="#">Wish List</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
+								<ul class="dropdown-menu dropdown-menu-right aList">
+									<li><a href="${path }/user/dashboard"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
+									<li><a href="${path }/user/properties"><span class="glyphicon glyphicon-piggy-bank"></span>&nbsp;My Properties</a></li>
+									<li><a href="${path }/user/favorite"><span class="glyphicon glyphicon-heart"></span>&nbsp;My Favorite</a></li>																	
+									<li><a href="${path }/user/collection"><span class="glyphicon glyphicon-star"></span>&nbsp;My Collection</a></li>
 									<li role="separator" class="divider"></li>
-									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+									<li id="logOff"><a href="${path}/user/signOff"><span class="glyphicon glyphicon-user"></span>&nbsp;Log Off</a></li>
 								</ul>
 							</li>
 							<li id="signInLi" class="hide"><a href="#" data-toggle="modal"
 								data-target="#signIn">Sign In</a></li>
 							<li id="signUpLi" class="hide"><a href="#" data-toggle="modal"
 								data-target="#signUp">Sign Up</a></li>
-						</c:when>
-						<c:otherwise>
-							<li role="presentation" class="dropdown hide" id="dropDownLog">
-								<a class="dropdown-toggle btn-lg skipThis"
-								data-toggle="dropdown" href="#" role="button"
-								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-left aList">
-									<li><a href="#">Wish List</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
-								</ul>
-							</li>
-							<li id="signInLi" ><a href="#" data-toggle="modal"
-								data-target="#signIn">Sign In</a></li>
-							<li id="signUpLi" ><a href="#" data-toggle="modal"
-								data-target="#signUp">Sign Up</a></li>
-						</c:otherwise>
-					</c:choose>					
-				</ul>
+							</ul>
+				</div>
 			</div>
-		</div>
-	</nav>
+		</nav>
 
 
 
@@ -123,14 +104,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="${path }/page/dashBoard.jsp">Dashboard</a>
+      <a class="navbar-brand" href="${path }/user/dashboard">Dashboard</a>
     </div>
 
     <div class="collapse navbar-collapse" id="userinfo">
       <ul class="nav navbar-nav">
-        <li><a href="#">Favorite List</a></li>
-       	<li><a href="${path }/page/accountSetting.jsp">Account Setting</a></li>
-       	<li><a href="#">Subscriptions</a></li>
+        <li><a href="${path }/user/properties">My Properties</a></li>
+        <li><a href="${path }/user/favorite">My Favorite</a></li>
+        <c:if test="${session_user.isAgent eq '1' }">
+        <li><a href="${path }/user/collection">My Collection</a></li>
+        </c:if>
+       	<li><a href="${path }/user/account">Account Setting</a></li>
+       	<li><a href="${path }/user/subscription">Subscriptions</a></li>
       </ul>      
     </div>
   </div>
@@ -140,43 +125,64 @@
 <section>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-3">
+			<c:choose>
+			<c:when test="${empty session_user.properties }">
+				no property yet!
+			</c:when>
+			<c:otherwise>
+		
+			<c:forEach var="prop" items="${properties }" varStatus="propStatus">
+			
+			<div class="col-md-6">
 					<div class="panel panel-default">
-						<div class="panel-heading photo-panel"><img src="${path}/image/cute.jpg" class="img-responsive" alt="photo"/></div>
-						<div class="panel-body"><h3>Shuai</h3><a> View Profile</a><br /><a> Edit Profile</a></div>
-					</div>	
-					<div class="panel panel-default">
-						<div class="panel-heading">Verifications</div>
-						<div class="panel-body"><h3>Shuai</h3><a> View Profile</a><br /><a> Edit Profile</a></div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">Quick Links</div>
-						<div class="panel-body"><h3>Shuai</h3><a> View Profile</a><br /><a> Edit Profile</a></div>
-					</div>
-							
-			</div>
-			<div class="col-md-9">
-					<div class="panel panel-default">
-						<div class="panel-heading">Quick Links</div>
-						<div class="panel-body">
-							message...........
+						<div class="panel-heading photo-panel">		
+									
+							<c:choose>
+								<c:when test="${fn:length(prop.files) eq '0'}"><img src="${path}/image/cute.jpg" class="img-responsive" alt="photo"/>
+								</c:when>
+								<c:when test="${fn:length(prop.files) eq '1'}">
+								<c:forEach var="oneFile" items="${prop.files }" >
+								<img src="${(oneFile.address)}" class="img-responsive" alt="photo"/>
+								</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<div id="flip${propStatus.index}" class="carousel slide" data-ride="carousel">
+									<%-- 	<ol class="carousel-indicators">
+										<c:forEach var="file" items="${prop.files}" varStatus="status">
+											<li data-target="#flip" data-slide-to="${status.index }" class="<c:if test="${status.index =='1' }">active</c:if>" ></li>											
+										</c:forEach>
+										</ol> --%>
+									<div class="carousel-inner" role="listbox">	
+									<c:forEach var="file" items="${prop.files}" varStatus="status">
+										<div class="item  <c:if test="${status.index =='1' }">active</c:if>" >
+										<img src="${file.address}" class="img-responsive" alt="MIAMI">										
+										</div>										
+									</c:forEach>
+									</div>
+									<a class="left carousel-control" href="#flip${propStatus.index}" role="button"
+									data-slide="prev"> <span
+									class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+									<span class="sr-only">Previous</span>
+									</a> <a class="right carousel-control" href="#flip${propStatus.index}" role="button"
+									data-slide="next"> <span
+									class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+									<span class="sr-only">Next</span>
+									</a>
+									</div>
+								</c:otherwise>
+							</c:choose>																										
+						</div>
+						<div class="panel-body">${prop.address },${prop.city },${prop.state },${prop.zipCode },${prop.country }
+							<div>${prop.description }</div>
 						</div>
 					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">Quick Links</div>
-						<div class="panel-body">
-							message...........
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">Quick Links</div>
-						<div class="panel-body">
-							message...........
-						</div>
-					</div>
-				</div>
+				</div>											
+			
+			</c:forEach>			
+			</c:otherwise>
+			</c:choose>
+			</div>	
 		</div>
-	</div>
 </section>
 
 	<section id="foot">

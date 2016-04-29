@@ -1,7 +1,6 @@
 package com.blusky.www.serviceImpl;
 
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,11 +30,10 @@ public class UserServiceImpl extends BaseServciceImpl<UserBean> implements UserS
 	public boolean validateUser(String parameter1, String parameter2,HttpServletRequest request) {
 
 		Object[] parameters ={parameter1};
-		List<UserBean> list =findEntityByHQL("from UserBean ub inner join fetch ub.properties prop  where trim(ub.email)=?",parameters);
+		List<UserBean> list =findEntityByHQL("from UserBean ub where trim(ub.email)=?",parameters);
 		if(list!=null&&list.size()>0){
 			if(list.get(0).getPassword().trim().equals(parameter2)){
 				UserBean userBean = list.get(0);
-				Thread.currentThread().setContextClassLoader(userBean.getClass().getClassLoader());
 				request.getSession().setAttribute(CommonConstant.SESSION_USER, userBean);
 				return true;
 			}

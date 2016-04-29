@@ -23,6 +23,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -46,23 +47,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 @RequestMapping("/property")
 public class PropertyAction {
-
+	
+	private static final Logger logger = Logger.getLogger(PropertyAction.class);
 	@Inject
 	PropertyServceI propertyService;
 	@Inject
 	UserServiceI userService;
-
 	
-/*	@RequestMapping(value = "/upload1", method = {RequestMethod.POST,RequestMethod.GET})	
-	@ResponseBody
-	public String uploadProperty1(@RequestBody @ModelAttribute(value="propertyBean") @Valid PropertyBean propertyBean,BindingResult result,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		String[] btnFile = request.getParameterValues("btnFile");
-		String file = request.getParameter("btnFile");
-		return "uploadProperties";
-	}
-	*/
 	@RequestMapping(value = "/upload", method = {RequestMethod.POST,RequestMethod.GET})	
 	public String uploadProperty(@ModelAttribute(value="propertyBean") @Valid PropertyBean propertyBean,BindingResult result,@RequestParam MultipartFile[] btnFile,HttpServletRequest request, HttpServletResponse response)throws Exception {
+		logger.info("uploadProperty method executed!");
 		request.getSession().setAttribute("amenities", request.getParameterValues("amenities"));
 		request.getSession().setAttribute("leaseDetails", request.getParameterValues("leaseDetails"));
 		List<UploadFiles> set = new ArrayList<UploadFiles>();
@@ -73,6 +67,9 @@ public class PropertyAction {
 		String[] strings1 = request.getParameterValues("amenities");
 		if(!"SELL".equals(propertyBean.getType())&&(strings==null||strings.length==0)){
 			result.rejectValue("leaseDetails","Lease Details can not be empty!");
+		}
+		if(StringUtils.isNotBlank(propertyBean.getCommisionFee())&&!propertyBean.getCommisionFee().matches("^\\d*(.\\d*)?%?$")){
+			result.rejectValue("commisionFee","commision fee is not valid!");
 		}
 		String fileName;
 		String folderRoot = this.getClass().getResource("").toString();

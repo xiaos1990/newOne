@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blusky.www.Iservice.PropertyServceI;
 import com.blusky.www.Iservice.UserServiceI;
+import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UserBean;
 import com.blusky.www.constant.CommonConstant;
 
@@ -28,6 +30,8 @@ public class UserAction {
 
 	@Inject
 	UserServiceI userService;
+	@Inject
+	PropertyServceI propService;
 
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)	
@@ -74,6 +78,7 @@ public class UserAction {
 		Map<String, Object> mapErrors = new HashMap<String, Object>();
 		if(valid){
 			mapErrors.put("success", true);
+			mapErrors.put("userName", ((UserBean)request.getSession().getAttribute(CommonConstant.SESSION_USER)).getFirstName());
 		}else{
 			mapErrors.put("success", false);
 			mapErrors.put("message", CommonConstant.WRONG_USER_INFO);
@@ -139,6 +144,11 @@ public class UserAction {
 	}
 	@RequestMapping(value = "/properties", method = RequestMethod.GET)	
 	public  String propertiesAction(HttpServletRequest request,HttpServletResponse response) throws Exception {	
+		UserBean userBean=(UserBean) request.getSession().getAttribute(CommonConstant.SESSION_USER);
+		Long userId = userBean.getId();
+		Object[] parameters ={userId};
+		List<PropertyBean> properties=propService.findEntityByHQL("from PropertyBean prop where prop.user.id=? order by prop.createdDate", parameters);
+		request.setAttribute("properties", properties);
 		return "properties";
 
 	}

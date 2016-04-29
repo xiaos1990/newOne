@@ -25,7 +25,12 @@
         <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
     </mvc:message-converters>
 </mvc:annotation-driven>
-
+ <mvc:interceptors> 
+        <!-- 开启openSessionInView -->
+        <bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">  
+          <property name="sessionFactory" ref="sessionFactory" />  
+        </bean>     
+    </mvc:interceptors>
 
 	<!-- 静态资源(js/image)的访问 -->
 	<mvc:resources location="/image/" mapping="/image/**" />

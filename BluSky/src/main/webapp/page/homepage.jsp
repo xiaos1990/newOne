@@ -8,6 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href=" /bitbug_favicon.ico" /> 
 <title>Cat & Dog</title>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
@@ -88,14 +89,15 @@
 								<a class="dropdown-toggle btn-lg skipThis"
 								data-toggle="dropdown" href="#" role="button"
 								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user">${session_user.firstName }</span>
+								<span class="glyphicon glyphicon-user"><span class="homeLabel" id="userSpan"></span></span>
 								</a>
-								<ul class="dropdown-menu dropdown-menu-left aList">
-									<li><a href="#">Wish List</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
+								<ul class="dropdown-menu dropdown-menu-right aList">
+									<li><a href="${path }/user/dashboard"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
+									<li><a href="${path }/user/properties"><span class="glyphicon glyphicon-piggy-bank"></span>&nbsp;My Properties</a></li>
+									<li><a href="${path }/user/favorite"><span class="glyphicon glyphicon-heart"></span>&nbsp;My Favorite</a></li>																	
+									<li><a href="${path }/user/collection"><span class="glyphicon glyphicon-star"></span>&nbsp;My Collection</a></li>
 									<li role="separator" class="divider"></li>
-									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+									<li id="logOff"><a href="${path}/user/signOff"><span class="glyphicon glyphicon-user"></span>&nbsp;Log Off</a></li>
 								</ul>
 							</li>
 							<li id="signInLi" ><a href="#" data-toggle="modal"

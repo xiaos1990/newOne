@@ -63,10 +63,34 @@ body {
 @media (min-width: 992px){
 #map {
     height: 800px;
-}
+	}
 }
 @media (max-width: 991px){
 #map {
     height: 400px;
+	}
 }
+
+.media-body {
+    width: 100px;
 }
+
+@media (min-width: 992px){
+.img-info{
+	width:150px;
+	}
+}
+@media (max-width: 991px){
+.img-info{
+	width:100px;
+	}
+}
+
+.labels {
+     color: white;
+     background-color: black;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     text-align: center;
+     white-space: nowrap;
+     }

@@ -1,7 +1,6 @@
 package com.blusky.www.serviceImpl;
 
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.annotation.Resource;

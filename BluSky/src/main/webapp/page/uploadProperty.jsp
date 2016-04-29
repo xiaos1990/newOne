@@ -8,21 +8,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Sign Up</title>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
+<title>Property - Upload</title>
+<link rel="shortcut icon" href="${path}/image/bitbug_favicon.ico" /> 
 <link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
 <link rel="stylesheet" href="${path}/css/propertyupload.css" />
-<style>
-	.labels {
-     color: white;
-     background-color: red;
-     font-family: "Lucida Grande", "Arial", sans-serif;
-     font-size: 10px;
-     text-align: center;
-     white-space: nowrap;}
-
-</style>
-
 </head>
 <body onload="initialize();">
 
@@ -38,11 +28,8 @@
 			</div>
 			<div class="navbar-collapse collapse" id="mainMenu">
 				<ul class="nav navbar-nav navbar-right">
-					<li role="presentation" class="dropdown" id="dropDownProperty"><a
-						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="true" aria-expanded="false">
-						Property<span class="caret"></span>
-					</a>
+					<li role="presentation" class="dropdown" id="dropDownProperty">
+						<a class="dropdown-toggle skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Property<span class="caret"></span></a>
 						<ul class="dropdown-menu dropdown-menu-left aList">
 							<li><a  href="${path }/property/create/1">Sell/Rent House/Apartment</a></li>
 							<li><a  href="${path }/property/create/2">Sell Other</a></li>
@@ -53,30 +40,23 @@
 							<li><a href="#">Rent</a></li>		
 						</ul>
 					</li>
-					<li role="presentation" class="dropdown" id="dropDownAgent"><a
-						class="dropdown-toggle skipThis" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="true" aria-expanded="false">
-						Agent<span class="caret"></span>
-					</a>
+					<li role="presentation" class="dropdown" id="dropDownAgent">
+						<a class="dropdown-toggle skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Agent<span class="caret"></span></a>
 						<ul class="dropdown-menu dropdown-menu-left aList">
 							<li><a href="${path }/agencycreate">Become Agent</a></li>
 							<li><a href="#">Find Agent</a></li>		
 						</ul>
 					</li>				
-							<li role="presentation" class="dropdown" id="dropDownLog">
-								<a class="dropdown-toggle btn-lg skipThis"
-								data-toggle="dropdown" href="#" role="button"
-								aria-haspopup="true" aria-expanded="false"> 
-								<span class="glyphicon glyphicon-user"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-left aList">
-									<li><a href="#">Wish List</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-									<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
-								</ul>
-							</li>							
+					<li role="presentation" class="dropdown" id="dropDownLog">
+						<a class="dropdown-toggle btn-lg skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a href="#">Wish List</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+						</ul>
+					</li>							
 				</ul>
 			</div>
 		</div>
@@ -92,8 +72,9 @@
 									<div class="form-group  has-feedback ${requestScope['org.springframework.validation.BindingResult.propertyBean'].hasFieldErrors('address')?'has-error':'' }">
 										<label class="col-sm-2 control-label" for="address">Address</label>
 										<div class="col-sm-10">
-											<form:input type="text" path="address" class="form-control" id="address" value="${propertyBean.address }" placeholder="address" data-toggle="tooltip" data-placement="top" title="address is Required!" />
+											<form:input type="text" path="address" class="form-control" id="address" placeholder="address" data-toggle="tooltip" data-placement="top" title="address is Required!" />
 											<span class="glyphicon glyphicon-globe form-control-feedback" aria-hidden="true"></span>
+											<input type="hidden" id="addressHidden" value="${propertyBean.address }" />
 										</div>
 									</div>
 									<div class="form-group  has-feedback ${requestScope['org.springframework.validation.BindingResult.propertyBean'].hasFieldErrors('city')?'has-error':'' }">
