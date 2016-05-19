@@ -37,7 +37,17 @@ public class UploadFiles {
 	private PropertyBean property;
 	@Column(name="file_type")
 	private String fileType;
+	@Column(name="sort_value")
+	private Long sortValue;
 	
+	
+	
+	public Long getSortValue() {
+		return sortValue;
+	}
+	public void setSortValue(Long sortValue) {
+		this.sortValue = sortValue;
+	}
 	public long getFile_id() {
 		return file_id;
 	}

@@ -146,8 +146,8 @@ public class UserAction {
 	public  String propertiesAction(HttpServletRequest request,HttpServletResponse response) throws Exception {	
 		UserBean userBean=(UserBean) request.getSession().getAttribute(CommonConstant.SESSION_USER);
 		Long userId = userBean.getId();
-		Object[] parameters ={userId};
-		List<PropertyBean> properties=propService.findEntityByHQL("from PropertyBean prop where prop.user.id=? order by prop.createdDate", parameters);
+		Object[] parameters ={userId,"photo"};
+		List<PropertyBean> properties=propService.findEntityByHQL("select distinct prop from PropertyBean prop left join fetch prop.files file where prop.user.id=? and file.fileType=? order by prop.createdDate desc,file.sortValue asc", parameters);
 		request.setAttribute("properties", properties);
 		return "properties";
 

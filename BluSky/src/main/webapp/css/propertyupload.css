@@ -28,7 +28,13 @@ body {
     margin-top: 13px;
 }
 
-
+form.navbar-left {
+    font-size: 20px;
+    color: grey;
+    margin-top: 15px;
+    margin-bottom: 0;
+    font-weight: bold;
+}
 
 #form{
 	margin-top:100px;
@@ -94,3 +100,29 @@ body {
      text-align: center;
      white-space: nowrap;
      }
+     
+.userNav{
+	margin-top:60px;
+}
+nav.navbar.navbar-inverse.userNav {
+    border-radius: 0;
+}
+
+.panel-body .col-sm-4 div{
+	position:relative;
+	border:1px solid;
+	height:300px;
+}
+.panel-body .col-sm-4 div a .badge{
+	position:absolute;
+	right:10px;
+	top:10px;
+	background-color:red;
+}
+@media (min-width: 768px){
+	.form-horizontal .control-label1 {
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: left;
+	}
+}

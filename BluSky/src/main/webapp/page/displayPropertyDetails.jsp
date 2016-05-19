@@ -9,6 +9,7 @@
 <head lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title></title>
+ <link href="http://vjs.zencdn.net/5.9.2/video-js.css" rel="stylesheet">
 <script src="/BluSky/js/jquery-1.12.2.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js" async defer></script>
 <style>
@@ -18,7 +19,7 @@
       }
 
 </style>
-<script>
+<!-- <script>
 var map;
 var json =${users};
 var lat =${propertyBean.lat};
@@ -127,7 +128,16 @@ var infowindow;
                         infowindow.open(map, marker);               
             });
         };
-</script>
+</script> -->
+</head>
+
+
+
+<head>
+ 
+
+  <!-- If you'd like to support IE8 -->
+  <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 </head>
 <body onload=" initialize()">
 	<div>
@@ -136,11 +146,22 @@ var infowindow;
 			<c:choose>
 
 				<c:when test="${fn:contains(file.address,'.mp4') }">
-					<video controls="controls" height="250px" width="600px"
-						preload="auto">
-						<source src="${file.address }" type=video/mp4 />
-						Brower doesn't support
-					</video>
+					
+					 <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+ 					 	poster="/BluSky/image/cute.jpg" data-setup="{}">
+    					<source src="${file.address }" type='video/mp4'>
+    					<!-- <source src="MY_VIDEO.webm" type='video/webm'> -->
+				   	 	<p class="vjs-no-js">
+				     	 To view this video please enable JavaScript, and consider upgrading to a web browser that
+				      	<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    					</p>
+  					</video>
+  					
+  					 <video id="my-video" class="video-js" autoplay width="640" height="264"
+ 					 	poster="/BluSky/image/cute.jpg" data-setup="{}">
+    					<source src="${file.address }" type='video/mp4'>				   	 	
+  					</video>
+					
 				</c:when>
 				<c:otherwise>
 					<div>
@@ -154,5 +175,6 @@ var infowindow;
 	<div id="travelTime" style="color:red"></div>
 	<div id="googleMap"></div>
 
+  <script src="http://vjs.zencdn.net/5.9.2/video.js"></script>
 </body>
 </html>

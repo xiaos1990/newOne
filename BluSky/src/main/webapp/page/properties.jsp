@@ -138,37 +138,31 @@
 						<div class="panel-heading photo-panel">		
 									
 							<c:choose>
-								<c:when test="${fn:length(prop.files) eq '0'}"><img src="${path}/image/cute.jpg" class="img-responsive" alt="photo"/>
+								<c:when test="${fn:length(prop.files) eq '0'}"><a href="${path }/property/edit/${prop.id}"><img src="${path}/image/cute.jpg" class="img-responsive" alt="photo"/></a>
 								</c:when>
 								<c:when test="${fn:length(prop.files) eq '1'}">
 								<c:forEach var="oneFile" items="${prop.files }" >
-								<img src="${(oneFile.address)}" class="img-responsive" alt="photo"/>
+								<a href="${path }/property/edit/${prop.id}"><img src="${(oneFile.address)}" class="img-responsive" alt="photo"/></a>
 								</c:forEach>
 								</c:when>
 								<c:otherwise>
 									<div id="flip${propStatus.index}" class="carousel slide" data-ride="carousel">
-									<%-- 	<ol class="carousel-indicators">
-										<c:forEach var="file" items="${prop.files}" varStatus="status">
-											<li data-target="#flip" data-slide-to="${status.index }" class="<c:if test="${status.index =='1' }">active</c:if>" ></li>											
-										</c:forEach>
-										</ol> --%>
-									<div class="carousel-inner" role="listbox">	
-									<c:forEach var="file" items="${prop.files}" varStatus="status">
-										<div class="item  <c:if test="${status.index =='1' }">active</c:if>" >
-										<img src="${file.address}" class="img-responsive" alt="MIAMI">										
-										</div>										
-									</c:forEach>
-									</div>
-									<a class="left carousel-control" href="#flip${propStatus.index}" role="button"
-									data-slide="prev"> <span
-									class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-									<span class="sr-only">Previous</span>
-									</a> <a class="right carousel-control" href="#flip${propStatus.index}" role="button"
-									data-slide="next"> <span
-									class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-									<span class="sr-only">Next</span>
-									</a>
-									</div>
+										<div class="carousel-inner" role="listbox">	
+											<c:forEach var="file" items="${prop.files}" varStatus="status">
+												<div class="item  <c:if test="${status.index =='0' }">active</c:if>" >
+													<a href="${path }/property/edit/${prop.id}"><img src="${file.address}" class="img-responsive" alt="MIAMI"></a>									
+												</div>										
+											</c:forEach>
+										</div>
+										<a class="left carousel-control" href="#flip${propStatus.index}" role="button" data-slide="prev">
+											<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+											<span class="sr-only">Previous</span>
+										</a> 
+										<a class="right carousel-control" href="#flip${propStatus.index}" role="button" data-slide="next">
+											<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+											<span class="sr-only">Next</span>
+										</a>
+									</div>																	
 								</c:otherwise>
 							</c:choose>																										
 						</div>

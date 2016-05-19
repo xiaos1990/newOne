@@ -247,6 +247,12 @@ public class PropertyAction {
 		return "displayPropertyDetails";
 	}
 	
+	@RequestMapping(value = "/edit/{propertyId}", method = RequestMethod.GET)
+	public String editProperty(@PathVariable("propertyId") String id,HttpServletRequest request,ModelMap map) {		
+		PropertyBean property=propertyService.getEntity(Integer.parseInt(id));
+		map.addAttribute("propertyBean", property);
+		return "editProperty";
+	}
 	
 	
 	
