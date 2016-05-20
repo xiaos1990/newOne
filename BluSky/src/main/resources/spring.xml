@@ -11,11 +11,12 @@ http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 http://www.springframework.org/schema/context 
 http://www.springframework.org/schema/context/spring-context-4.0.xsd
+http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
 ">
 	<context:property-placeholder location="classpath*:config.properties" />
 
 	<context:component-scan
-		base-package="com.blusky.www.daoImpl,com.blusky.www.serviceImpl" />
+		base-package="com.blusky.www.daoImpl,com.blusky.www.serviceImpl,com.blusky.www.notification" />
 
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="${jndiName}" />
@@ -68,5 +69,75 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd
 
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	
+	<!-- activeMQ JavaMail -->
+
+	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="shuaixiao1223@gmail.com" />
+		<property name="password" value="${email.pass}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth.ntlm.domain">DOMAIN</prop>
+			</props>
+		</property>
+	</bean> -->
+	<!--  <bean id="reqAmqMsgQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <property name="physicalName" value="amqMsgQueue" />
+    </bean> -->
+
+    <bean id="reqAmqEmailQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <property name="physicalName" value="amqEmailQueue" />
+    </bean>
+
+
+ <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+    <property name="connectionFactory">
+      <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+        <!-- <property name="brokerURL">
+          <value>tcp://localhost:61616</value>
+        </property> -->
+        <constructor-arg index="0" value="vm://localhost" />
+      </bean>
+    </property>
+  </bean>
+ 
+  <!-- Spring JMS Template -->
+  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="jmsFactory"/>
+      <property name="defaultDestination" ref="reqAmqEmailQueue" />
+  </bean>
+
+
+<!--     <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://0.0.0.0:61616" />
+       <constructor-arg index="0" value="vm://localhost" />
+    </bean> -->
+  <!--   <bean id="amqMobileListener" class="com.blusky.www.message.AMQMobileListener" /> -->
+
+<!--     <bean id="container" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref ="activeMQConnectionFactory" />
+        <property name="destination" ref ="reqAmqMsgQueue"/>
+        <property name="messageListener" ref ="messageListener"/>
+        <property name="concurrentConsumers" value="1" />
+    </bean> -->
+
+   <bean id="emailListener" class="com.blusky.www.notification.AMQEmailListener" /> 
+    <bean id="emailContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref ="jmsFactory" />
+        <property name="destination" ref ="reqAmqEmailQueue"/>
+        <property name="messageListener" ref ="emailListener"/>
+        <property name="concurrentConsumers" value="1" />
+    </bean>
+<!-- 
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="activeMQConnectionFactory" />
+        <property name="defaultDestination" ref="reqAmqEmailQueue" />
+    </bean> -->
+
 
 </beans>
