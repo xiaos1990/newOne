@@ -11,6 +11,7 @@
     var sw ;
 	function initialize() {
         geocoder = new google.maps.Geocoder();
+        codeAddress();
         if($("#lat").val()){
         	lat=$("#lat").val();
         }
@@ -47,7 +48,7 @@
 				var bounds = map.getBounds();
 				ne = bounds.getNorthEast();
 				sw = bounds.getSouthWest();
-				ajaxCall();		 
+				ajaxCall1();		 
        		});
    		};
  
@@ -124,7 +125,7 @@
 				}
 				});
 			};
-		
+		if(fulladdress !=''){
 		 geocoder.geocode( { 'address': fulladdress}, function(results, status) {
 		
 				if (status == google.maps.GeocoderStatus.OK) {
@@ -148,11 +149,12 @@
 				    	$("#zipCode").val(this.short_name);
 				    }
 				});	
-				$("#address").val(address[0]);
+				//$("#address").val(address[0]);
 				} else {
 				alert("Geocode was not successful for the following reason: "+ status);
 				}
 			});
+		}
 		}; 
 
 
@@ -162,7 +164,7 @@
 			deleteMarkers();
 			//event.preventDefault();
             $.ajax({
-                url: '/BluSky/property/display/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",     				           
+                url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",     				           
             }).done(function(json){         
                    for (var i = 0; i < json.properties.length; i++) {
                         var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);                     
@@ -188,6 +190,108 @@
 	
 
 
+	
+	function ajaxCall1() {
+			deleteMarkers();
+			$("#content").html("");
+			//lat=map.getCenter().lat();
+			//lng=map.getCenter().lng();
+            $.ajax({
+                url: '/BluSky/property/display/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",
+                success: function (json) {
+               // window.history.pushState("", "search screen", "http://localhost:7001/BluSky/property/display3?lat="+lat+"&lng="+lng);
+                    // now make an empty bounds to determine the new viewport
+                    //bounds = map.getBounds();
+                    //var bounds = new google.maps.LatLngBounds();
+                	var div="";
+                	var content = $("#content");
+                    $.each(json.properties,function(index,item){
+                    	var latLng = new google.maps.LatLng(item.lat, item.lng);
+                    	 var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                         var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'});
+                         attachInfoWindows(marker, map, infowindow, item);
+                         markers.push(marker);
+                        
+                         div +='<div class="col-md-6">'+					
+ 						'<div class="panel panel-default">'+
+ 							'<div class="panel-heading photo-panel">';
+ 								if(item.files == 'undefied'){
+ 								div+='<a href="/BluSky/property/displayDetails/'+item.id+'"><img src="BluSky/image/cute.jpg" class="img-responsive" alt="photo"/></a>';
+ 								}else if(item.files.length =='1'){
+ 									div+='<a href="/BluSky/property/displayDetails/'+item.id+'"><img src="'+item.files[0].address+'" class="img-responsive" alt="photo"/></a>';
+ 								}else{
+ 									div+=
+ 									'<div id="flip'+index+'" class="carousel slide" data-ride="carousel">'+
+ 										'<div class="carousel-inner" role="listbox">';
+ 											$.each(item.files,function(index1,item1){
+ 												if(index1=='0'){
+ 												div+='<div class="item active" >'+
+													'<a href="/BluSky/property/displayDetails/'+item.id+'"><img src="'+item1.address+'" class="img-responsive" alt=""></a>'+									
+	 												'</div>';
+ 												}else{
+ 													div+='<div class="item" >'+
+													'<a href="/BluSky/property/displayDetails/'+item.id+'"><img src="'+item1.address+'" class="img-responsive" alt=""></a>'+									
+	 												'</div>';
+ 												};
+ 											});
+	 									
+ 											div+='</div>'+	
+	 										'<a class="left carousel-control" href="#flip'+index+'" role="button" data-slide="prev">'+
+	 											'<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>'+
+	 											'<span class="sr-only">Previous</span>'+
+	 										'</a>'+ 
+	 										'<a class="right carousel-control" href="#flip'+index+'" role="button" data-slide="next">'+
+	 											'<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>'+
+	 											'<span class="sr-only">Next</span>'+
+	 										'</a>'+
+	 									'</div>';
+ 												
+ 								};
+ 								div+='</div><div class="panel-body"><h3>Shuai</h3><a> View Profile</a><br /><a> Edit Profile</a></div>'+
+ 		 								'</div>'+						
+ 		 									'</div>';
+ 											});
+                    	content.append(div);              
+                        //content.append('<a href="/BluSky/property/displayDetails/'+json.properties[i].id+'?lat='+lat+'&lng='+lng+'" onclick="changeCenter('+json.properties[i].lat+","+json.properties[i].lng+',this);" ><img id="'+i+'" src="'+json.properties[i].files[0].address+'" width=400px height=400px onmouseover="changeColor(this);"  onmouseout="changebackColor(this);"/> </a>');
+                   
+                   /*  for (var j = 0; j < json.users.length; j++) {
+                        var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);
+                      // bounds.extend(latLng);                   
+                        var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
+                        //attachInfoWindows(marker, map, infowindow, json.users[i]);
+                        markers.push(marker);
+                    };*/
+                    // only fit the bounds when all the markers have been added.
+                  // map.fitBounds(bounds);
+                }
+            });
+	
+	};
+
+
+
+
+function changeCenter(val1,val2,obj){
+map.setCenter(new google.maps.LatLng(val1,val2));
+bounds=map.getBounds();
+  ne = bounds.getNorthEast();
+  sw = bounds.getSouthWest();
+  
+  obj.href=obj.href+'&lat1='+ne.lat()+'&lng1='+ne.lng()+'&lat2='+sw.lat()+'&lng2='+sw.lng();
+};
+
+
+function changeColor(obj){
+//console.log(obj.id);
+markers[obj.id].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+};
+
+function changebackColor(obj){
+markers[obj.id].setIcon('https://maps.google.com/mapfiles/kml/shapes/schools_maps.png');
+};
+
+
+	
 
 function setMapOnAll(map) {
   for (var i = 0; i < markers.length; i++) {
@@ -236,7 +340,7 @@ function validateNumber(obj){
 	
 }
 
-function flipLeaseInfo(obj){
+/*function flipLeaseInfo(obj){
 	if(obj.value == 'RENT'){
 		$("#leaseDetails").addClass("show");
 		$("#leaseDetails").removeClass("hide");
@@ -245,7 +349,7 @@ function flipLeaseInfo(obj){
 		$("#leaseDetails").removeClass("show");
 	}
 	
-}
+}*/
 
 function formatCurrency(obj){
 	var value=$(obj).val();
@@ -292,11 +396,11 @@ $(function(){
 		window.location.href=$(this).prop("href");								
 
 	}); 
-	var obj = document.getElementById("type");
-	flipLeaseInfo(obj);
+	/*var obj = document.getElementById("type");*/
+/*	flipLeaseInfo(obj);*/
 	
 	
-	$("#address").val($("#addressHidden").val());
+	//$("#address").val($("#addressHidden").val());
 	/*
 	$("#propertyButton").on("click", function(event) {		
 				event.preventDefault();				
@@ -355,6 +459,17 @@ $(function(){
 				});				
 		});*/
 
+	$("#ex1").slider();
+	$("#ex2").slider();
 	
+	$("input:radio[name='type']").on("change",function(){
+		if($(this).val() == 'SELL' && $(this).is(":checked")){
+			$("#buyDiv").removeClass("fade");
+			$("#rentDiv").addClass("fade");
+		}else{
+			$("#buyDiv").addClass("fade");
+			$("#rentDiv").removeClass("fade");
+		}
 	});
+});
 

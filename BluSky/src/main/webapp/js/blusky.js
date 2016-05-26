@@ -109,6 +109,35 @@ $.fn.serializeObject = function(){
 				console.log(arguments[1]);
 				});
 			}); 
+			
+			
+	/*		
+			$("#go").on("click",function(){
+				event.preventDefault();
+				var geocoder = new google.maps.Geocoder();
+				var fulladdress =$("#address").val();
+				 geocoder.geocode( { 'address': fulladdress}, function(results, status) {
+				var map = new google.maps.Map(document.getElementById('map'), {});		
+						if (status == google.maps.GeocoderStatus.OK) {
+						map.setCenter(results[0].geometry.location);	
+						var centerLat=map.getCenter().lat();
+						var centerLng=map.getCenter().lng();
+						var bounds = map.getBounds();
+						var ne = bounds.getNorthEast();
+						var sw = bounds.getSouthWest();
+						var lat1=ne.lat();
+						var lng1=ne.lng();
+						var lat2=sw.lat();
+						var lng2=sw.lng();
+						var type=$("#type").val();
+						var action=$("#searchForm").prop("action");
+						action=action+"?lat1="+lat1+"&lng1="+lng1+"&lat2="+lat2+"&lng2="+lng2+"&type="+type+"&centerLat="+centerLat+"&centerLng="+centerLng;
+						window.location.href=action;
+						} else {
+						alert("Geocode was not successful for the following reason: "+ status);
+						}
+					});
+			});*/
 		});
 		
 		

@@ -128,21 +128,21 @@
 					<div class="col-md-1"></div>
 					<div class="col-md-10">
 
-						<form class="form-inline">
+						<form class="form-inline" action="${path}/property/search" id="searchForm" method="post">
 							<div class="form-group">
 								<div class="input-group">
 									<div class="input-group-addon">Address</div>
-									<input type="text" class="form-control" id="address"
+									<input type="text" class="form-control" id="address" name="address"
 										placeholder="address">
 								</div>
 								<div class="input-group">
-									<select class="form-control type" id="type">
-										<option value="rent">Rent</option>
-										<option value="buy">Buy</option>
-										<option value="find">Find A Roommate</option>
+									<select name="type" class="form-control type" id="type">
+										<option value="RENT">Rent</option>
+										<option value="SELL">Buy</option>
+										<option value="SHARE">Find A Roommate</option>
 									</select> <label class="sr-only" for="address">address </label>
 									<div class="input-group-btn">
-										<button type="submit" class="btn btn-default">
+										<button type="submit" class="btn btn-default" id="go">
 											<span class="glyphicon glyphicon-search"> </span>&nbsp;GO!
 										</button>
 									</div>
@@ -365,7 +365,7 @@
     </div>
   </div>
 </div>
-
+<div id="map">
 	<script src="${path}/js/jquery-1.12.2.js"></script>
 	<script src="${path}/js/bootstrap.min.js"></script>
 	<script src="${path}/js/jquery.singlePageNav.min.js"></script>

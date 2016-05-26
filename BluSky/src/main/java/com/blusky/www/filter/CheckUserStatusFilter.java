@@ -25,17 +25,18 @@ public class CheckUserStatusFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
-		if(uri.matches("^/BluSky/property/display4/.*$")){
+	    if(uri.matches("^(/BluSky)((/image)|(/fonts)|(/files)|(/js)|(/css))/.*$")||uri.matches("^/BluSky/property/(search|display).*$")){
 			chain.doFilter(req, resp);
 			return;
 			}
-		uri.replace("/BluSky", "");
-		req.setAttribute(CommonConstant.FORWARD_PAGE, uri);
+		//uri=uri.replace("/BluSky", "");
+		req.getSession().setAttribute(CommonConstant.FORWARD_PAGE, uri);
 		System.out.println(uri);
 	
 			Object user = req.getSession().getAttribute(CommonConstant.SESSION_USER);
 			if(user==null){
-				req.getRequestDispatcher(req.getContextPath()+"/page/signin.jsp").forward(req, resp); 
+				//req.getRequestDispatcher(req.getContextPath()+"/page/signin.jsp").forward(req, resp); 
+				resp.sendRedirect(req.getContextPath()+"/page/signin.jsp");
 				return;
 			}else{
 				chain.doFilter(req, resp);

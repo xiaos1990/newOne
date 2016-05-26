@@ -13,7 +13,7 @@
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <link rel="shortcut icon" href="${path}/image/bitbug_favicon.ico" /> 
 <link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
-<link rel="stylesheet" href="${path}/css/propertyupload.css" />
+<link rel="stylesheet" href="${path}/css/editProperty.css" />
 </head>
 
 <body>
@@ -125,7 +125,7 @@
 		<div class="container">
 			<div class="row">		
 				<div class="col-md-12">	
-				<form:form action="${path }/property/edit" method="post" id="propertyForm" commandName="propertyBean" class="form-horizontal" enctype="multipart/form-data">	
+				<form:form action="${path }/property/upload" method="post" id="propertyForm" commandName="propertyBean" class="form-horizontal" enctype="multipart/form-data">	
 					<div class="panel panel-default">
 						<div class="panel-heading"><h4>Property Information:</h4></div>
 						<div class="panel-body">
@@ -198,7 +198,14 @@
 												</div>
 										</div>
 									</div>
-
+								</div>
+									<div class="panel-footing">
+									<button type="submit" id="propertyButton"
+										class="btn btn-primary btn-block">Submit</button>	
+									</div>
+								</div>	
+							</form:form>
+							<form action="${path }/property/update" method="post" >
 									<div class="panel panel-default">
 										<div class="panel-heading"><h5>IMG/VIDEO</h5></div>
 										<div class="panel-body">
@@ -217,20 +224,21 @@
 										<div class="panel-footing">
 										<!-- 	<button class="btn btn-primary btn-block" >preview</button> -->											
 											<a href="#" id="previewBtn" class="btn btn-primary btn-block" data-toggle="modal" data-target="#preview">preview</a>
+											<button type="submit" id="propertyButton"
+											class="btn btn-primary btn-block">Update</button>	
 										</div>
 									</div>
+						<!-- </div> -->
+
+
+
+
+									<%-- <form:input type="hidden" path="lat" id="lat" /> 
+									<form:input type="hidden" path="lng" id="lng" /> --%>
+															
 						</div>
-
-
-
-
-									<form:input type="hidden" path="lat" id="lat" /> 
-									<form:input type="hidden" path="lng" id="lng" />
-									<button type="submit" id="propertyButton"
-										class="btn btn-primary btn-block">Submit</button>							
-						</div>
-					</div>
-					</form:form>
+					<!-- </div> -->
+					</form>
 				</div>				
 			</div>
 		</div>
@@ -252,12 +260,12 @@
 				<div class="carousel-inner" role="listbox" ">						
 					
 					
-				
+				<%-- 
 					<c:forEach var="file" items="${propertyBean.files}" varStatus="status">
 						<div class="item  <c:if test="${status.index =='0' }">active</c:if>"  style="height:600px;width:100%" >
 							<img src="${file.address}" height="100%" width="100%" alt="MIAMI">									
 						</div>										
-					</c:forEach>
+					</c:forEach> --%>
 					
 					<a id="mark" class="left carousel-control" href="#flip1" role="button" data-slide="prev">
 						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -295,52 +303,72 @@
 	<script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/src/markerwithlabel.js"></script> --%>
 	<script src="${path}/js/editProperty.js"></script>
 	<script>
-var id1;
-var id2;
-var id3;
-var value;
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+		var id1;
+		var id2;
+		var id3;
+		var value;
 
-function drag(ev) {
-    //ev.dataTransfer.setData("text", ev.target.id);
-id1=$(ev.target).parent().prop("id"); //get a tag
-id2=ev.target.id; //get img
-id3=$(ev.target).parent().siblings("input:first").prop("id"); //get input
-value=$(ev.target).parent().siblings("input:first").val(); //get input value
-console.log(ev.target);
-}
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
 
-function drop(ev) {
-    ev.preventDefault();
+		function drag(ev) {
+			//ev.dataTransfer.setData("text", ev.target.id);
+			id1 = $(ev.target).parent().prop("id"); //get a tag
+			id2 = ev.target.id; //get img
+			id3 = $(ev.target).parent().siblings("input:first").prop("id"); //get input
+			value = $(ev.target).parent().siblings("input:first").val(); //get input value
+			console.log(ev.target);
+		}
 
-var data = ev.target;
-console.log(ev.target);
-if(data.tagName == 'IMG'){
-$("#"+id3).val($(ev.target).parent().siblings("input:first").val());
-$(ev.target.parentNode).prepend($("#"+id2));
-$(ev.target.parentNode).siblings("input:first").val(value);
-$("#"+id1).prepend(ev.target);
-}
-}
+		function drop(ev) {
+			ev.preventDefault();
 
+			var data = ev.target;
+			console.log(ev.target);
+			if (data.tagName == 'IMG') {
+				$("#" + id3).val(
+						$(ev.target).parent().siblings("input:first").val());
+				$(ev.target.parentNode).prepend($("#" + id2));
+				$(ev.target.parentNode).siblings("input:first").val(value);
+				$("#" + id1).prepend(ev.target);
+			}
+		}
 
-/* $(function(){
-$("#previewBtn").on("click",function(){
-	var div;
-	$(".item").remove();
-	$("a[id^=a]").each(function(i){
-	if(i==0){
-	$('<div/>',{class:'item active'}).append($('<img src='+$(this).children("img:first").prop("src")+'  />')).insertBefore($("#mark"));
-	}else{
-	$('<div/>',{class:'item'}).append($('<img src='+$(this).children("img:first").prop("src")+'  />')).insertBefore($("#mark"));
-	}
-	});
-});
-}); */
-</script>
+		$(function() {
+			$("#previewBtn").on(
+					"click",
+					function() {
+						var div;
+						$(".item").remove();
+						$("a[id^=a]").each(
+								function(i) {
+									if (i == 0) {
+										$('<div/>', {
+											class : 'item active'
+										}).append(
+												$('<img src='
+														+ $(this).children(
+																"img:first")
+																.prop("src")
+														+ '  />'))
+												.insertBefore($("#mark"));
+									} else {
+										$('<div/>', {
+											class : 'item'
+										}).append(
+												$('<img src='
+														+ $(this).children(
+																"img:first")
+																.prop("src")
+														+ '  />'))
+												.insertBefore($("#mark"));
+									}
+								});
+					});
+		});
+	</script>
 </body>
 
 </html>

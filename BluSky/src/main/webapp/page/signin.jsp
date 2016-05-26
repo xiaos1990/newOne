@@ -253,7 +253,7 @@ $.fn.serializeObject = function(){
 							/* if( pathname.split("/BluSky")[0] ==  '/property/upload')
 								window.location.href=pathname.split("/BluSky")[0];
 							else */
-								window.location.href=pathname.split("/BluSky")[0];
+								window.location.href=pathname;
 							}
 					}												
 				})
@@ -304,7 +304,7 @@ $.fn.serializeObject = function(){
 							if(typeof pathname == 'undefined'){
 							window.location.href="/";
 							}else{
-							window.location.href=pathname.split("/BluSky")[0];
+							window.location.href=pathname;
 							}
 						}
 						

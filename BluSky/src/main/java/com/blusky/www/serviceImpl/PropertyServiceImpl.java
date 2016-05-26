@@ -7,12 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.blusky.www.Idao.BaseDaoI;
 import com.blusky.www.Idao.PropertyDaoI;
-import com.blusky.www.Iservice.PropertyServceI;
+import com.blusky.www.Iservice.PropertyServiceI;
 import com.blusky.www.bean.PropertyBean;
 
 @Service("propertyService")
 @Transactional
-public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implements PropertyServceI {
+public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implements PropertyServiceI {
 	
 	@Resource
 	PropertyDaoI propertyDao;
@@ -22,11 +22,11 @@ public class PropertyServiceImpl extends BaseServciceImpl<PropertyBean> implemen
 		super.setDao(dao);		
 	};
 	
-	public void save(PropertyBean pb) {
+/*	public void save(PropertyBean pb) {
 		// TODO Auto-generated method stub
 		System.out.println("Hello World");
 		propertyDao.save(pb);
 		
-	}
+	}*/
 
 }

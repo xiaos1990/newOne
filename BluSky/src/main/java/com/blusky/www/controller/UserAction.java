@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blusky.www.Iservice.PropertyServceI;
+import com.blusky.www.Iservice.PropertyServiceI;
 import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UserBean;
@@ -31,7 +31,7 @@ public class UserAction {
 	@Inject
 	UserServiceI userService;
 	@Inject
-	PropertyServceI propService;
+	PropertyServiceI propService;
 
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)	

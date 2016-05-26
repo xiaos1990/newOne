@@ -38,14 +38,14 @@ public class UploadFiles {
 	@Column(name="file_type")
 	private String fileType;
 	@Column(name="sort_value")
-	private Long sortValue;
+	private int sortValue;
 	
 	
 	
-	public Long getSortValue() {
+	public int getSortValue() {
 		return sortValue;
 	}
-	public void setSortValue(Long sortValue) {
+	public void setSortValue(int sortValue) {
 		this.sortValue = sortValue;
 	}
 	public long getFile_id() {

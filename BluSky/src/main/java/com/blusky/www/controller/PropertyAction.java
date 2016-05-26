@@ -35,7 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.blusky.www.Iservice.PropertyServceI;
+import com.blusky.www.Iservice.FileServiceI;
+import com.blusky.www.Iservice.PropertyServiceI;
 import com.blusky.www.Iservice.UserServiceI;
 import com.blusky.www.bean.PropertyBean;
 import com.blusky.www.bean.UploadFiles;
@@ -50,9 +51,11 @@ public class PropertyAction {
 	
 	private static final Logger logger = Logger.getLogger(PropertyAction.class);
 	@Inject
-	PropertyServceI propertyService;
+	PropertyServiceI propertyService;
 	@Inject
 	UserServiceI userService;
+	@Inject
+	FileServiceI fileService;
 	
 	@RequestMapping(value = "/upload", method = {RequestMethod.POST,RequestMethod.GET})	
 	public String uploadProperty(@ModelAttribute(value="propertyBean") @Valid PropertyBean propertyBean,BindingResult result,@RequestParam MultipartFile[] btnFile,HttpServletRequest request, HttpServletResponse response)throws Exception {
@@ -154,7 +157,7 @@ public class PropertyAction {
 				}else{
 					propertyBean.setLeaseDetails(leaseDetails.toString());
 				}
-				propertyService.save(propertyBean);
+				propertyService.updateEntity(propertyBean);
 				
 
 			} catch (Exception e) {
@@ -225,6 +228,25 @@ public class PropertyAction {
 		
 	}
 	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateProperty(HttpServletRequest request) {
+		PropertyBean pb = (PropertyBean) request.getSession().getAttribute("currentProperty");
+		int size = pb.getFiles().size();
+		for(int i=0;i<size;i++){
+			String position = "position_"+i;
+			String key = request.getParameter(position);
+			for(UploadFiles file:pb.getFiles()){
+				if(file.getFile_id()==(Long.parseLong(key))){
+					file.setSortValue(i);
+					fileService.updateEntity(file);
+				}
+			}
+		}
+		
+		return "redirect:/user/properties";
+	}
+	
+	
 	@RequestMapping(value = "/displayDetails/{propertyId}", method = RequestMethod.GET)
 	public String createNewProperty(@PathVariable("propertyId") String id,HttpServletRequest request) {
 		String lat = request.getParameter("lat");
@@ -250,7 +272,10 @@ public class PropertyAction {
 	@RequestMapping(value = "/edit/{propertyId}", method = RequestMethod.GET)
 	public String editProperty(@PathVariable("propertyId") String id,HttpServletRequest request,ModelMap map) {		
 		PropertyBean property=propertyService.getEntity(Integer.parseInt(id));
-		map.addAttribute("propertyBean", property);
+		Object[] parameters ={Integer.parseInt(id),"photo"};
+		List<PropertyBean> properties=propertyService.findEntityByHQL("select distinct prop from PropertyBean prop left join fetch prop.files file where prop.id=? and file.fileType=? order by prop.createdDate desc,file.sortValue asc", parameters);	
+		map.addAttribute("propertyBean", properties.get(0));
+		request.getSession().setAttribute("currentProperty", property);
 		return "editProperty";
 	}
 	
@@ -350,9 +375,9 @@ new JSONObject();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/display4/{lat1}/{lng1}/{lat2}/{lng2}/")
+	@RequestMapping(value = "/display/{lat1}/{lng1}/{lat2}/{lng2}/")
 	@ResponseBody 
-	public Map dipslayProperty4(@PathVariable String lat1,@PathVariable String lng1,@PathVariable String lat2,@PathVariable String lng2) {
+	public Map dipslayProperty(@PathVariable String lat1,@PathVariable String lng1,@PathVariable String lat2,@PathVariable String lng2) {
 		Map map = new HashMap();
 
 		System.out.println(lat1+","+lng1+","+lat2+","+lng2);
@@ -365,5 +390,96 @@ new JSONObject();
 		
 		return map;	
 	}
+	
+	@RequestMapping(value = "/search",method={RequestMethod.POST,RequestMethod.GET})
+	public String searchProperty(HttpServletRequest request) {
+		request.setAttribute("stype",request.getParameter("type"));
+		request.setAttribute("saddress",request.getParameter("address"));
+		
+		return "displayProperty";
+	}
+	
+	/*
+	@RequestMapping(value = "/search",method=RequestMethod.POST)
+	public String searchProperty(HttpServletRequest request) {
+		StringBuffer sBuffer = new StringBuffer();
+		String lat1=request.getParameter("lat1");
+		String lng1=request.getParameter("lng1");
+		String lat2=request.getParameter("lat2");
+		String lng2=request.getParameter("lng2");
+		String centerLat=request.getParameter("centerLat");
+		String centerLng=request.getParameter("centerLng");
+		String rentPrice=request.getParameter("rentPrice");
+		String buyPrice=request.getParameter("buyPrice");
+		String type=request.getParameter("type");
+		String propertyType=request.getParameter("propertyType");
+		String bed=request.getParameter("bed");
+		String bath=request.getParameter("bath");
+		
+		request.setAttribute("centerLat", centerLat);
+		request.setAttribute("centerLng", centerLng);
+		sBuffer.append("select distinct pb from PropertyBean pb inner join fetch pb.files file inner join fetch pb.user u  where 1=1 ");
+		List parameters = new ArrayList();
+		if(StringUtils.isNotBlank(lat1)){
+			sBuffer.append(" pb.lat <=?");	
+			parameters.add(lat1);
+		}
+		if(StringUtils.isNotBlank(lat2)){
+			sBuffer.append(" pb.lat >=?");	
+			parameters.add(lat2);
+		}
+		if(StringUtils.isNotBlank(lng1)){
+			sBuffer.append(" pb.lng >=?");	
+			parameters.add(lng1);
+		}
+		if(StringUtils.isNotBlank(lng2)){
+			sBuffer.append(" pb.lng <=?");	
+			parameters.add(lng2);
+		}
+		if(StringUtils.isNotBlank(rentPrice)){
+			String[] prices = rentPrice.split(",");
+			sBuffer.append(" pb.price >=?");	
+			parameters.add(prices[0]);
+			if(!prices[1].equals("5000")){
+				sBuffer.append(" pb.price <=?");	
+				parameters.add(prices[1]);
+			}
+		}
+		
+		if(StringUtils.isNotBlank(buyPrice)){
+			String[] prices = buyPrice.split(",");
+			sBuffer.append(" pb.price >=?");	
+			parameters.add(prices[0]);
+			if(!prices[1].equals("1000000")){
+				sBuffer.append(" pb.price <=?");	
+				parameters.add(prices[1]);
+			}
+		}
+		
+		if(StringUtils.isNotBlank(type)){
+			sBuffer.append(" pb.type =?");	
+			parameters.add(type);
+		}
+		
+		
+		if(StringUtils.isNotBlank(propertyType)){
+			sBuffer.append(" pb.propertyType =?");	
+			parameters.add(propertyType);
+		}
+		if(StringUtils.isNotBlank(bed)){
+			sBuffer.append(" pb.bed >=?");	
+			parameters.add(bed);
+		}
+		if(StringUtils.isNotBlank(bath)){
+			sBuffer.append(" pb.bath >=?");	
+			parameters.add(bath);
+		}
+		
+		
+		List list = propertyService.findEntityByHQL(sBuffer.toString(),parameters.toArray());
+		//map.put("users",userService.findEntityByHQL("select ub from UserBean ub where ub.lat <=? and ub.lat>=? and ub.lng>=? and ub.lng<=? ", new Object[]{lat1,lat2,lng1,lng2}));
+		request.setAttribute("list", list);
+		return "displayProperty";	
+	}*/
 	
 }

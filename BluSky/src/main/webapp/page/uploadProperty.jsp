@@ -271,7 +271,8 @@
 <!-- 	<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places" async defer></script> -->
 	 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 	<%-- <script src="${path}/js/markerwithlabel.js"></script> --%>
-	<script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/src/markerwithlabel.js"></script>
+	<!-- <script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/src/markerwithlabel.js"></script> -->
+	<script src="${path}/js/markerwithlabel.js"></script>
 	<script src="${path}/js/property.js"></script>
 	
 	<script>

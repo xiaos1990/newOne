@@ -1,18 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@taglib uri="/spring-form.tld" prefix="form"%>
-<%@taglib uri="/c.tld" prefix="c"%>
-
+<%@taglib uri="/c.tld" prefix="c" %>
+<%@taglib uri="/fn.tld" prefix="fn" %>
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
-<script src="../js/jquery-1.12.2.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=places" async defer></script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cat & Dog</title>
+<c:set var="path" value="${pageContext.request.contextPath }"/>
+<link rel="stylesheet" href="${path}/css/bootstrap.min.css" />
+<link rel="stylesheet" href="${path}/css/propertyupload.css" />
+<link rel="stylesheet" href="${path}/css/animate.css" />
+<link rel="stylesheet" href="${path}/css/bootstrap-slider.css" />
+<!-- 
+
 <style>
 .main {
 	border-bottom: dashed blue 0.5px;
@@ -56,12 +60,157 @@ right:10%; */
 	width: 100%;
 	height: 100%;
 }
-</style>
+</style> -->
 </head>
 <body onload="initialize();">
+		<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#mainMenu">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a href="${path }" class="navbar-brand"><span class="glyphicon glyphicon-home"> </span></a>
+			</div>
+			<div class="navbar-collapse collapse" id="mainMenu">
+				<ul class="nav navbar-nav navbar-right">
+					<li role="presentation" class="dropdown" id="dropDownProperty">
+						<a class="dropdown-toggle skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Property<span class="caret"></span></a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a  href="${path }/property/create/1">Sell/Rent House/Apartment</a></li>
+							<li><a  href="${path }/property/create/2">Sell Other</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Buy House/Apartment</a></li>
+							<li><a href="#">Buy Other</a></li>	
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Rent</a></li>		
+						</ul>
+					</li>
+					<li role="presentation" class="dropdown" id="dropDownAgent">
+						<a class="dropdown-toggle skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Agent<span class="caret"></span></a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a href="${path }/agencycreate">Become Agent</a></li>
+							<li><a href="#">Find Agent</a></li>		
+						</ul>
+					</li>				
+					<li role="presentation" class="dropdown" id="dropDownLog">
+						<a class="dropdown-toggle btn-lg skipThis" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+						<ul class="dropdown-menu dropdown-menu-left aList">
+							<li><a href="#">Wish List</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li id="logOff"><a href="${path}/user/signOff">Log Off</a></li>
+						</ul>
+					</li>							
+				</ul>
+			</div>
+		</div>
+	</nav>	
 
 
-	<div>
+<section id="displayForm" >	
+		<div class="container-fluid">
+			<div class="row">		
+				<div class="col-md-6">	
+					<div id="filterDiv">
+						<form action="${path }/property/upload" method="post" id="propertyForm" class="form-horizontal" >
+							<div class="form-group  has-feedback" >
+								<label class="col-sm-2 control-label" for="filterAddress">Address</label>
+								<div class="col-sm-10">
+									<input type="text" name="address" class="form-control"
+										id="address" placeholder="search address" value="${saddress }" />
+								</div>
+							</div>
+							<div class="form-group  has-feedback" >
+								<label class="col-sm-2 control-label" for="type">Type</label>
+								<div class="col-sm-4">
+										<label class="checkbox-inline">
+											<input type="radio" name="type" value="RENT" <c:if test="${stype =='RENT' }">checked </c:if>>Rent
+										</label>
+										<label class="checkbox-inline">
+											<input type="radio" name="type" value="SELL" <c:if test="${stype =='SELL' }">checked </c:if>>Buy
+										</label>
+										<label class="checkbox-inline">
+											<input type="radio" name="type" value="SHARE" <c:if test="${stype =='SHARE' }">checked </c:if>>Shared
+										</label>
+								</div>
+								<div class="col-sm-1"></div>
+								<label class="col-sm-2 control-label" for="type">Property Type</label>
+								<div class="col-sm-3">
+										<label class="checkbox-inline">
+											<input type="checkbox" name="propertyType" value="APARTMENT" checked>Apartment
+										</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" name="propertyType" value="HOUSE" checked>House
+										</label>
+								</div>
+							</div>
+							
+							<div class="form-group  has-feedback" >
+								<label class="col-sm-2 control-label" for="price">Price</label>
+								<div class="col-sm-10 adjustSlider">
+								
+<div class="<c:if test="${stype !='SELL' }">fade </c:if>" id="buyDiv">							 
+<b>0&nbsp;&nbsp;</b><input id="ex1" type="text"  value="" data-slider-min="0" data-slider-max="1000000" data-slider-step="1000" data-slider-value="[0,500000]"/><b>&nbsp;&nbsp;$1,000,000+</b>
+</div>	
+<div  class="<c:if test="${stype =='SELL' }">fade </c:if>" id="rentDiv">						 
+<b>0&nbsp;&nbsp;</b><input id="ex2" type="text"  value="" data-slider-min="0" data-slider-max="5000" data-slider-step="5" data-slider-value="[0,2500]"/><b>&nbsp;&nbsp;$5,000+</b>
+</div>	
+
+								</div>
+							</div>								
+						</form>
+					</div>
+					<div id="content">
+				<%-- 	<c:forEach var="prop" items="${list }">
+					<div class="col-md-6">					
+							<div class="panel panel-default">
+								<div class="panel-heading photo-panel">
+									<c:choose>
+									<c:when test="${fn:length(prop.files) eq '0'}"><a href="/BluSky/property/displayDetails/${prop.id}"><img src="${path}/image/cute.jpg" class="img-responsive" alt="photo"/></a>
+									</c:when>
+									<c:when test="${fn:length(prop.files) eq '1'}">
+									<c:forEach var="oneFile" items="${prop.files }" >
+									<a href="/BluSky/property/displayDetails/${prop.id}"><img src="${(oneFile.address)}" class="img-responsive" alt="photo"/></a>
+									</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<div id="flip${propStatus.index}" class="carousel slide" data-ride="carousel">
+											<div class="carousel-inner" role="listbox">	
+												<c:forEach var="file" items="${prop.files}" varStatus="status">
+													<div class="item  <c:if test="${status.index =='0' }">active</c:if>" >
+														<a href="/BluSky/property/displayDetails/${prop.id}"><img src="${file.address}" class="img-responsive" alt="MIAMI"></a>									
+													</div>										
+												</c:forEach>
+											</div>
+											<a class="left carousel-control" href="#flip${propStatus.index}" role="button" data-slide="prev">
+												<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+												<span class="sr-only">Previous</span>
+											</a> 
+											<a class="right carousel-control" href="#flip${propStatus.index}" role="button" data-slide="next">
+												<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+												<span class="sr-only">Next</span>
+											</a>
+										</div>																	
+									</c:otherwise>
+									</c:choose>									
+								<div class="panel-body"><h3>Shuai</h3><a> View Profile</a><br /><a> Edit Profile</a></div>
+							</div>						
+					</div>
+					</c:forEach> --%>
+					</div>			
+				</div>
+				<div class="col-md-6">
+					<div id="map">							
+					</div>					
+				</div>
+			</div>
+		</div>
+</section>
+
+	<%-- <div>
 		<div style="float: left; width: 50%; height:800px; overflow-y: scroll">
 			<div class="formDiv">
 
@@ -117,384 +266,21 @@ right:10%; */
 			<div id="map"></div>
 		</div>
 
-	</div>
+	</div> --%>
+
+
+		<script src="${path}/js/jquery-1.12.2.js"></script>
+	<script src="${path}/js/bootstrap.min.js"></script>
+<!-- 	<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places" async defer></script> -->
+	 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+	<script src="${path}/js/markerwithlabel.js"></script>
+	<!-- <script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/src/markerwithlabel.js"></script> -->
+	
+	<script src="${path}/js/bootstrap-slider.js"></script>
+	<script src="${path}/js/displayProperty.js"></script>
 
 </body>
 <script>
-/* var lat = ${lat};
-var lng = ${lng};  */
-
-var lat =25;
-var lng = -84;  
- 	var bounds;
- 	var zipcode123;
-	var geocoder;
-	var map;
-	var markers = [];
-	var markersCenter = [];
-	var infowindow;
-		 var ne;
-          var sw ;
-/* 	function initialize() {
-		geocoder = new google.maps.Geocoder();
-		var latlng = new google.maps.LatLng(-34.397, 150.644);
-		var mapOptions = {
-			zoom : 10,
-			center : latlng
-		}
-		map = new google.maps.Map(document.getElementById("map"), mapOptions);
-	};
- */
- 
- function initialize() {
-         geocoder = new google.maps.Geocoder();
-        var latLng = new google.maps.LatLng(lat, lng);
-        var myMapOptions = {
-            sensor: true,
-            //mapTypeControl: true,
-            zoom: 10,
-            center: new google.maps.LatLng(25, -84),
-            rotateControlOptions: false,
-            panControl: false,
-            scrollwheel: false,
-           // mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        
-            infowindow = new google.maps.InfoWindow({
-            disableAutoPan : false,
-        });
-         map = new google.maps.Map(document.getElementById('map'), myMapOptions);
-			map.setCenter(new google.maps.LatLng(lat,lng));
-        var marker = new google.maps.Marker({
-					map : map,
-					position : latLng
-				});
-				
-			
-				
-				markersCenter.push(marker);	
-				
-				
-				
-	var input = document.getElementById('address');
-	  //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-  var searchBox = new google.maps.places.SearchBox((input));
-
-
-  // Bias the SearchBox results towards current map's viewport.
-  map.addListener('bounds_changed', function() {
-    searchBox.setBounds(map.getBounds());
-  });
-  
-  
-   searchBox.addListener('places_changed', function() {
-  codeAddress();
-  ajaxCall1();
-  });
- /* 
-  searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
-
-    if (places.length == 0) {
-      return;
-    }
-
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
-
-      // Create a marker for each place.
-      markers.push(new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location
-      }));
-
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    map.fitBounds(bounds);
-  }); */
-
-/* 	 google.maps.event.addListener(map, 'center_changed', function() {
-        
-            var bounds = map.getBounds();
-             ne = bounds.getNorthEast();
-             sw = bounds.getSouthWest();
-				ajaxCall1();
-				}); */
-				
-        //google.maps.event.addListener(map, 'bounds_changed', function() {
-        google.maps.event.addListener(map, 'idle', function() {
-        
-            var bounds = map.getBounds();
-             ne = bounds.getNorthEast();
-             sw = bounds.getSouthWest();
-			ajaxCall1();
-				
-           /*  $.ajax({
-                url: '/BluSky/property/display4/'+ne.lat()+','+ne.lng()+'/'+sw.lat()+','+sw.lng(),
-                success: function (json) {
-                    // now make an empty bounds to determine the new viewport
-                     bounds =  new google.maps.LatLngBounds();
-                    for (var i = 0; i < json.length; ++i) {
-                        var latLng = new google.maps.LatLng(json[i].latitude, json[i].longitude);
-                        bounds.extend(latLng);
-                        var marker = new google.maps.Marker({position: latLng});
-                        attachInfoWindows(marker, map, infowindow, json[i].latitude, json[i].longitude);
-                    };
-                    // only fit the bounds when all the markers have been added.
-                    //map.fitBounds(bounds);
-                }
-            }); */
-        });
-    };
- 
- 
-  function attachInfoWindows(marker, map, infowindow,jsonObj) {
-            google.maps.event.addListener(marker, 'click', function() {
-                        
-                        infowindow.setContent(
-'<div><a href="/BluSky/property/displayDetails/'+jsonObj.id+'"> <img src="'+jsonObj.files[0].address+'" width=50px height=50px  /> </div></a>'+
-'<div>'+jsonObj.address+' </div>'+
-'<div>'+jsonObj.city+' </div>'+
-'<div>'+jsonObj.zipCode+' </div>'+
-'<div>'+jsonObj.state+' </div>'+
-'<div>'+jsonObj.country+' </div>'
-);
-                        infowindow.open(map, marker);               
-            });
-        }
-       // google.maps.event.addDomListener(window, 'load', initialize);
-
- 
- 
- 
-	function codeAddress() {
-		var address = document.getElementById("address").value;
-		console.log(address);
-		 geocoder.geocode( { 'address': address}, function(results, status) {
-				console.log(results);
-				var index1;
-				if (status == google.maps.GeocoderStatus.OK) {
-				map.setCenter(results[0].geometry.location);
-				
-				var marker = new google.maps.Marker({
-					map : map,
-					position : results[0].geometry.location
-				});
-			lat=map.getCenter().lat();
-			lng=map.getCenter().lng();
-				deleteCenterMarkers();
-					markersCenter.push(marker);
-				//markers.push(marker);
-				index1=parseFloat(results[0].address_components.length)-1;
-				zipcode123= results[0].address_components[index1].long_name;
-			} else {
-				alert("Geocode was not successful for the following reason: "
-						+ status);
-			}
-		});
-	};
-
-/*  	$(function() {
- 	
-	 	var jsonObject = ${jsonObject};
-		console.log(jsonObject); 
-		fillAddress(jsonObject);
- 
-	}); */
-
-	function fillAddress(jsonAddress) {
-		var address;
-		for (var i = 0; i < jsonAddress.length; i++) {
-			address = jsonAddress[i].address+","+jsonAddress[i].zipCode;
-			console.log(address);
-		 geocoder.geocode( { 'address': address}, function(results, status) {
-								if (status == google.maps.GeocoderStatus.OK) {
-									map.setCenter(results[0].geometry.location);
-									var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-									var marker = new google.maps.Marker(
-											{
-												map : map,
-												position : results[0].geometry.location,
-												icon : iconBase
-														+ 'schools_maps.png'
-											});
-												markers.push(marker);
-								} else {
-									alert("Geocode was not successful for the following reason: "
-											+ status);
-								}
-							});
-		}
-		;
-	};
-
-	function ajaxCall() {
-		//deleteMarkers();
-		$.ajax({	
-			url : 'http://localhost:7001/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng(),
-			type : 'POST',
-			cache : false,
-			success : function(data) {
-				fillAddress(data);	
-			},
-			error : function() {
-				alert(arguments[1]);
-			},
-		});
-
-	};
 	
-	
-	
-	function ajaxCall1() {
-			deleteMarkers();
-			$("#content").html("");
-			//lat=map.getCenter().lat();
-			//lng=map.getCenter().lng();
-            $.ajax({
-                url: '/BluSky/property/display4/'+ne.lat()+'/'+ne.lng()+'/'+sw.lat()+'/'+sw.lng()+"/",
-                success: function (json) {
-               // window.history.pushState("", "search screen", "http://localhost:7001/BluSky/property/display3?lat="+lat+"&lng="+lng);
-                    // now make an empty bounds to determine the new viewport
-                    //bounds = map.getBounds();
-                    //var bounds = new google.maps.LatLngBounds();
-                    for (var i = 0; i < json.properties.length; i++) {
-                        var latLng = new google.maps.LatLng(json.properties[i].lat, json.properties[i].lng);
-                       // bounds.extend(latLng);
-                       var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-                        var marker = new google.maps.Marker({map : map,position: latLng,icon : iconBase+'schools_maps.png'});
-                        attachInfoWindows(marker, map, infowindow, json.properties[i]);
-                        markers.push(marker);
-                        var content = $("#content");
-                        content.append('<a href="/BluSky/property/displayDetails/'+json.properties[i].id+'?lat='+lat+'&lng='+lng+'" onclick="changeCenter('+json.properties[i].lat+","+json.properties[i].lng+',this);" ><img id="'+i+'" src="'+json.properties[i].files[0].address+'" width=400px height=400px onmouseover="changeColor(this);"  onmouseout="changebackColor(this);"/> </a>');
-                    };
-                     for (var j = 0; j < json.users.length; j++) {
-                        var latLng = new google.maps.LatLng(json.users[i].lat, json.users[i].lng);
-                      // bounds.extend(latLng);                   
-                        var marker = new google.maps.Marker({map : map,position: latLng,icon : '../image/Person.png'});
-                        //attachInfoWindows(marker, map, infowindow, json.users[i]);
-                        markers.push(marker);
-                    };
-                    // only fit the bounds when all the markers have been added.
-                  // map.fitBounds(bounds);
-                }
-            });
-	
-	};
-/* 	function loadJson(){
-	var jsonObject1 = ${jsonObject};
-		//console.log(jsonObject); 
-		fillAddress(jsonObject1);
-	}; */
-
-
-function setMapOnAll(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  };
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-  setMapOnAll(null);
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-  setMapOnAll(map);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-  clearMarkers();
-  markers = [];
-};
-function deleteCenterMarkers() {
-  for (var i = 0; i < markersCenter.length; i++) {
-    markersCenter[i].setMap(null);
-  };
-  markersCenter = [];
-};
-
-
-
-//google.maps.event.addListener(map,'center_changed',function() { checkBounds(); });
-
-/* function checkBounds() {    
-    if(! allowedBounds.contains(map.getCenter())) {
-      var C = map.getCenter();
-      var X = C.lng();
-      var Y = C.lat();
-
-      var AmaxX = allowedBounds.getNorthEast().lng();
-      var AmaxY = allowedBounds.getNorthEast().lat();
-      var AminX = allowedBounds.getSouthWest().lng();
-      var AminY = allowedBounds.getSouthWest().lat();
-
-      if (X < AminX) {X = AminX;}
-      if (X > AmaxX) {X = AmaxX;}
-      if (Y < AminY) {Y = AminY;}
-      if (Y > AmaxY) {Y = AmaxY;}
-
-      map.setCenter(new google.maps.LatLng(Y,X));
-    }
-} */
-
-/* function getBoundaries(){
-var bounds = map.getBounds();
-var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-console.log(bounds);
-
-var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-var se = new google.maps.LatLng(sw.lat(), ne.lng());
-
-
-google.maps.event.addListener(map, 'idle', function(ev){
-    // update the coordinates here
-});
-} */
-
-function changeCenter(val1,val2,obj){
-map.setCenter(new google.maps.LatLng(val1,val2));
-bounds=map.getBounds();
-  ne = bounds.getNorthEast();
-  sw = bounds.getSouthWest();
-  
-  obj.href=obj.href+'&lat1='+ne.lat()+'&lng1='+ne.lng()+'&lat2='+sw.lat()+'&lng2='+sw.lng();
-};
-
-
-function changeColor(obj){
-//console.log(obj.id);
-markers[obj.id].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-};
-
-function changebackColor(obj){
-markers[obj.id].setIcon('https://maps.google.com/mapfiles/kml/shapes/schools_maps.png');
-};
-
-
 </script>
 </html>

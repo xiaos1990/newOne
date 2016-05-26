@@ -30,8 +30,8 @@ public class CheckCookieFilter implements Filter {
 	        HttpServletRequest request = (HttpServletRequest) req; 
 	        HttpServletResponse response = (HttpServletResponse) res; 
 	        String URI = request.getRequestURI();
-	        System.out.println(URI);
-	        if(URI.matches("^(/BluSky)((/image)|(/fonts)|(/files)|(/js)|(/css))/.*$")){
+	        //System.out.println(URI);
+	        if(URI.matches("^(/BluSky)((/image)|(/fonts)|(/files)|(/js)|(/css))/.*$")||URI.matches("^/BluSky/property/search.*$")){
 	        	 chain.doFilter(request, response); 
 	        	 return;
 	        }else{

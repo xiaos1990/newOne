@@ -1,4 +1,4 @@
-package com.blusky.www.notification;
+/*package com.blusky.www.notification;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -36,3 +36,4 @@ public class AMQMsgProducer {
         });
     }
 }
+*/

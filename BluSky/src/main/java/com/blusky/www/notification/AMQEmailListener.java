@@ -1,17 +1,9 @@
 package com.blusky.www.notification;
 
-import org.apache.activemq.command.ActiveMQObjectMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Repository;
+import java.util.Properties;
 
-import com.blusky.www.test.TestFile;
-
-import javax.annotation.PostConstruct;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
@@ -23,9 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Properties;
+import org.apache.activemq.command.ActiveMQObjectMessage;
 
 /*@Repository("emailListener")*/
 public class AMQEmailListener implements MessageListener {
